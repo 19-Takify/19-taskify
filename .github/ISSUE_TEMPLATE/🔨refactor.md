@@ -1,7 +1,7 @@
 ---
 name: "🔨refactor"
 about: 리팩토링 사항을 알려주세요
-title: ""
+title: "[refactor]"
 labels: ""
 assignees: ""
 ---

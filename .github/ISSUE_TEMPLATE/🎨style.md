@@ -1,7 +1,7 @@
 ---
 name: "🎨style"
 about: CSS 스타일 변경 사항을 알려주세요
-title: ""
+title: "[style]"
 labels: ""
 assignees: ""
 ---

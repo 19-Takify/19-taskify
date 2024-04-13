@@ -1,7 +1,7 @@
 ---
 name: "🐞fix"
 about: 수정 사항을 알려주세요
-title: ""
+title: "[fix]"
 labels: ""
 assignees: ""
 ---
