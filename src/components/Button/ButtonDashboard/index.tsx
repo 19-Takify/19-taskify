@@ -1,26 +1,42 @@
 import { ButtonHTMLAttributes } from 'react';
 import styles from './ButtonDashboard.module.scss';
+import Image from 'next/image';
 
-type ButtonDashboardProps = {
-  del: boolean;
-  add: boolean;
-  dashboard: boolean;
+type ButtonDashboardProps<T> = {
+  dashboard: Record<string, T>;
+  createdByMe: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 function ButtonDashboard({
-  del = false,
-  add = false,
-  dashboard = false,
+  dashboard,
+  createdByMe,
   ...rest
-}: ButtonDashboardProps) {
+}: ButtonDashboardProps<string>) {
   return (
-    <button className={styles.buttonDashboard} {...rest}>
-      {/* 대시보드 삭제하기 */}
-      {del && <p>대시보드 삭제하기</p>}
-      {/* 새로운 대시보드 */}
-      {add && <p>새로운 대시보드</p>}
-      {/* 대시보드 */}
-      {dashboard && <div>대시보드 내용</div>}
+    <button className={styles.dashboard} {...rest}>
+      <div className={styles.dashboardText}>
+        <div className={styles.dashboardName}>
+          <div
+            className={styles.circle}
+            style={{ backgroundColor: `${dashboard.color}` }}
+          />
+          <p>{dashboard.title}</p>
+          {createdByMe && (
+            <Image
+              src="/svgs/crown.svg"
+              alt="crown 이미지"
+              width={20}
+              height={16}
+            />
+          )}
+        </div>
+        <Image
+          src="/svgs/arrow.svg"
+          alt="arrow 이미지"
+          width={18}
+          height={18}
+        />
+      </div>
     </button>
   );
 }
