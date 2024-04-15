@@ -10,7 +10,7 @@ const nextConfig = {
   pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
   sassOptions: {
     includePaths: [includePaths],
-    prependData: `@import "src/styles/colors.scss";`,
+    prependData: `@import "src/styles/globals.scss";`,
   },
 };
 
