@@ -1,0 +1,151 @@
+.sign {
+  background: $color-violet-5534da;
+  width: 32.5rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: $color-white-ffffff;
+
+  @include mobile {
+    width: 22rem;
+  }
+}
+
+.sign:disabled {
+  background: $color-gray-9fa6b2;
+}
+
+.delete {
+  background: $color-white-ffffff;
+  width: 5.25rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-violet-5534da;
+
+  @include mobile {
+    width: 3.25rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+.dashboard {
+  background: $color-gray-fafafa;
+  width: 20rem;
+  height: 4rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: $color-black-333236;
+
+  @include mobile {
+    width: 17.75rem;
+    height: 3.25rem;
+    font-size: 1rem;
+  }
+}
+
+.confirm {
+  background: $color-violet-5534da;
+  width: 5.25rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-white-ffffff;
+
+  @include tablet {
+    width: 4.5rem;
+  }
+
+  @include mobile {
+    width: 6.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+.deny {
+  background: $color-white-ffffff;
+  width: 5.25rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-violet-5534da;
+
+  @include tablet {
+    width: 4.5rem;
+  }
+
+  @include mobile {
+    width: 6.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+.column {
+  background: $color-white-ffffff;
+  width: 22.25rem;
+  height: 4.5rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $color-black-333236;
+
+  @include tablet {
+    width: 34rem;
+  }
+
+  @include mobile {
+    width: 17.75rem;
+    height: 4rem;
+    font-size: 1rem;
+  }
+}
+
+.card {
+  background: $color-white-ffffff;
+  width: 19.75rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  color: $color-black-333236;
+
+  @include tablet {
+    width: 34rem;
+  }
+
+  @include mobile {
+    width: 17.75rem;
+    height: 2rem;
+  }
+}
+
+.buttonText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboardText {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboardName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
