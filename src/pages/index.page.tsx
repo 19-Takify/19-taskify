@@ -1,5 +1,3 @@
-import Button from '@/components/Button/Button';
-import ButtonDashboard from '@/components/Button/ButtonDashboard';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
