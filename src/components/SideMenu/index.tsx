@@ -1,6 +1,6 @@
-import ButtonDashboard from '../Button/ButtonDashboard';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;
@@ -12,22 +12,20 @@ type SideMenuProps = {
 };
 
 function SideMenu({ dashboards, isOpen }: SideMenuProps) {
+  const router = useRouter();
+
+  const handleDashboardClick = (id: number) => {
+    router.push(`/dashboard/${id}`);
+  };
+
   return (
     <div className={`${styles.sideMenu} ${isOpen && styles.open}`}>
-      <div className={styles.sideMenuLogo}>
-        <Image
-          src="/svgs/taskify-logo.svg"
-          alt="taskify logo 이미지"
-          width={29}
-          height={33}
-        />
-        <Image
-          src="/svgs/taskify.svg"
-          alt="taskify 이미지"
-          width={80}
-          height={22}
-        />
-      </div>
+      <Image
+        src="/svgs/taskify-logo.svg"
+        alt="taskify 로고 이미지"
+        width={109}
+        height={34}
+      />
       <div className={styles.dashboardMenu}>
         <div className={styles.dashboardAddBox}>
           <span>Dash Boards</span>
@@ -39,8 +37,12 @@ function SideMenu({ dashboards, isOpen }: SideMenuProps) {
           />
         </div>
         <ul className={styles.dashboardListBox}>
-          {dashboards.map((dashboard, index) => (
-            <li key={index} className={styles.dashboardList}>
+          {dashboards.map((dashboard) => (
+            <li
+              key={dashboard.id as number}
+              className={styles.dashboardList}
+              onClick={() => handleDashboardClick(dashboard.id as number)}
+            >
               <div
                 className={styles.circle}
                 style={{ backgroundColor: `${dashboard.color}` }}
