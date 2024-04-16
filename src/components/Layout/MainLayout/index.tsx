@@ -1,7 +1,5 @@
-import { ReactNode } from 'react';
-
 type MainLayoutProps = {
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 function MainLayout({ children }: MainLayoutProps) {
