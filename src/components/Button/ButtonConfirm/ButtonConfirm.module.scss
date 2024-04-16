@@ -1,0 +1,49 @@
+.buttonConfirm {
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
+.confirm {
+  cursor: pointer;
+  border: none;
+  background: $color-violet-5534da;
+  width: 5.25rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-white-ffffff;
+
+  @include tablet {
+    width: 4.5rem;
+  }
+
+  @include mobile {
+    width: 6.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+.deny {
+  cursor: pointer;
+  border: none;
+  background: $color-white-ffffff;
+  width: 5.25rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  border: 1px solid $color-gray-d9d9d9;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-violet-5534da;
+
+  @include tablet {
+    width: 4.5rem;
+  }
+
+  @include mobile {
+    width: 6.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}

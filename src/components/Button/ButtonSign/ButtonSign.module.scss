@@ -1,0 +1,17 @@
+.buttonSign {
+  background: $color-violet-5534da;
+  width: 520px;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: $color-white-ffffff;
+
+  @include mobile {
+    width: 22rem;
+  }
+}
+
+.buttonSign:disabled {
+  background: $color-gray-9fa6b2;
+}
