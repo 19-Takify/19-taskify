@@ -3,25 +3,25 @@ import styles from './ButtonDashboard.module.scss';
 import Image from 'next/image';
 
 type ButtonDashboardProps<T> = {
-  dashboard: Record<string, T>;
-  createdByMe: boolean;
+  dashboards: { [key: string]: T };
+  arrow?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 function ButtonDashboard({
-  dashboard,
-  createdByMe,
+  dashboards,
+  arrow = false,
   ...rest
-}: ButtonDashboardProps<string>) {
+}: ButtonDashboardProps<string | boolean | number>) {
   return (
     <button className={styles.dashboard} {...rest}>
       <div className={styles.dashboardText}>
         <div className={styles.dashboardName}>
           <div
             className={styles.circle}
-            style={{ backgroundColor: `${dashboard.color}` }}
+            style={{ backgroundColor: `${dashboards.color}` }}
           />
-          <p>{dashboard.title}</p>
-          {createdByMe && (
+          <p>{dashboards.title}</p>
+          {dashboards.createdByMe && (
             <Image
               src="/svgs/crown.svg"
               alt="crown 이미지"
@@ -30,12 +30,14 @@ function ButtonDashboard({
             />
           )}
         </div>
-        <Image
-          src="/svgs/arrow.svg"
-          alt="arrow 이미지"
-          width={18}
-          height={18}
-        />
+        {arrow && (
+          <Image
+            src="/svgs/arrow.svg"
+            alt="arrow 이미지"
+            width={18}
+            height={18}
+          />
+        )}
       </div>
     </button>
   );

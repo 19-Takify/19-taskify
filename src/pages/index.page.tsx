@@ -1,12 +1,10 @@
 import Head from 'next/head';
-import Card from '@/components/Card';
 
 export default function Home() {
   return (
-    <>
-      <Card />
+    <div>
       <Head>Taskify</Head>
       <h1>taskify</h1>
-    </>
+    </div>
   );
 }
