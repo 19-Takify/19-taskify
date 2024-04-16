@@ -1,10 +1,10 @@
-import Head from 'next/head';
-
 export default function Home() {
   return (
     <>
-      <Head>Taskify</Head>
-      <h1>taskify</h1>
+      <button>success</button>
+      <button>error</button>
+      <button>info</button>
+      <button>warn</button>
     </>
   );
 }
