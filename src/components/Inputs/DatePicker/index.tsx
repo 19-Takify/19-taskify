@@ -11,15 +11,26 @@ type DatePickerProps<F extends FieldValues> = {
   name: Path<F>;
   id?: string;
   label?: string;
+  required?: boolean;
   placeholder?: string;
   className?: string;
 };
 
+/**
+ * @param control - react-hook-form의 useForm에서 받아온 control 값.
+ * @param name - useForm의 schema field 값.
+ * @param id - label의 htmlFor, input의 id.
+ * @param label - label의 text 값. label이 없을 경우 렌더링 하지 않음.
+ * @param required - label에 * 표시와 input의 required.
+ * @param placeholder - input의 placeholder.
+ * @param className - input의 className에 커스텀 스타일링 할 때 넘겨주는 값.
+ */
 function DatePicker<F extends FieldValues>({
   control,
   name,
   id,
   label,
+  required = false,
   placeholder,
   className,
 }: DatePickerProps<F>) {
@@ -29,7 +40,7 @@ function DatePicker<F extends FieldValues>({
     <div className={styles.container}>
       {label && (
         <label className={styles.label} htmlFor={id}>
-          {label}
+          {label} {required && <span className={styles.required}>*</span>}
         </label>
       )}
       <div className={styles.inputContainer}>
@@ -47,6 +58,7 @@ function DatePicker<F extends FieldValues>({
                 className={`${styles.input} ${className || ''}`}
                 placeholderText={placeholder}
                 selected={value}
+                required={required}
                 showTimeSelect
               />
             );
