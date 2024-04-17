@@ -51,13 +51,9 @@ function Card({ cards }: CardProps) {
           />
           <p>{cards.dueDate}</p>
         </div>
-        <Image
-          className={styles.profileIcon}
-          src={cards.assignee?.profileImageUrl || ''}
-          alt={`${cards.assignee?.nickname} 프로필 이미지`}
-          width={24}
-          height={24}
-        />
+        <div>
+          <ProfileIcon profile={cards.assignee || null} small />
+        </div>
       </div>
     </div>
   );

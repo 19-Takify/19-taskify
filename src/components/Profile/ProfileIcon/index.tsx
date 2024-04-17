@@ -16,7 +16,7 @@ type ProfileIconProps = {
 function ProfileIcon({ children, profile, small = false }: ProfileIconProps) {
   return (
     <div className={`${styles.profileIcon} ${small && styles.small}`}>
-      {profile?.profileImageUrl && (
+      {profile && (
         <Image
           className={styles.profileIconImage}
           src={profile.profileImageUrl || ''}
