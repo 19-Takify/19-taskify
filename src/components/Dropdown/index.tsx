@@ -31,21 +31,23 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
   });
   const id = useId();
 
-  useEffect(() => {
-    document.addEventListener('click', (e) => handleDropdownClick(e));
-
-    return () => {
-      document.removeEventListener('click', (e) => handleDropdownClick(e));
-    };
-  }, []);
-
   const handleDropdownClick = (e: any) => {
-    if (e.target.dataset.state === `Dropdown${id}`) {
+    const target = e.target as HTMLElement;
+    const datasetState = target.dataset.state;
+    if (datasetState === `Dropdown${id}`) {
       setIsOpen((prev) => !prev);
       return;
     }
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    document.addEventListener('click', handleDropdownClick);
+
+    return () => {
+      document.removeEventListener('click', handleDropdownClick);
+    };
+  }, []);
 
   const handleItemClick = (index: number, data: any) => {
     setIsSelectData({
@@ -61,7 +63,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
     <>
       <div
         className={`${styles.initial} ${isOpen && styles.active}`}
-        onClick={(e) => handleDropdownClick(e)}
+        onClick={handleDropdownClick}
         data-state={`Dropdown${id}`}
       >
         {isSelectData.isClick ? (
