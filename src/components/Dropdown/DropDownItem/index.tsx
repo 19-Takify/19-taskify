@@ -1,4 +1,4 @@
-import styles from './Item.module.scss';
+import styles from './DropDownItem.module.scss';
 
 type TData = {
   title?: string;
