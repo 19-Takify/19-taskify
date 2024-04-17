@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styles from './Dropdown.module.scss';
 import { MouseEvent, useEffect, useState, useId } from 'react';
-import Item from './Item';
+import DropDownItem from './DropDownItem';
 
 type TData = {
   title?: string;
@@ -22,7 +22,7 @@ type TDropdownProps = {
 
 function Dropdown({ usage, initialData, data }: TDropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isSelect, setIsSelect] = useState<TIsSelect>({
+  const [isSelectData, setIsSelectData] = useState<TIsSelect>({
     isClick: false,
     index: 99999,
     title: '',
@@ -48,7 +48,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
   };
 
   const handleItemClick = (index: number, data: any) => {
-    setIsSelect({
+    setIsSelectData({
       isClick: true,
       index,
       title: data.title,
@@ -64,17 +64,17 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
         onClick={(e) => handleDropdownClick(e)}
         data-state={`Dropdown${id}`}
       >
-        {isSelect.isClick ? (
+        {isSelectData.isClick ? (
           usage === 'state' ? (
-            <Item usage={usage} data={isSelect} />
+            <DropDownItem usage={usage} data={isSelectData} />
           ) : (
-            <Item usage={usage} data={isSelect} />
+            <DropDownItem usage={usage} data={isSelectData} />
           )
         ) : initialData ? (
           usage === 'state' ? (
-            <Item usage={usage} data={initialData} />
+            <DropDownItem usage={usage} data={initialData} />
           ) : (
-            <Item usage={usage} data={initialData} />
+            <DropDownItem usage={usage} data={initialData} />
           )
         ) : (
           '담당자를 선택해 주세요'
@@ -105,7 +105,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
                 className={styles.list}
                 onClick={() => handleItemClick(idx, value)}
               >
-                {isSelect.index === idx && (
+                {isSelectData.index === idx && (
                   <Image
                     className={`${styles.select} ${usage === 'manager' && styles.selectM}`}
                     src="/svgs/check.svg"
@@ -114,7 +114,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
                     alt="체크 모양 이미지"
                   />
                 )}
-                <Item usage={usage} data={value} />
+                <DropDownItem usage={usage} data={value} />
               </li>
             ))}
           </ul>
