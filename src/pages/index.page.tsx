@@ -1,4 +1,3 @@
-import SideMenu from '@/components/SideMenu';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
