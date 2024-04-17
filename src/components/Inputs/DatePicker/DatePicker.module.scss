@@ -8,6 +8,9 @@
   font-size: 1.125rem;
   font-weight: 500;
   color: $color-black-333236;
+  .required {
+    color: $color-violet-5534da;
+  }
 }
 
 .inputContainer {
