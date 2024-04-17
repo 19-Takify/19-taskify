@@ -43,8 +43,14 @@ function DatePicker<F extends FieldValues>({
           {label} {required && <span className={styles.required}>*</span>}
         </label>
       )}
-      <div className={styles.inputContainer}>
-        <Image src={calendarIcon} alt={'calendarIcon'} />
+      <div className={`${styles.inputContainer} ${className}`}>
+        <Image
+          src={calendarIcon}
+          alt={'calendarIcon'}
+          className={styles.calendarIcon}
+          width={24}
+          height={24}
+        />
         <Controller
           control={control}
           name={name}
@@ -55,7 +61,7 @@ function DatePicker<F extends FieldValues>({
                 id={id}
                 locale="ko"
                 dateFormat="yyyy.MM.dd HH:mm"
-                className={`${styles.input} ${className || ''}`}
+                className={styles.input}
                 placeholderText={placeholder}
                 selected={value}
                 required={required}
