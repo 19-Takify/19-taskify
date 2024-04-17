@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './Dropdown.module.scss';
-import { MouseEvent, useEffect, useState, useId } from 'react';
+import { useEffect, useState, useId } from 'react';
 import DropDownItem from './DropDownItem';
 
 type TData = {
@@ -31,7 +31,15 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
   });
   const id = useId();
 
-  const handleDropdownClick = (e: any) => {
+  useEffect(() => {
+    document.addEventListener('click', handleDropdownClick);
+
+    return () => {
+      document.removeEventListener('click', handleDropdownClick);
+    };
+  }, []);
+
+  const handleDropdownClick = (e: any): void => {
     const target = e.target as HTMLElement;
     const datasetState = target.dataset.state;
     if (datasetState === `Dropdown${id}`) {
@@ -41,15 +49,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    document.addEventListener('click', handleDropdownClick);
-
-    return () => {
-      document.removeEventListener('click', handleDropdownClick);
-    };
-  }, []);
-
-  const handleItemClick = (index: number, data: any) => {
+  const handleItemClick = (index: number, data: TData): void => {
     setIsSelectData({
       isClick: true,
       index,
@@ -63,7 +63,6 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
     <>
       <div
         className={`${styles.initial} ${isOpen && styles.active}`}
-        onClick={handleDropdownClick}
         data-state={`Dropdown${id}`}
       >
         {isSelectData.isClick ? (
@@ -88,6 +87,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
             width="26"
             height="26"
             alt="위를 가르키는 화살표 이미지"
+            priority
           />
         ) : (
           <Image
@@ -96,6 +96,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
             width="26"
             height="26"
             alt="아래를 가르키는 화살표 이미지"
+            priority
           />
         )}
         {isOpen && (
