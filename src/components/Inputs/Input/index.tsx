@@ -1,5 +1,5 @@
 import styles from './Input.module.scss';
-import { useState, InputHTMLAttributes } from 'react';
+import { useState, InputHTMLAttributes, MouseEvent } from 'react';
 import Image from 'next/image';
 import {
   FieldErrors,
