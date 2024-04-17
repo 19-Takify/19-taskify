@@ -11,7 +11,7 @@ type TItemProps = {
   data: TData;
 };
 
-function Item({ usage, data }: TItemProps) {
+function DropDownItem({ usage, data }: TItemProps) {
   const { title, nickname, profileImageUrl } = data;
   const isState = usage === 'state';
 
@@ -37,4 +37,4 @@ function Item({ usage, data }: TItemProps) {
   );
 }
 
-export default Item;
+export default DropDownItem;
