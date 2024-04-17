@@ -1,31 +1,45 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  Controller,
+  SubmitErrorHandler,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 import { z } from 'zod';
-import Input from '@/components/Input';
+import Input from '@/components/Inputs/Input';
+import DatePicker from '@/components/Inputs/DatePicker';
 
-interface IFormValues {
+type IFormValues = {
   email: string;
   password: string;
   passwordConfirm: string;
-}
+  ReactDatepicker: Date;
+};
 
-const schema = z.object({
-  email: z
-    .string()
-    .min(1, { message: '이메일을 입력해 주세요.' })
-    .email({ message: '이메일 형식으로 작성해 주세요.' }),
-  password: z
-    .string()
-    .min(1, { message: '비밀번호를 입력해 주세요.' })
-    .min(8, { message: '8자 이상 입력해주세요.' }),
-  passwordConfirm: z.string().min(1),
-});
+const schema = z
+  .object({
+    email: z
+      .string()
+      .min(1, { message: '이메일을 입력해 주세요.' })
+      .email({ message: '이메일 형식으로 작성해 주세요.' }),
+    password: z
+      .string()
+      .min(1, { message: '비밀번호를 입력해 주세요.' })
+      .min(8, { message: '8자 이상 입력해주세요.' }),
+    passwordConfirm: z.string().min(1, '비밀번호를 입력해 주세요.'),
+    ReactDatepicker: z.date(),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    path: ['passwordConfirm'],
+    message: '비밀번호가 일치하지 않습니다.',
+  });
 
 function Login() {
   const {
     register,
     formState: { errors },
     handleSubmit,
+    control,
   } = useForm<IFormValues>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -33,6 +47,7 @@ function Login() {
       email: '',
       password: '',
       passwordConfirm: '',
+      ReactDatepicker: new Date(),
     },
   });
   const onValid: SubmitHandler<IFormValues> = (data) => {
@@ -47,9 +62,10 @@ function Login() {
         <div>
           <Input
             label="이메일"
-            id="email"
-            register={register}
             required
+            id="email"
+            type="email"
+            register={register('email')}
             placeholder="이메일을 입력해주세요."
             errors={errors}
           />
@@ -57,9 +73,9 @@ function Login() {
         <div>
           <Input
             id="password"
-            icon="calendar"
-            register={register}
+            icon="search"
             required
+            register={register('password')}
             placeholder="비밀번호를 입력해주세요."
           />
           <p>{errors.password?.message}</p>
@@ -68,13 +84,18 @@ function Login() {
           <Input
             id="passwordConfirm"
             type="password"
-            register={register}
-            required
+            register={register('passwordConfirm')}
             placeholder="비밀번호를 입력해 주세요."
           />
           <p>{errors.passwordConfirm?.message}</p>
         </div>
       </div>
+      <DatePicker
+        control={control}
+        name="ReactDatepicker"
+        label="마감일"
+        required
+      />
       <button type="submit">submit</button>
     </form>
   );
