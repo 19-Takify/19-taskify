@@ -1,5 +1,5 @@
 import styles from './Input.module.scss';
-import { useState, InputHTMLAttributes } from 'react';
+import { useState, InputHTMLAttributes, MouseEvent } from 'react';
 import Image from 'next/image';
 import {
   FieldErrors,
@@ -65,26 +65,45 @@ function Input({
           {label} {required && <span className={styles.required}>*</span>}
         </label>
       )}
-      <div className={`${styles.inputContainer} ${errors && styles.error}`}>
-        {icon && <Image src={ICON_IMG[icon]?.src} alt={ICON_IMG[icon]?.alt} />}
+      <div
+        className={`${styles.inputContainer} ${errors && errors[register.name] && styles.error} ${className}`}
+      >
+        {icon && (
+          <Image
+            width={24}
+            height={24}
+            src={ICON_IMG[icon]?.src}
+            alt={ICON_IMG[icon]?.alt}
+          />
+        )}
         <input
           type={type === 'password' && isVisible ? 'text' : type}
-          className={`${styles.input} ${className}`}
+          className={styles.input}
           id={id}
           required={required}
           {...register}
           {...rest}
         />
         {type === 'password' && (
-          <button onClick={handleVisibleToggler} type="button">
+          <button
+            onClick={handleVisibleToggler}
+            type="button"
+            className={styles.visibleToggler}
+          >
             <Image
+              width={24}
+              height={24}
               src={isVisible ? eyeOnImg : eyeOffImg}
               alt={isVisible ? 'eyeOnImg' : 'eyeOffImg'}
             />
           </button>
         )}
       </div>
-      {errors && <p>{errors[register.name]?.message?.toString()}</p>}
+      {errors && (
+        <p className={styles.errorMessage}>
+          {errors[register.name]?.message?.toString()}
+        </p>
+      )}
     </div>
   );
 }
