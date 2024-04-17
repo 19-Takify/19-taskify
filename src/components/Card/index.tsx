@@ -23,23 +23,23 @@ type CardList = {
 };
 
 type CardProps = {
-  cardData: CardList;
+  cards: CardList;
 };
 
-function Card({ cardData }: CardProps) {
+function Card({ cards }: CardProps) {
   return (
     <div className={styles.cardBox}>
-      {cardData.imageUrl && (
+      {cards.imageUrl && (
         <Image
-          src={cardData.imageUrl}
-          alt="카드 배경 이미지"
+          src={cards.imageUrl}
+          alt=" card 배경 이미지"
           width={274}
           height={160}
         />
       )}
-      <span>{cardData.title}</span>
+      <span>{cards.title}</span>
       <ul className={styles.tags}>
-        {cardData.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
+        {cards.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
       </ul>
       <div className={styles.bottom}>
         <div className={styles.date}>
@@ -49,11 +49,15 @@ function Card({ cardData }: CardProps) {
             width={18}
             height={18}
           />
-          <p>{cardData.dueDate}</p>
+          <p>{cards.dueDate}</p>
         </div>
-        <div>
-          <ProfileIcon profile={cardData.assignee || null} small />
-        </div>
+        <Image
+          className={styles.profileIcon}
+          src={cards.assignee?.profileImageUrl || ''}
+          alt={`${cards.assignee?.nickname} 프로필 이미지`}
+          width={24}
+          height={24}
+        />
       </div>
     </div>
   );
