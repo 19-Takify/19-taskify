@@ -1,9 +1,13 @@
+import styles from './SignupForm.module.scss';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import styles from './SignupForm.module.scss';
+import axios from '@/apis/axios';
+import { isAxiosError } from 'axios';
 import PageButton from '@/components/Button/PageButton';
 import Input from '@/components/Inputs/Input';
+import setToast from '@/utils/setToast';
 
 type FormValues = {
   email: string;
@@ -37,13 +41,16 @@ const schema = z
   });
 
 function SignupForm() {
+  const router = useRouter();
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
+    setError,
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       email: '',
       nickname: '',
@@ -52,13 +59,26 @@ function SignupForm() {
     },
   });
 
-  const handleValidSubmit = () => {};
-
-  const handleInvalidSubmit = () => {};
+  const handleValidSubmit = async (data: FormValues) => {
+    try {
+      await axios.post('/users', data);
+      setToast('success', '가입이 완료되었습니다.');
+      router.push('/login');
+    } catch (e) {
+      if (isAxiosError(e)) {
+        const message =
+          e.response?.data.message || '다른 이메일을 입력해 주세요.';
+        setError('email', { message });
+        return;
+      }
+      setToast('warn', '다시 시도해 주세요.');
+      reset();
+    }
+  };
 
   return (
     <form
-      onSubmit={handleSubmit(handleValidSubmit, handleInvalidSubmit)}
+      onSubmit={handleSubmit(handleValidSubmit)}
       className={styles.container}
     >
       <div className={styles.inputContainer}>
