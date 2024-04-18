@@ -1,3 +1,4 @@
+import ProfileIcon from '../Profile/ProfileIcon';
 import styles from './Card.module.scss';
 import Image from 'next/image';
 
@@ -16,33 +17,29 @@ type CardList = {
   assignee?: Assignee;
   imageUrl?: string;
   teamId?: string;
-  columnId?: number;
+  columnId: number;
   createdAt?: string;
   updatedAt?: string;
 };
 
 type CardProps = {
-  cards: CardList;
+  cardData: CardList;
 };
 
-function Card({ cards }: CardProps) {
+function Card({ cardData }: CardProps) {
   return (
     <div className={styles.cardBox}>
-      {cards.imageUrl && (
+      {cardData.imageUrl && (
         <Image
-          src={cards.imageUrl}
-          alt="card 배경 이미지"
+          src={cardData.imageUrl}
+          alt="카드 배경 이미지"
           width={274}
           height={160}
         />
       )}
-      <span>{cards.title}</span>
+      <span>{cardData.title}</span>
       <ul className={styles.tags}>
-        {cards.tags?.map((tag, index) => (
-          <li key={index} className={styles.tagItem}>
-            {tag}
-          </li>
-        ))}
+        {cardData.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
       </ul>
       <div className={styles.bottom}>
         <div className={styles.date}>
@@ -52,15 +49,11 @@ function Card({ cards }: CardProps) {
             width={18}
             height={18}
           />
-          <p>{cards.dueDate}</p>
+          <p>{cardData.dueDate}</p>
         </div>
-        <Image
-          className={styles.profileIcon}
-          src={cards.assignee?.profileImageUrl || ''}
-          alt={`${cards.assignee?.nickname} 프로필 이미지`}
-          width={24}
-          height={24}
-        />
+        <div>
+          <ProfileIcon profile={cardData.assignee || null} small />
+        </div>
       </div>
     </div>
   );
