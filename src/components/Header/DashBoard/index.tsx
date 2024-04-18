@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import styles from './Header.module.scss';
+import styles from './DashBoard.module.scss';
 import MenuIcon from '/public/svgs/menu.svg';
 import SettngIcon from '/public/svgs/setting.svg';
 import InviteIcon from '/public/svgs/invite.svg';
 
-function Header() {
+function DashBoard() {
   return (
     <>
       <div className={styles.container}>
@@ -31,4 +31,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default DashBoard;
