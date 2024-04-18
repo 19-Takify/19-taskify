@@ -16,13 +16,20 @@ const schema = z
   .object({
     email: z
       .string()
+      .trim()
       .min(1, { message: '이메일을 입력해 주세요.' })
       .email({ message: '이메일 형식으로 작성해 주세요.' }),
+    nickname: z
+      .string()
+      .trim()
+      .min(1, { message: '닉네임을 입력해 주세요.' })
+      .max(10, { message: '열 자 이하로 작성해주세요.' }),
     password: z
       .string()
+      .trim()
       .min(1, { message: '비밀번호를 입력해 주세요.' })
       .min(8, { message: '8자 이상 입력해주세요.' }),
-    passwordConfirm: z.string().min(1, '비밀번호를 입력해 주세요.'),
+    passwordConfirm: z.string().trim().min(1, '비밀번호를 입력해 주세요.'),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     path: ['passwordConfirm'],
@@ -39,6 +46,7 @@ function SignupForm() {
     mode: 'onChange',
     defaultValues: {
       email: '',
+      nickname: '',
       password: '',
       passwordConfirm: '',
     },
@@ -87,7 +95,7 @@ function SignupForm() {
           errors={errors}
         />
       </div>
-      <PageButton disabled={isValid}>가입하기</PageButton>
+      <PageButton disabled={!isValid}>가입하기</PageButton>
     </form>
   );
 }
