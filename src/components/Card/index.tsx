@@ -31,7 +31,7 @@ function Card({ cards }: CardProps) {
       {cards.imageUrl && (
         <Image
           src={cards.imageUrl}
-          alt=" card 배경 이미지"
+          alt="card 배경 이미지"
           width={274}
           height={160}
         />
