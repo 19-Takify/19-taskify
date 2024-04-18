@@ -23,15 +23,15 @@ const MODAL_BUTTON_TYPE: ModalButtonType<string> = {
 function ModalButton({ children, ...rest }: ModalButtonSignProps) {
   return (
     <button
-      className={`${styles[MODAL_BUTTON_TYPE[children ?? 'default'].style] && styles.default}`}
+      className={`${styles[MODAL_BUTTON_TYPE[children ?? 'default']?.style] ?? styles.default}`}
       {...rest}
     >
       <div className={styles.buttonText}>
-        {MODAL_BUTTON_TYPE[children ?? 'default'].text ?? children}
-        {MODAL_BUTTON_TYPE[children ?? 'default'].image ? (
+        {MODAL_BUTTON_TYPE[children ?? 'default']?.text ?? children}
+        {MODAL_BUTTON_TYPE[children ?? 'default']?.image ? (
           <Image
-            src={`${MODAL_BUTTON_TYPE[children ?? 'default'].image}`}
-            alt={`${MODAL_BUTTON_TYPE[children ?? 'default'].alt}`}
+            src={`${MODAL_BUTTON_TYPE[children ?? 'default']?.image}`}
+            alt={`${MODAL_BUTTON_TYPE[children ?? 'default']?.alt}`}
             width={16}
             height={16}
           />

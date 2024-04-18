@@ -1,8 +1,6 @@
 .cardBox {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
   gap: 0.75rem;
   padding: 1.25rem;
   width: 19.75rem;
@@ -24,7 +22,7 @@
   gap: 0.5rem;
 }
 
-.tags .tagItem {
+.tags li {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +37,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
 }
 
 .date {
@@ -48,10 +45,4 @@
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-}
-
-.profileIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
 }
