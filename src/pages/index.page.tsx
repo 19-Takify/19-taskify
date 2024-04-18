@@ -2,10 +2,10 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './index.module.scss';
-import useIsMobile from '@/hooks/useIsMobile';
+import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 
 export default function Home() {
-  const isMobile = useIsMobile();
+  const isMobile = useIsDesiredSize(375);
 
   return (
     <>
