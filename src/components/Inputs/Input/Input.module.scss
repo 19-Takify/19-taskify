@@ -47,6 +47,10 @@
 
 .input {
   width: 100%;
+
+  &::placeholder {
+    color: $color-gray-9fa6b2;
+  }
 }
 
 .visibleToggler {
