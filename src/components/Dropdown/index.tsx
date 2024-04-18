@@ -96,14 +96,14 @@ function Dropdown({ usage, initialData, data, register }: TDropdownProps) {
         )}
         {isOpen && (
           <ul data-state={`Dropdown${uniqueId}`} className={styles.dropdown}>
-            {data.map((value, idx) => (
+            {data.map((value) => (
               <li
                 data-state={`Dropdown${uniqueId}`}
                 key={value.id}
                 className={styles.list}
                 onClick={() => handleItemClick(value)}
               >
-                {isSelectData.index === idx && (
+                {isSelectData.id === value.id && (
                   <Image
                     className={`${styles.select} ${usage === 'manager' && styles.selectM}`}
                     src="/svgs/check.svg"
