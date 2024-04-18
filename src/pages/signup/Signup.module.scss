@@ -22,7 +22,9 @@
 }
 
 .footerMessage {
+  display: inline-flex;
   color: $color-black-333236;
+  gap: 0.5rem;
 
   .link {
     color: $color-violet-5534da;
