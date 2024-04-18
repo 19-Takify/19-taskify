@@ -76,6 +76,11 @@ a {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+  border: none;
+}
+
 .Toastify__toast-container {
   bottom: 20px !important;
 }
