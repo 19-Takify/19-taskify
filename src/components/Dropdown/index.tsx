@@ -66,17 +66,9 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
         data-state={`Dropdown${id}`}
       >
         {isSelectData.isClick ? (
-          usage === 'state' ? (
-            <DropDownItem usage={usage} data={isSelectData} />
-          ) : (
-            <DropDownItem usage={usage} data={isSelectData} />
-          )
+          <DropDownItem usage={usage} data={isSelectData} />
         ) : initialData ? (
-          usage === 'state' ? (
-            <DropDownItem usage={usage} data={initialData} />
-          ) : (
-            <DropDownItem usage={usage} data={initialData} />
-          )
+          <DropDownItem usage={usage} data={initialData} />
         ) : (
           '담당자를 선택해 주세요'
         )}

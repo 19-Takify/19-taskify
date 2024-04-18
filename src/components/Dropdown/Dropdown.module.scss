@@ -41,10 +41,10 @@
 .list {
   padding: 0.6rem 0 0.6rem 2.25rem;
   position: relative;
-}
 
-.list:hover {
-  background-color: $color-gray-fafafa;
+  &:hover {
+    background-color: $color-gray-fafafa;
+  }
 }
 
 .select {
