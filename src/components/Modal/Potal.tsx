@@ -5,7 +5,7 @@ type PortalProps = {
 };
 
 const Portal = ({ children }: PortalProps) => {
-  const el = document.getElementById('modal-root');
+  const el: any = document.getElementById('modal-root');
   return ReactDOM.createPortal(children, el);
 };
 
