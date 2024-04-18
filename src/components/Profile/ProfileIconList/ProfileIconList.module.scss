@@ -1,9 +1,0 @@
-.profileIconList {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.profileIconList > li:not(:first-of-type) {
-  margin-left: -0.5rem;
-}
