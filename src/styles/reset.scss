@@ -84,3 +84,13 @@ button {
 .Toastify__toast-container {
   bottom: 20px !important;
 }
+
+input {
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
