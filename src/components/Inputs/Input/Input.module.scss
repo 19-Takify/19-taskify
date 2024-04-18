@@ -51,6 +51,11 @@
   &::placeholder {
     color: $color-gray-9fa6b2;
   }
+
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px $color-white-ffffff inset;
+    box-shadow: 0 0 0 1000px $color-white-ffffff inset;
+  }
 }
 
 .visibleToggler {
