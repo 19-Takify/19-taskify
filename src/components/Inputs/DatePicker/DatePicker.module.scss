@@ -1,15 +1,27 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.5rem;
 }
 
 .label {
   font-size: 1.125rem;
   font-weight: 500;
   color: $color-black-333236;
-  .required {
+  & .required {
     color: $color-violet-5534da;
+  }
+  &.hiddenLabel {
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
   }
 }
 
@@ -31,7 +43,5 @@
 }
 .input {
   width: 100%;
-  border: none;
   height: 3rem;
-  outline: none;
 }

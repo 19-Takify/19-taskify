@@ -5,10 +5,24 @@
 }
 
 .label {
+  color: $color-black-333236;
   font-size: 1.125rem;
   font-weight: 500;
 
-  .required {
+  &.hiddenLabel {
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+  }
+
+  & .required {
     color: $color-violet-5534da;
   }
 }
@@ -32,8 +46,6 @@
 }
 
 .input {
-  outline: none;
-  border: none;
   width: 100%;
 }
 
