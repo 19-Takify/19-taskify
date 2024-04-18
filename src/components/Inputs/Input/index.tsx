@@ -1,5 +1,5 @@
 import styles from './Input.module.scss';
-import { useState, InputHTMLAttributes, MouseEvent } from 'react';
+import { useState, InputHTMLAttributes } from 'react';
 import Image from 'next/image';
 import {
   FieldErrors,
@@ -8,24 +8,21 @@ import {
 } from 'react-hook-form';
 import eyeOnImg from '@/svgs/eye-on.svg';
 import eyeOffImg from '@/svgs/eye-off.svg';
-import searchIcon from '@/svgs/search.svg';
-import calendarIcon from '@/svgs/calendar.svg';
 
-type IconType = 'search';
-
-const ICON_IMG = {
-  search: {
-    src: searchIcon,
-    alt: 'searchIcon',
-  },
+type IconType = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 };
 
 type InputProps = {
   className?: string;
-  type?: string;
+  type: string;
   icon?: IconType;
-  label?: string;
-  id: string;
+  label: string;
+  hasLabel: boolean;
+  id?: string;
   required?: boolean;
   register: UseFormRegisterReturn;
   errors?: FieldErrors<FieldValues>;
@@ -35,7 +32,8 @@ type InputProps = {
 /* @param className - Input 커스터마이징 (Input을 사용하는 곳에서 쓰는 className) ex) styles.dashboardName
 /* @param type - email 또는 password
 /* @param icon - 사용할 아이콘 이름 ex) search
-/* @param label - 라벨 
+/* @param label - 라벨 이름
+/* @param hasLabel -라벨을 사용할 건지 안 할 건지 (웹 접근성 반영)
 /* @param id - 라벨의 id로 사용하고 싶은 값 ex) email
 /* @param required - 라벨 옆에 *(필수 표시) 붙일 건지 안 붙일 건지 ex) true
 /* @param register - useForm register 함수의 반환값 ex)register={register('password')}
@@ -43,9 +41,10 @@ type InputProps = {
 */
 function Input({
   className,
-  type = 'text',
+  type,
   icon,
   label,
+  hasLabel = false,
   id,
   required = false,
   register,
@@ -54,26 +53,29 @@ function Input({
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleVisibleToggler = () => {
+  const handleVisibleToggle = () => {
     setIsVisible((preIsVisible) => !preIsVisible);
   };
 
+  const hasErrorMessage = errors && errors[register.name]?.message;
+
   return (
     <div className={styles.container}>
-      {label && (
-        <label className={styles.label} htmlFor={id}>
-          {label} {required && <span className={styles.required}>*</span>}
-        </label>
-      )}
+      <label
+        className={`${styles.label} ${hasLabel || styles.hiddenLabel}`}
+        htmlFor={id}
+      >
+        {label} {required && <span className={styles.required}>*</span>}
+      </label>
       <div
         className={`${styles.inputContainer} ${errors && errors[register.name] && styles.error} ${className}`}
       >
         {icon && (
           <Image
-            width={24}
-            height={24}
-            src={ICON_IMG[icon]?.src}
-            alt={ICON_IMG[icon]?.alt}
+            width={icon.width}
+            height={icon.height}
+            src={icon.src}
+            alt={icon.alt}
           />
         )}
         <input
@@ -86,7 +88,7 @@ function Input({
         />
         {type === 'password' && (
           <button
-            onClick={handleVisibleToggler}
+            onClick={handleVisibleToggle}
             type="button"
             className={styles.visibleToggler}
           >
@@ -94,12 +96,12 @@ function Input({
               width={24}
               height={24}
               src={isVisible ? eyeOnImg : eyeOffImg}
-              alt={isVisible ? 'eyeOnImg' : 'eyeOffImg'}
+              alt={isVisible ? 'Show Password' : 'Hide Password'}
             />
           </button>
         )}
       </div>
-      {errors && (
+      {hasErrorMessage && (
         <p className={styles.errorMessage}>
           {errors[register.name]?.message?.toString()}
         </p>

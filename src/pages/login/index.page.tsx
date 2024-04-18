@@ -57,6 +57,7 @@ function Login() {
         <div>
           <Input
             label="이메일"
+            hasLabel
             required
             id="email"
             type="email"
@@ -68,7 +69,15 @@ function Login() {
         <div>
           <Input
             id="password"
-            icon="search"
+            label="비밀번호"
+            hasLabel={true}
+            icon={{
+              src: '/svgs/search.svg',
+              alt: 'search 아이콘',
+              width: 24,
+              height: 24,
+            }}
+            type="password"
             required
             register={register('password')}
             placeholder="비밀번호를 입력해주세요."
@@ -79,6 +88,8 @@ function Login() {
           <Input
             id="passwordConfirm"
             type="password"
+            label="비밀번호 확인"
+            hasLabel={false}
             register={register('passwordConfirm')}
             placeholder="비밀번호를 입력해 주세요."
           />
@@ -89,9 +100,9 @@ function Login() {
         control={control}
         name="ReactDatepicker"
         label="마감일"
+        hasLabel={true}
         required
       />
-      <button type="submit">submit</button>
     </form>
   );
 }
