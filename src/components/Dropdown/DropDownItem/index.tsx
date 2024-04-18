@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styles from './DropDownItem.module.scss';
 
 type TData = {
@@ -25,9 +26,12 @@ function DropDownItem({ usage, data }: TItemProps) {
           </>
         ) : (
           <>
-            <p
+            <Image
+              width={24}
+              height={24}
               className={styles.profile}
-              style={{ backgroundImage: `url(${profileImageUrl})` }}
+              src={`${profileImageUrl}`}
+              alt="유저 프로필 이미지"
             />
             <span className={styles.nickname}>{nickname}</span>
           </>
