@@ -2,8 +2,10 @@ import Image from 'next/image';
 import styles from './Dropdown.module.scss';
 import { useEffect, useState, useId } from 'react';
 import DropDownItem from './DropDownItem';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 type TData = {
+  id?: number;
   title?: string;
   nickname?: string;
   profileImageUrl?: string;
@@ -11,25 +13,25 @@ type TData = {
 
 type TIsSelect = {
   isClick: boolean;
-  index: number;
 } & TData;
 
 type TDropdownProps = {
   usage: 'state' | 'manager';
   data: TData[];
   initialData?: TData;
+  register: UseFormRegisterReturn;
 };
 
-function Dropdown({ usage, initialData, data }: TDropdownProps) {
+function Dropdown({ usage, initialData, data, register }: TDropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isSelectData, setIsSelectData] = useState<TIsSelect>({
     isClick: false,
-    index: 99999,
+    id: 9999999,
     title: '',
     nickname: '',
     profileImageUrl: '',
   });
-  const id = useId();
+  const uniqueId = useId();
 
   useEffect(() => {
     document.addEventListener('click', handleDropdownClick);
@@ -42,17 +44,17 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
   const handleDropdownClick = (e: any): void => {
     const target = e.target as HTMLElement;
     const datasetState = target.dataset.state;
-    if (datasetState === `Dropdown${id}`) {
+    if (datasetState === `Dropdown${uniqueId}`) {
       setIsOpen((prev) => !prev);
       return;
     }
     setIsOpen(false);
   };
 
-  const handleItemClick = (index: number, data: TData): void => {
+  const handleItemClick = (data: TData): void => {
     setIsSelectData({
       isClick: true,
-      index,
+      id: data.id,
       title: data.title,
       nickname: data.nickname,
       profileImageUrl: data.profileImageUrl,
@@ -63,8 +65,9 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
     <>
       <div
         className={`${styles.initial} ${isOpen && styles.active}`}
-        data-state={`Dropdown${id}`}
+        data-state={`Dropdown${uniqueId}`}
       >
+        <input type="hidden" value={isSelectData.id} {...register} />
         {isSelectData.isClick ? (
           <DropDownItem usage={usage} data={isSelectData} />
         ) : initialData ? (
@@ -74,7 +77,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
         )}
         {isOpen ? (
           <Image
-            data-state={`Dropdown${id}`}
+            data-state={`Dropdown${uniqueId}`}
             src="/svgs/arrow-top.svg"
             width="26"
             height="26"
@@ -83,7 +86,7 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
           />
         ) : (
           <Image
-            data-state={`Dropdown${id}`}
+            data-state={`Dropdown${uniqueId}`}
             src="/svgs/arrow-down.svg"
             width="26"
             height="26"
@@ -92,13 +95,13 @@ function Dropdown({ usage, initialData, data }: TDropdownProps) {
           />
         )}
         {isOpen && (
-          <ul data-state={`Dropdown${id}`} className={styles.dropdown}>
+          <ul data-state={`Dropdown${uniqueId}`} className={styles.dropdown}>
             {data.map((value, idx) => (
               <li
-                data-state={`Dropdown${id}`}
-                key={idx}
+                data-state={`Dropdown${uniqueId}`}
+                key={value.id}
                 className={styles.list}
-                onClick={() => handleItemClick(idx, value)}
+                onClick={() => handleItemClick(value)}
               >
                 {isSelectData.index === idx && (
                   <Image
