@@ -18,7 +18,7 @@ function Signup() {
       <SignupForm />
       <footer>
         <p className={styles.footerMessage}>
-          이미 가입하셨나요?{' '}
+          이미 가입하셨나요?
           <Link href="/login" className={styles.link}>
             로그인하기
           </Link>
