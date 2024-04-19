@@ -10,7 +10,7 @@ function Signup() {
         <Link href="/">
           <Image
             src="/svgs/taskify-vertical-logo.svg"
-            alt="Taskify"
+            alt="Taskify 로고"
             width={200}
             height={280}
           />
