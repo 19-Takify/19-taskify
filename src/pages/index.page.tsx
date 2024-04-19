@@ -36,10 +36,10 @@ export default function Home() {
           </Link>
           <ul className={styles.navList}>
             <li>
-              <Link href="/signin">로그인</Link>
+              <Link href={PAGE_PATH.LOGIN}>로그인</Link>
             </li>
             <li>
-              <Link href="/signup">회원가입</Link>
+              <Link href={PAGE_PATH.SIGNUP}>회원가입</Link>
             </li>
           </ul>
         </nav>
