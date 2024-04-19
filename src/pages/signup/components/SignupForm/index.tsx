@@ -120,7 +120,9 @@ function SignupForm() {
           errors={errors}
         />
       </div>
-      <PageButton disabled={!isValid}>가입하기</PageButton>
+      <PageButton type="submit" disabled={!isValid}>
+        가입하기
+      </PageButton>
     </form>
   );
 }
