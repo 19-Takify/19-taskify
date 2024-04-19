@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './index.module.scss';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
+import { PAGE_PATH } from '@/constants/pageUrl';
 
 export default function Home() {
   const isMobile = useIsDesiredSize(375);
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <header className={styles.header}>
         <nav className={styles.nav}>
-          <Link href="/">
+          <Link href={PAGE_PATH.MAIN}>
             {isMobile ? (
               <Image
                 className={styles.logo}
@@ -59,7 +60,7 @@ export default function Home() {
             새로운 일정 관리 <span>Taskify</span>
           </h1>
           <h2 className={styles.mainText}>간편하게 일정관리 하기!</h2>
-          <Link className={styles.loginBtn} href="/signin">
+          <Link className={styles.loginBtn} href={PAGE_PATH.LOGIN}>
             로그인
           </Link>
         </section>
