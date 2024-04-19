@@ -11,6 +11,7 @@ function Signup() {
           <Image
             src="/svgs/taskify-vertical-logo.svg"
             alt="Taskify 로고"
+            className={styles.logoImage}
             width={200}
             height={280}
           />
