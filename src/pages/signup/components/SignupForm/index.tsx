@@ -88,7 +88,7 @@ function SignupForm() {
           register={register('email')}
           label="이메일"
           placeholder="이메일을 입력해 주세요."
-          hasLabel={true}
+          hasLabel
           errors={errors}
         />
 
@@ -98,7 +98,7 @@ function SignupForm() {
           register={register('nickname')}
           label="닉네임"
           placeholder="닉네임을 입력해 주세요."
-          hasLabel={true}
+          hasLabel
           errors={errors}
         />
         <Input
@@ -107,7 +107,7 @@ function SignupForm() {
           register={register('password')}
           label="비밀번호"
           placeholder="8자 이상 입력해 주세요."
-          hasLabel={true}
+          hasLabel
           errors={errors}
         />
         <Input
@@ -116,7 +116,7 @@ function SignupForm() {
           register={register('passwordConfirm')}
           label="비밀번호 확인"
           placeholder="비밀번호를 한번 더 입력해 주세요."
-          hasLabel={true}
+          hasLabel
           errors={errors}
         />
       </div>
