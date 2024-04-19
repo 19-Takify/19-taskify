@@ -2,7 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Input from '@/components/Inputs/Input';
-import { instance as axios, isAxiosError } from '@/apis/axios';
+import { isAxiosError } from 'axios';
+import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { useRouter } from 'next/router';
 
