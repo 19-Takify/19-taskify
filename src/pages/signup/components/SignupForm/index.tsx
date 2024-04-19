@@ -83,6 +83,7 @@ function SignupForm() {
     >
       <div className={styles.inputContainer}>
         <Input
+          id="email"
           type="email"
           register={register('email')}
           label="이메일"
@@ -90,7 +91,9 @@ function SignupForm() {
           hasLabel={true}
           errors={errors}
         />
+
         <Input
+          id="nickname"
           type="text"
           register={register('nickname')}
           label="닉네임"
@@ -99,6 +102,7 @@ function SignupForm() {
           errors={errors}
         />
         <Input
+          id="password"
           type="password"
           register={register('password')}
           label="비밀번호"
@@ -107,6 +111,7 @@ function SignupForm() {
           errors={errors}
         />
         <Input
+          id="passwordConfirm"
           type="password"
           register={register('passwordConfirm')}
           label="비밀번호 확인"
