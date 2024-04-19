@@ -7,12 +7,14 @@ function Signup() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <Image
-          src="/svgs/taskify-vertical-logo.svg"
-          alt="Taskify"
-          width={200}
-          height={280}
-        />
+        <Link href="/">
+          <Image
+            src="/svgs/taskify-vertical-logo.svg"
+            alt="Taskify"
+            width={200}
+            height={280}
+          />
+        </Link>
         <h1 className={styles.title}>첫 방문을 환영합니다!</h1>
       </header>
       <SignupForm />
