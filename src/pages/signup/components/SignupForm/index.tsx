@@ -44,7 +44,7 @@ function SignupForm() {
   const router = useRouter();
   const {
     register,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     handleSubmit,
     setError,
     reset,
@@ -120,7 +120,7 @@ function SignupForm() {
           errors={errors}
         />
       </div>
-      <PageButton type="submit" disabled={!isValid}>
+      <PageButton type="submit" disabled={!isValid || isSubmitting}>
         가입하기
       </PageButton>
     </form>
