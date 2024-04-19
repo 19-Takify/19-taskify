@@ -7,14 +7,17 @@
   font-weight: 500;
   color: $color-white-ffffff;
 
+
   @include mobile {
     width: 22rem;
   }
 }
 
+
 .sign:disabled {
   background: $color-gray-9fa6b2;
 }
+
 
 .delete {
   background: $color-white-ffffff;

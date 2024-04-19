@@ -77,6 +77,11 @@ a {
   color: $color-black-000000;
 }
 
+button {
+  cursor: pointer;
+  border: none;
+}
+
 .Toastify__toast-container {
   bottom: 20px !important;
 }
