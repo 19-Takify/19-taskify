@@ -1,8 +1,6 @@
-type MainLayoutProps = {
-  children: React.ReactNode;
-};
+import { PropsWithChildren } from 'react';
 
-function MainLayout({ children }: MainLayoutProps) {
+function MainLayout({ children }: PropsWithChildren) {
   return (
     <>
       <header></header>
