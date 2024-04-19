@@ -1,0 +1,341 @@
+export const test = {
+  cursorId: 0,
+  invitations: [
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+    {
+      id: 0,
+      inviter: {
+        nickname: '홍길동',
+        email: 'hong123@naver.com',
+        id: 0,
+      },
+      teamId: 'string',
+      dashboard: {
+        title: '비브라토',
+        id: 0,
+      },
+      invitee: {
+        nickname: 'string',
+        email: 'string',
+        id: 0,
+      },
+      inviteAccepted: true,
+      createdAt: '2024-04-19T03:44:54.647Z',
+      updatedAt: '2024-04-19T03:44:54.647Z',
+    },
+  ],
+};
