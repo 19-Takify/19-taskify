@@ -1,8 +1,18 @@
 import axios from '@/apis/axios';
+import { GetServerSidePropsContext } from 'next';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookies = context.req.cookies;
+  console.log('accessToken: ', cookies['accessToken']);
+
+  return {
+    props: {},
+  };
+}
 
 export default function Home() {
   const accessToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc0OSwidGVhbUlkIjoiNC0xOSIsImlhdCI6MTcxMzUxOTU0OSwiaXNzIjoic3AtdGFza2lmeSJ9.yHOcu9ojaJrM3ox576Cr3Oj0xTW7g-3y2k2FHWMLUbk';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc0OSwidGVhbUlkIjoiNC0xOSIsImlhdCI6MTcxMzUyNTQ2NSwiaXNzIjoic3AtdGFza2lmeSJ9.tImTj9DbHCr42QnQaBwayyX_lflTnqdGrqWvu-LEvzk';
   const handlePasswordChange = async () => {
     try {
       const res = await axios.put(
