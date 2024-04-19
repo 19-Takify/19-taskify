@@ -37,17 +37,19 @@ const PAGE_BUTTON_TYPE: PageButtonType<string> = {
 };
 
 function PageButton({ children, ...rest }: PageButtonSignProps) {
+  const typeCheck = children ?? 'default';
+
   return (
     <button
-      className={styles[PAGE_BUTTON_TYPE[children ?? 'default'].style]}
+      className={`${styles[PAGE_BUTTON_TYPE[typeCheck]?.style] ?? styles.default}`}
       {...rest}
     >
       <div className={styles.buttonText}>
-        {PAGE_BUTTON_TYPE[children ?? 'default'].text ?? children}
-        {PAGE_BUTTON_TYPE[children ?? 'default'].image ? (
+        {PAGE_BUTTON_TYPE[typeCheck]?.text ?? children}
+        {PAGE_BUTTON_TYPE[typeCheck]?.image ? (
           <Image
-            src={`${PAGE_BUTTON_TYPE[children ?? 'default'].image}`}
-            alt={`${PAGE_BUTTON_TYPE[children ?? 'default'].alt}`}
+            src={`${PAGE_BUTTON_TYPE[typeCheck]?.image}`}
+            alt={`${PAGE_BUTTON_TYPE[typeCheck]?.alt}`}
             width={16}
             height={16}
           />
