@@ -6,7 +6,7 @@ import { instance as axios, isAxiosError } from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { useRouter } from 'next/router';
 
-type IFormValues = {
+type FormValues = {
   email: string;
   password: string;
 };
@@ -27,8 +27,9 @@ function Login() {
   const {
     register,
     formState: { errors },
+    setError,
     handleSubmit,
-  } = useForm<IFormValues>({
+  } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: 'all',
     defaultValues: {
@@ -36,29 +37,34 @@ function Login() {
       password: '',
     },
   });
-  const onValid: SubmitHandler<IFormValues> = async (data) => {
+  const handleValidSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axios.post('auth/login', data);
       const result = response.data;
       // console.log(result);
       router.push('/mydashboard');
     } catch (error) {
-      if (isAxiosError(error)) {
-        // `AxiosError`인 경우 에러 처리
-        if (error.response) {
-          setToast('error', error.response.data.message);
-        } else {
-          setToast('error', error.message);
-        }
-      } else {
+      if (!isAxiosError(error)) {
         // `AxiosError`가 아닌 경우
-        setToast('error', String(error));
+        setToast('error', '알 수 없는 오류가 발생했습니다.');
+        return;
       }
+      // `AxiosError`인 경우 에러 처리
+      if (!error.response) {
+        setToast('error', '로그인에 실패했습니다.');
+        return;
+      }
+      const message = error.response.data.message;
+      if (message === '존재하지 않는 유저입니다.') {
+        setError('email', { message });
+        return;
+      }
+      setError('password', { message });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onValid)}>
+    <form onSubmit={handleSubmit(handleValidSubmit)}>
       <div>
         <div>
           <Input
@@ -67,7 +73,7 @@ function Login() {
             id="email"
             type="email"
             register={register('email')}
-            placeholder="이메일을 입력해주세요."
+            placeholder="이메일을 입력해 주세요."
             errors={errors}
           />
         </div>
@@ -75,10 +81,10 @@ function Login() {
           <Input
             id="password"
             label="비밀번호"
-            hasLabel={true}
+            hasLabel
             type="password"
             register={register('password')}
-            placeholder="비밀번호를 입력해주세요."
+            placeholder="비밀번호를 입력해 주세요."
             errors={errors}
           />
         </div>
