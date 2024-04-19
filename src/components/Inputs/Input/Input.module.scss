@@ -28,10 +28,10 @@
 }
 
 .inputContainer {
-  display: inline-flex;
+  display: flex;
   border: 0.0625rem solid $color-gray-d9d9d9;
   border-radius: 0.5rem;
-  width: min(100%, 32.5rem);
+  width: min(100%, 60.25rem);
   height: 3rem;
   padding: 0 1rem;
   gap: 0.5rem;
