@@ -42,8 +42,8 @@ function Login() {
     try {
       const response = await axios.post('auth/login', data);
       const result = response.data;
-      // console.log(result);
-      router.push('/mydashboard');
+      console.log(result);
+      // router.push('/mydashboard');
     } catch (error) {
       if (!isAxiosError(error)) {
         // `AxiosError`가 아닌 경우
