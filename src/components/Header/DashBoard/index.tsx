@@ -14,7 +14,11 @@ function DashBoard() {
         </div>
         <div className={styles.box}>
           <button className={styles.button}>
-            <Image className={styles.icon} src={SettngIcon} alt="setting" />
+            <Image
+              className={styles.icon}
+              src={SettngIcon}
+              alt="톱니바퀴 이미지"
+            />
             관리
           </button>
           <button className={styles.button}>

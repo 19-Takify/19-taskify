@@ -1,10 +1,11 @@
 import Portal from './Potal';
+import styles from './Modal.module.scss';
 
 function Modal() {
   return (
     <Portal>
-      <div>
-        <h1>Modal</h1>
+      <div className={styles.background}>
+        <div className={styles.modalBox}></div>
       </div>
     </Portal>
   );

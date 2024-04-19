@@ -29,10 +29,10 @@
   }
 }
 .button {
-  font-family: Pretendard;
   font-size: 1rem;
-  font-weight: 400;
   color: $color-black-333236;
+  background-color: $color-white-ffffff;
+  border: none;
   @include mobile {
     font-size: 0.8rem;
   }

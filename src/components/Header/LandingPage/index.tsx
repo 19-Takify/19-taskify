@@ -12,8 +12,8 @@ function LoginHeader() {
           <Image className={styles.tastify} src={Taskify} alt="tastify" />
         </div>
         <div className={styles.box}>
-          <div className={styles.button}>로그인</div>
-          <div className={styles.button}>회원가입</div>
+          <button className={styles.button}>로그인</button>
+          <button className={styles.button}>회원가입</button>
         </div>
       </div>
     </>
