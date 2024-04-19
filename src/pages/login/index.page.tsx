@@ -27,7 +27,7 @@ function Login() {
   const router = useRouter();
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     setError,
     handleSubmit,
   } = useForm<FormValues>({
@@ -90,7 +90,9 @@ function Login() {
           />
         </div>
       </div>
-      <button type="submit">로그인</button>
+      <button disabled={!isValid} type="submit">
+        로그인
+      </button>
     </form>
   );
 }
