@@ -4,5 +4,6 @@
 .invitedDashboard {
   display: flex;
   overflow: hidden;
-  height: 100vh;
+  min-height: 25rem;
+  max-height: 100vh;
 }
