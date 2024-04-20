@@ -11,8 +11,8 @@
     background: $color-gray-9fa6b2;
   }
 
-  @include mobile {
-    width: 22rem;
+  @include tablet {
+    width: 100%;
   }
 }
 
