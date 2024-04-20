@@ -21,7 +21,7 @@
 
 .invitedBox {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 1rem 2rem;
 
@@ -30,7 +30,16 @@
   }
 }
 
+.invitedBox.title {
+  color: $color-gray-9fa6b2;
+}
+
+.invitedBox > p {
+  width: 40%;
+}
+
 .invitedButton {
   display: flex;
   gap: 0.75rem;
+  align-items: center;
 }

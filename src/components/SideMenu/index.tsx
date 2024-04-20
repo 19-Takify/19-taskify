@@ -1,7 +1,8 @@
-import styles from './SideMenu.module.scss';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Circle from '@/components/Circle';
+import styles from './SideMenu.module.scss';
+import Image from 'next/image';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;
@@ -57,10 +58,7 @@ function SideMenu({ dashboards, isOpen }: SideMenuProps) {
                   className={styles.dashboardList}
                   onClick={() => handleDashboardClick(dashboard.id as number)}
                 >
-                  <div
-                    className={styles.circle}
-                    style={{ backgroundColor: `${dashboard.color}` }}
-                  />
+                  <Circle color={dashboard.color as string} small />
                   <p>{dashboard.title}</p>
                   {dashboard.createdByMe && (
                     <Image

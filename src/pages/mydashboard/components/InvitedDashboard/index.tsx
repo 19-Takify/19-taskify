@@ -12,7 +12,6 @@ function InvitedDashboard() {
   const handleInfiniteScroll = () => {
     const nextIndex = startIndex + 8;
     if (nextIndex > 16) return;
-    console.log(nextIndex);
     setStartIndex(nextIndex); // 시작 인덱스 업데이트
     // 다음 데이터를 가져와서 상태를 업데이트
     setInvitations([
@@ -29,16 +28,18 @@ function InvitedDashboard() {
       <strong>초대받은 대시보드</strong>
       <div>검색</div>
       <ul>
-        <li className={styles.invitedBox}>
-          <div>이름</div>
-          <div>초대자</div>
-          <div>수락 여부</div>
+        <li>
+          <div className={`${styles.invitedBox} ${styles.title}`}>
+            <p>이름</p>
+            <p>초대자</p>
+            <div className={styles.invitedButton}>수락 여부</div>
+          </div>
         </li>
         {invitations.map((invitation, index) => (
           <li key={index}>
             <div className={styles.invitedBox}>
-              <div>{invitation.dashboard.title}</div>
-              <div>{invitation.inviter.nickname}</div>
+              <p>{invitation.dashboard.title}</p>
+              <p>{invitation.inviter.nickname}</p>
               <div className={styles.invitedButton}>
                 <PageButton>수락</PageButton>
                 <PageButton>거절</PageButton>

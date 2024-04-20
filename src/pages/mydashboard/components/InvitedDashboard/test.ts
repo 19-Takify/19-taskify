@@ -25,13 +25,13 @@ export const test = {
     {
       id: 0,
       inviter: {
-        nickname: '홍길동',
+        nickname: '홍길동asd',
         email: 'hong123@naver.com',
         id: 0,
       },
       teamId: 'string',
       dashboard: {
-        title: '비브라토',
+        title: '비브라토asd',
         id: 0,
       },
       invitee: {
@@ -67,13 +67,13 @@ export const test = {
     {
       id: 0,
       inviter: {
-        nickname: '홍길동',
+        nickname: '홍길동qweqwe',
         email: 'hong123@naver.com',
         id: 0,
       },
       teamId: 'string',
       dashboard: {
-        title: '비브라토',
+        title: '비브라토qweqwe',
         id: 0,
       },
       invitee: {
