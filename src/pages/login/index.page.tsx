@@ -6,6 +6,7 @@ import { isAxiosError } from 'axios';
 import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { useRouter } from 'next/router';
+import { useAtom } from 'jotai';
 
 type FormValues = {
   email: string;
@@ -24,6 +25,8 @@ const schema = z.object({
 });
 
 function Login() {
+  // const [auth, setAuth] = useAtom();
+
   const router = useRouter();
   const {
     register,
@@ -94,6 +97,9 @@ function Login() {
       <button disabled={!isValid} type="submit">
         로그인
       </button>
+      {/* <button type="button" onClick={() => setAuth((pre) => ++pre)}>
+        {auth}
+      </button> */}
     </form>
   );
 }

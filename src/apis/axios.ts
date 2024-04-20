@@ -1,15 +1,25 @@
 import axios from 'axios';
 import { getCookie } from './cookie';
+import { GetServerSidePropsContext } from 'next';
 const instance = axios.create({
   baseURL: 'https://sp-taskify-api.vercel.app/4-19/',
 });
+
+let context: GetServerSidePropsContext | null = null;
+export const setContext = (_context: GetServerSidePropsContext) => {
+  context = _context;
+};
 
 // 요청 인터셉터
 instance.interceptors.request.use(
   async function (config) {
     // 스토리지에서 토큰을 가져온다.
     // const accessToken = localStorage.getItem('accessToken');
-    console.log(1);
+    const isServer = typeof window === 'undefined';
+
+    // const accessToken = isServer
+    //   ? context?.req?.cookies?.accessToken
+    //   : getCookie('accessToken');
 
     const accessToken = getCookie('accessToken');
 
