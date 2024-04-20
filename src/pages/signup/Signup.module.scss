@@ -23,7 +23,7 @@
     font-weight: 500;
   }
 
-  @include mobile {
+  @include tablet {
     .logoImage {
       width: 8.75rem;
       height: 12.25rem;
