@@ -1,6 +1,8 @@
 import axios from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
 
+// SSR에서 axios interceptor 값 받아와지지 않는 현상.
+// https://github.com/axios/axios/issues/4976#issuecomment-1723822982
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   console.log(2);
 
@@ -10,9 +12,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (accessToken) {
     try {
       const res = await axios.get('users/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
       });
       console.log('me data: ', res.data);
     } catch (error) {
