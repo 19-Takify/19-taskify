@@ -7,8 +7,12 @@
   font-weight: 500;
   color: $color-white-ffffff;
 
-  @include mobile {
-    width: 22rem;
+  &:disabled {
+    background: $color-gray-9fa6b2;
+  }
+
+  @include tablet {
+    width: 100%;
   }
 }
 
