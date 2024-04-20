@@ -9,20 +9,16 @@ instance.interceptors.request.use(
   async function (config) {
     // 스토리지에서 토큰을 가져온다.
     // const accessToken = localStorage.getItem('accessToken');
-    const accessToken = getCookie('accessToken') + 'fwejofwe';
+    console.log(1);
 
-    console.log('accessToken interceptor: ', accessToken);
+    const accessToken = getCookie('accessToken');
 
-    // await instance.get('users/me', {
-    //   headers: {
-    //     Authorization: `bearer ${accessToken}`,
-    //   },
-    // });
+    console.log('interceptor accessToken: ', accessToken);
 
     // 토큰이 있으면 요청 헤더에 추가한다.
-    // if (accessToken) {
-    //   config.headers['Authorization'] = `Bearer ${accessToken}`;
-    // }
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
 
     return config;
   },
@@ -37,7 +33,7 @@ instance.interceptors.response.use(
   (error) => {
     const statusCode = error.response?.status;
     if (statusCode === 401) {
-      console.log('로그인을 다시시도해 주세요.');
+      return Promise.reject('로그인을 다시시도해 주세요.');
     }
     return Promise.reject(error);
   },

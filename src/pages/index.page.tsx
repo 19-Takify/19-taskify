@@ -2,8 +2,23 @@ import axios from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  console.log(2);
+
   const cookies = context.req.cookies;
-  // console.log('accessToken: ', cookies['accessToken']);
+  const accessToken = cookies.accessToken;
+  console.log('Home SSR accessToken: ', accessToken);
+  if (accessToken) {
+    try {
+      const res = await axios.get('users/me', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      console.log('me data: ', res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return {
     props: {},
@@ -23,7 +38,7 @@ export default function Home() {
         },
         {
           headers: {
-            Authorization: `bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
@@ -36,9 +51,9 @@ export default function Home() {
   const handleMe = async () => {
     try {
       const res = await axios.get('users/me', {
-        headers: {
-          Authorization: `bearer ${accessToken}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
       });
       console.log(res);
     } catch (error) {
@@ -48,7 +63,7 @@ export default function Home() {
 
   return (
     <>
-      <button type="button" onClick={handlePasswordChange}>
+      <button type="button" onClick={handleMe}>
         테스트
       </button>
     </>
