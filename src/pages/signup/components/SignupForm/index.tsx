@@ -120,7 +120,6 @@ function SignupForm() {
           hasLabel
           errors={errors}
         />
-
         <Input
           id="nickname"
           type="text"
