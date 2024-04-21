@@ -16,7 +16,7 @@ function Signup() {
             height={280}
           />
         </Link>
-        <h1 className={styles.title}>첫 방문을 환영합니다!</h1>
+        <h2 className={styles.title}>첫 방문을 환영합니다!</h2>
       </header>
       <SignupForm />
       <footer>
