@@ -9,6 +9,7 @@ import PageButton from '@/components/Button/PageButton';
 import Input from '@/components/Inputs/Input';
 import setToast from '@/utils/setToast';
 import {
+  FETCH_ERROR_MESSAGE,
   SERVER_ERROR_MESSAGE,
   VALID_ERROR_MESSAGE,
 } from '@/constants/errorMessage';
@@ -90,7 +91,7 @@ function SignupForm() {
             return;
         }
       }
-      setToast('warn', '알 수 없는 오류가 발생했습니다.');
+      setToast('warn', FETCH_ERROR_MESSAGE.UNKNOWN);
       reset();
     }
   };
