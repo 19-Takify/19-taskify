@@ -4,6 +4,7 @@
   padding: 2rem 1.75rem;
   border-radius: 0.5rem;
   background: $color-white-ffffff;
+  border: 0.0625rem solid $color-gray-d9d9d9;
   min-width: 18.75rem;
 
   @include tablet {

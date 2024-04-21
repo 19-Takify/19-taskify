@@ -4,7 +4,7 @@ import styles from './Dashboard.module.scss';
 
 const COLOR = ['#7AC555', '#760DDE', '#FFA500', '#76A5EA', '#E876EA'];
 
-// 추후에 상태 데이터로 변경
+// 추후에 전역 상태 데이터로 변경
 const tempData = {
   title: '비브리지',
   color: '#7AC555',

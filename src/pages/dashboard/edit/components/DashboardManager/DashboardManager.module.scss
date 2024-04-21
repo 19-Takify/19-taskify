@@ -1,9 +1,10 @@
 .wrap {
   width: 38.75rem;
-  height: 26rem;
+  height: auto;
   padding: 2rem 0 0;
   border-radius: 0.5rem;
   background: $color-white-ffffff;
+  border: 0.0625rem solid $color-gray-d9d9d9;
   min-width: 18.75rem;
 
   @include tablet {
@@ -41,7 +42,7 @@
     width: 100%;
     padding: 0 1.75rem;
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 
     img {
       position: absolute;
@@ -74,8 +75,8 @@
   }
 
   ul {
-    margin-top: 1rem;
-    height: 18.2rem;
+    margin-top: 0.5rem;
+    height: 14rem;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -146,9 +147,21 @@
         font-weight: 500;
       }
     }
+  }
 
-    .target {
-      height: 10px;
+  .empty {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 18.2rem;
+    font-size: 1.1rem;
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      padding-left: 1.2rem;
     }
   }
 }

@@ -1,6 +1,6 @@
 .wrap {
   background-color: $color-gray-fafafa;
-  padding-top: 1.25rem;
+  padding: 1.25rem 0 2.5rem 1rem;
 
   .box {
     width: 38.75rem;
@@ -32,18 +32,18 @@
 
       .deleteBtn {
         width: 18rem;
-        height: 3.875rem;
+        height: 3.5rem;
         border-radius: 0.5rem;
         border: 0.0625rem solid $color-gray-d9d9d9;
         background-color: $color-white-ffffff;
         color: $color-black-333236;
         text-align: center;
-        font-size: 1.125rem;
+        font-size: 1rem;
         font-weight: 500;
 
         @include tablet {
           width: 12rem;
-          font-size: 1rem;
+          font-size: 0.9rem;
         }
       }
     }
