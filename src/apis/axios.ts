@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getCookie } from './cookie';
 import { GetServerSidePropsContext } from 'next';
+import Router from 'next/router';
 const instance = axios.create({
   baseURL: 'https://sp-taskify-api.vercel.app/4-19/',
 });
@@ -16,12 +17,13 @@ instance.interceptors.request.use(
     // 스토리지에서 토큰을 가져온다.
     // const accessToken = localStorage.getItem('accessToken');
     const isServer = typeof window === 'undefined';
+    console.log('isServer: ', isServer);
 
-    // const accessToken = isServer
-    //   ? context?.req?.cookies?.accessToken
-    //   : getCookie('accessToken');
+    const accessToken = isServer
+      ? context?.req?.cookies?.accessToken
+      : getCookie('accessToken');
 
-    const accessToken = getCookie('accessToken');
+    // const accessToken = getCookie('accessToken');
 
     console.log('interceptor accessToken: ', accessToken);
 
@@ -43,7 +45,8 @@ instance.interceptors.response.use(
   (error) => {
     const statusCode = error.response?.status;
     if (statusCode === 401) {
-      return Promise.reject('로그인을 다시시도해 주세요.');
+      // return Promise.reject('로그인을 다시시도해 주세요.');
+      Router.push('/login');
     }
     return Promise.reject(error);
   },

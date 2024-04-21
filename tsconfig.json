@@ -18,6 +18,11 @@
       "@/svgs/*": ["./public/svgs/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/utils/middlewares/auth.ts"
+  ],
   "exclude": ["node_modules"]
 }
