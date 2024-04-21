@@ -8,8 +8,8 @@
   color: $color-white-ffffff;
 
 
-  @include mobile {
-    width: 22rem;
+  @include tablet {
+    width: 100%;
   }
 }
 
