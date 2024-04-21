@@ -38,5 +38,5 @@ export const SERVER_ERROR_MESSAGE = {
 
 export const FETCH_ERROR_MESSAGE = {
   REQUEST: '요청에 실패했습니다.',
-  UNKNOWN: '알 수 없는 오류가 발생했습니다.',
+  UNKNOWN: '잠시 후 다시 시도해 주세요.',
 };
