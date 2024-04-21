@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
+import instance from '@/apis/axios';
+import setToast from '@/utils/setToast';
 import styles from './Dashboard.module.scss';
 
 const COLOR = ['#7AC555', '#760DDE', '#FFA500', '#76A5EA', '#E876EA'];
@@ -30,18 +32,26 @@ function DashboardEdit() {
     }));
   };
 
+  const handleEditDashboard = async () => {
+    try {
+      const res = await instance.put('/dashboards/대시보드 ID', value);
+    } catch (e: any) {
+      setToast('error', e.response.data.message);
+    }
+  };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
         <h2>{tempData.title}</h2>
         <ul>
-          {COLOR.map((v, idx) =>
-            value.color === v ? (
-              <li
-                key={idx}
-                style={{ backgroundColor: v }}
-                onClick={() => handleColorClick(v)}
-              >
+          {COLOR.map((v, idx) => (
+            <li
+              key={idx}
+              style={{ backgroundColor: v }}
+              onClick={() => handleColorClick(v)}
+            >
+              {value.color === v && (
                 <Image
                   className={styles.check}
                   src="/svgs/check-white.svg"
@@ -49,15 +59,9 @@ function DashboardEdit() {
                   width={24}
                   height={24}
                 />
-              </li>
-            ) : (
-              <li
-                key={idx}
-                style={{ backgroundColor: v }}
-                onClick={() => handleColorClick(v)}
-              />
-            ),
-          )}
+              )}
+            </li>
+          ))}
         </ul>
       </div>
       <div className={styles.inputBox}>
@@ -69,7 +73,7 @@ function DashboardEdit() {
           onChange={handleInputChange}
         />
       </div>
-      <button>변경</button>
+      <button onClick={() => handleEditDashboard()}>변경</button>
     </div>
   );
 }
