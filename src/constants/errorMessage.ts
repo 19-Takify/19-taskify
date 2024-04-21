@@ -35,3 +35,8 @@ export const SERVER_ERROR_MESSAGE = {
     NOT_FOUND: '존재하지 않는 유저입니다.',
   },
 };
+
+export const FETCH_ERROR_MESSAGE = {
+  REQUEST: '요청에 실패했습니다.',
+  UNKNOWN: '알 수 없는 오류가 발생했습니다.',
+};
