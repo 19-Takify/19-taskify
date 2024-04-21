@@ -2,12 +2,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Signup.module.scss';
 import SignupForm from '@/pages/signup/components/SignupForm';
+import { PAGE_PATH } from '@/constants/pageUrl';
 
 function Signup() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <Link href="/">
+        <Link href={PAGE_PATH.MAIN}>
           <Image
             src="/svgs/taskify-vertical-logo.svg"
             alt="Taskify 로고"
@@ -22,7 +23,7 @@ function Signup() {
       <footer>
         <p className={styles.footerMessage}>
           이미 가입하셨나요?
-          <Link href="/login" className={styles.link}>
+          <Link href={PAGE_PATH.LOGIN} className={styles.link}>
             로그인하기
           </Link>
         </p>
