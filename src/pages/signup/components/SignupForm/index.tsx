@@ -13,6 +13,8 @@ import {
   SERVER_ERROR_MESSAGE,
   VALID_ERROR_MESSAGE,
 } from '@/constants/errorMessage';
+import { PAGE_PATH } from '@/constants/pageUrl';
+import { setCookie } from '@/utils/cookie';
 
 type FormValues = {
   email: string;
@@ -70,14 +72,21 @@ function SignupForm() {
   const handleValidSubmit = async (data: FormValues) => {
     try {
       await axios.post('/users', data);
+      const res = await axios.post('/auth/login', data);
+      const { accessToken } = res.data;
+      setCookie('accessToken', accessToken);
       setToast('success', '가입이 완료되었습니다.');
-      router.push('/login');
+      router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {
       if (isAxiosError(error)) {
         const status = error.response?.status;
         switch (status) {
           case 400:
             setError('email', { message: SERVER_ERROR_MESSAGE.EMAIL.INVALID });
+            return;
+          case 404:
+            setToast('warn', FETCH_ERROR_MESSAGE.UNKNOWN);
+            router.push(PAGE_PATH.LOGIN);
             return;
           case 409:
             setError('email', {
