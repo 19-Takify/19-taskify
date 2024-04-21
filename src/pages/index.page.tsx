@@ -13,12 +13,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // if (accessToken) {
   setContext(context);
   try {
-    const res = await axios.get('users/me', {
-      // headers: {
-      //   Authorization: `Bearer ${accessToken}`,
-      // },
-    });
-    console.log('me data: ', res.data);
+    // const res = await axios.get('users/me', {
+    // headers: {
+    //   Authorization: `Bearer ${accessToken}`,
+    // },
+    // });
+    // console.log('me data: ', res.data);
   } catch (error) {
     console.log(error);
   }
