@@ -2,12 +2,25 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { withoutAuth } from './utils/middlewares/auth';
 
-export function middleware(request: NextRequest) {
-  console.log('request: ', request);
+export async function middleware(request: NextRequest) {
+  // console.log('request: ', request);
+  // const requestHeader = new Headers(request.headers);
+  // const accessToken = request.cookies.get('accessToken')?.value;
+  // console.log('middleware accessToken: ', accessToken);
+
+  // if (accessToken) {
+  //   requestHeader.set('Authrization', `Bearer ${accessToken}`);
+  // }
+
+  // const response = NextResponse.next({
+  //   request: {
+  //     headers: requestHeader,
+  //   },
+  // });
 
   if (request.nextUrl.pathname.startsWith('/login')) {
     // return NextResponse.rewrite(new URL('/singup', request.url));
-    console.log('로그인 페이지 진입');
+    // console.log('로그인 페이지 진입');
 
     return withoutAuth(request);
   }

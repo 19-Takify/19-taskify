@@ -15,6 +15,7 @@ import {
 } from '@/constants/errorMessage';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import { setCookie } from '@/utils/cookie';
+import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/api';
 
 type FormValues = {
   email: string;
@@ -74,7 +75,7 @@ function SignupForm() {
       await axios.post('/users', data);
       const res = await axios.post('/auth/login', data);
       const { accessToken } = res.data;
-      setCookie('accessToken', accessToken);
+      setCookie(AUTH_TOKEN_COOKIE_NAME, accessToken);
       setToast('success', '가입이 완료되었습니다.');
       router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {

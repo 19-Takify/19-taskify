@@ -14,6 +14,7 @@ import {
   VALID_ERROR_MESSAGE,
 } from '@/constants/errorMessage';
 import { PAGE_PATH } from '@/constants/pageUrl';
+import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/api';
 
 type FormValues = {
   email: string;
@@ -50,8 +51,8 @@ function LoginForm() {
     try {
       const response = await axios.post('auth/login', data);
       const result = response.data;
-      document.cookie = `accessToken=${result?.accessToken}`;
-      router.push(PAGE_PATH.MY_DASHBOARD);
+      document.cookie = `${AUTH_TOKEN_COOKIE_NAME}=${result?.accessToken}`;
+      // router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {
       if (!isAxiosError(error)) {
         // `AxiosError`가 아닌 경우
