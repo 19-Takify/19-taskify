@@ -4,17 +4,25 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '@/apis/axios';
+import { useRouter } from 'next/router';
 
-export function AuthProvider({ children }: { children: any }) {
-  const valueAtom = atom({
-    user: null,
-    isPending: true,
-  });
-  const [values, setValues] = useAtom(valueAtom);
+// export function AuthProvider({ children }: { children: any }) {
+
+//   return <Provider>{children}</Provider>;
+// }
+
+export function useAuth(required: any) {
   const [auth, setAuth] = useAtom(authAtom);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (required && !auth.user && !auth.isPending) {
+      router.push('/login');
+    }
+  }, [auth.user, auth.isPending, router, required]);
 
   async function getMe() {
-    setValues((prevValues: any) => ({
+    setAuth((prevValues: any) => ({
       ...prevValues,
       isPending: true,
     }));
@@ -23,7 +31,7 @@ export function AuthProvider({ children }: { children: any }) {
       const res = await axios.get('/users/me');
       nextUser = res.data;
     } finally {
-      setValues((prevValues: any) => ({
+      setAuth((prevValues: any) => ({
         ...prevValues,
         user: nextUser,
         isPending: false,
@@ -46,36 +54,21 @@ export function AuthProvider({ children }: { children: any }) {
   async function updateMe(formData: any) {
     const res = await axios.patch('users/me', formData);
     const nextUser = res.data;
-    setValues((prevValues: any) => ({
+    setAuth((prevValues: any) => ({
       ...prevValues,
       user: nextUser,
     }));
   }
 
   useEffect(() => {
+    setAuth((prevValues: any) => ({
+      ...prevValues,
+      login,
+      logout,
+      updateMe,
+    }));
     getMe();
   }, []);
-
-  setAuth({
-    user: values.user,
-    isPending: values.isPending,
-    login,
-    logout,
-    updateMe,
-  });
-
-  return <Provider>{children}</Provider>;
-}
-
-export function useAuth(required: any) {
-  const [auth, setAuth] = useAtom(authAtom);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (required && !auth.user && !auth.isPending) {
-      navigate('/login');
-    }
-  }, [auth.user, auth.isPending, navigate, required]);
 
   return [auth, setAuth];
 }

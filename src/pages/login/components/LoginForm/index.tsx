@@ -14,6 +14,7 @@ import {
   VALID_ERROR_MESSAGE,
 } from '@/constants/errorMessage';
 import { PAGE_PATH } from '@/constants/pageUrl';
+import { useAuth } from '@/hooks/useAuth';
 
 type FormValues = {
   email: string;
@@ -32,6 +33,8 @@ const schema = z.object({
 });
 
 function LoginForm() {
+  const [auth, setAuth] = useAuth(false);
+  console.log(auth);
   const router = useRouter();
   const {
     register,
