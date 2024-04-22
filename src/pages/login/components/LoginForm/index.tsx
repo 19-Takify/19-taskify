@@ -50,6 +50,7 @@ function LoginForm() {
     try {
       const response = await axios.post('auth/login', data);
       const result = response.data;
+      document.cookie = `accessToken=${result?.accessToken}`;
       router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {
       if (!isAxiosError(error)) {
