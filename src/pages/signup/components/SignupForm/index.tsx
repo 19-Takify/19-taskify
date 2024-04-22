@@ -8,6 +8,13 @@ import { isAxiosError } from 'axios';
 import PageButton from '@/components/Button/PageButton';
 import Input from '@/components/Inputs/Input';
 import setToast from '@/utils/setToast';
+import {
+  FETCH_ERROR_MESSAGE,
+  SERVER_ERROR_MESSAGE,
+  VALID_ERROR_MESSAGE,
+} from '@/constants/errorMessage';
+import { PAGE_PATH } from '@/constants/pageUrl';
+import { setCookie } from '@/utils/cookie';
 
 type FormValues = {
   email: string;
@@ -21,30 +28,33 @@ const schema = z
     email: z
       .string()
       .trim()
-      .min(1, { message: '이메일을 입력해 주세요.' })
-      .email({ message: '이메일 형식으로 작성해 주세요.' }),
+      .min(1, { message: VALID_ERROR_MESSAGE.EMAIL.EMPTY })
+      .email({ message: VALID_ERROR_MESSAGE.EMAIL.INVALID }),
     nickname: z
       .string()
       .trim()
-      .min(1, { message: '닉네임을 입력해 주세요.' })
-      .max(10, { message: '열 자 이하로 작성해주세요.' }),
+      .min(1, { message: VALID_ERROR_MESSAGE.NICKNAME.EMPTY })
+      .max(10, { message: VALID_ERROR_MESSAGE.MAX.TEN }),
     password: z
       .string()
       .trim()
-      .min(1, { message: '비밀번호를 입력해 주세요.' })
-      .min(8, { message: '8자 이상 입력해주세요.' }),
-    passwordConfirm: z.string().trim().min(1, '비밀번호를 입력해 주세요.'),
+      .min(1, { message: VALID_ERROR_MESSAGE.PASSWORD.EMPTY })
+      .min(8, { message: VALID_ERROR_MESSAGE.MIN.EIGHT }),
+    passwordConfirm: z
+      .string()
+      .trim()
+      .min(1, VALID_ERROR_MESSAGE.PASSWORD.EMPTY),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     path: ['passwordConfirm'],
-    message: '비밀번호가 일치하지 않습니다.',
+    message: VALID_ERROR_MESSAGE.PASSWORD.NOT_MATCH,
   });
 
 function SignupForm() {
   const router = useRouter();
   const {
     register,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     handleSubmit,
     setError,
     reset,
@@ -62,16 +72,35 @@ function SignupForm() {
   const handleValidSubmit = async (data: FormValues) => {
     try {
       await axios.post('/users', data);
+      const res = await axios.post('/auth/login', data);
+      const { accessToken } = res.data;
+      setCookie('accessToken', accessToken);
       setToast('success', '가입이 완료되었습니다.');
-      router.push('/login');
-    } catch (e) {
-      if (isAxiosError(e)) {
-        const message =
-          e.response?.data.message || '다른 이메일을 입력해 주세요.';
-        setError('email', { message });
-        return;
+      router.push(PAGE_PATH.MY_DASHBOARD);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        switch (status) {
+          case 400:
+            setError('email', { message: SERVER_ERROR_MESSAGE.EMAIL.INVALID });
+            return;
+          case 404:
+            setToast('warn', FETCH_ERROR_MESSAGE.UNKNOWN);
+            router.push(PAGE_PATH.LOGIN);
+            return;
+          case 409:
+            setError('email', {
+              message: SERVER_ERROR_MESSAGE.EMAIL.DUPLICATE,
+            });
+            return;
+          default:
+            setError('email', {
+              message: SERVER_ERROR_MESSAGE.EMAIL.ALTERNATE,
+            });
+            return;
+        }
       }
-      setToast('warn', '다시 시도해 주세요.');
+      setToast('warn', FETCH_ERROR_MESSAGE.UNKNOWN);
       reset();
     }
   };
@@ -91,7 +120,6 @@ function SignupForm() {
           hasLabel
           errors={errors}
         />
-
         <Input
           id="nickname"
           type="text"
@@ -120,7 +148,7 @@ function SignupForm() {
           errors={errors}
         />
       </div>
-      <PageButton type="submit" disabled={!isValid}>
+      <PageButton type="submit" disabled={!isValid || isSubmitting}>
         가입하기
       </PageButton>
     </form>
