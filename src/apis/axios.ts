@@ -8,8 +8,8 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async function (config) {
     // 스토리지에서 토큰을 가져온다.
-    // const accessToken = localStorage.getItem('accessToken');
-    const accessToken = getCookie('accessToken') + 'fwejofwe';
+
+    const accessToken = getCookie('accessToken');
 
     console.log('accessToken interceptor: ', accessToken);
 
@@ -20,9 +20,9 @@ instance.interceptors.request.use(
     // });
 
     // 토큰이 있으면 요청 헤더에 추가한다.
-    // if (accessToken) {
-    //   config.headers['Authorization'] = `Bearer ${accessToken}`;
-    // }
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
 
     return config;
   },

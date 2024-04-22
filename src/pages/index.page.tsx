@@ -1,4 +1,6 @@
 import axios from '@/apis/axios';
+
+import { atom, useAtom, useStore } from 'jotai';
 import { GetServerSidePropsContext } from 'next';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -48,7 +50,7 @@ export default function Home() {
 
   return (
     <>
-      <button type="button" onClick={handlePasswordChange}>
+      <button type="button" onClick={handleMe}>
         테스트
       </button>
     </>
