@@ -13,37 +13,59 @@
 .modalBox {
   background-color: $color-white-ffffff;
   padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
   border-radius: 0.5rem;
+  overflow: scroll;
   @include tablet {
     padding: 1.5rem 1.3rem 1.7rem;
+  }
+  @include mobile {
+    padding: 1.5rem 1rem 1.7rem;
   }
 }
 .btnBox {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  @include mobile {
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
 }
 .name {
   font-size: 1.2rem;
   font-weight: 700;
   color: $color-black-333236;
+  @include mobile {
+    margin: 1.5rem 0 0.5rem;
+  }
 }
 .btns {
   display: flex;
   align-items: center;
 }
-.btn {
+.btnx {
   background-color: $color-white-ffffff;
+  @include mobile {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+  }
 }
 .contentBox {
   display: flex;
+  flex-direction: row-reverse;
   gap: 1.3rem;
+  @include mobile {
+    flex-direction: column;
+  }
 }
 .content {
   width: 26rem;
+  @include mobile {
+    width: 18rem;
+  }
 }
 .text {
   font-size: 0.9rem;
@@ -51,6 +73,9 @@
   margin-bottom: 1rem;
   line-height: 1.4rem;
   margin-right: 0.2rem;
+  @include mobile {
+    font-size: 0.8rem;
+  }
 }
 .img {
   width: 100%;
@@ -73,6 +98,11 @@
   width: 100%;
   height: 6.8rem;
   resize: none;
+  @include mobile {
+    height: 4.3rem;
+    font-size: 0.8rem;
+    color: $color-gray-9fa6b2;
+  }
 }
 .submit {
   background-color: $color-white-ffffff;
@@ -85,6 +115,11 @@
   position: absolute;
   top: 4rem;
   right: 1rem;
+  @include mobile {
+    width: 5.2rem;
+    height: 2rem;
+    top: 1.6rem;
+  }
 }
 .comment {
   display: flex;
@@ -100,14 +135,23 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: $color-black-333236;
+  @include mobile {
+    font-size: 0.8rem;
+  }
 }
 .createAt {
   font-size: 0.8rem;
   color: $color-gray-9fa6b2;
+  @include mobile {
+    font-size: 0.7rem;
+  }
 }
 .commentBox {
   position: relative;
   left: 3rem;
+  @include mobile {
+    left: 1.9rem;
+  }
 }
 .commentText {
   font-size: 0.9rem;
@@ -115,6 +159,8 @@
   color: $color-black-333236;
   @include tablet {
     margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
   }
 }
 .btn {
@@ -122,6 +168,11 @@
   text-decoration: underline;
   margin-right: 0.6rem;
   font-size: 0.8rem;
+  background-color: $color-white-ffffff;
+  @include mobile {
+    font-size: 0.7rem;
+    margin-right: 0.4rem;
+  }
 }
 .managerBox {
   border: 0.1rem solid $color-gray-d9d9d9;
@@ -130,9 +181,15 @@
   height: 9.6rem;
   padding: 1rem;
 
-  @include tablet {
-    width: 10rem;
-    height: 8rem;
+  @include mobile {
+    width: 18rem;
+    height: 4.5rem;
+    display: flex;
+  }
+}
+.nameBox {
+  @include mobile {
+    width: 50%;
   }
 }
 
@@ -140,6 +197,7 @@
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
   color: $color-black-333236;
+  font-weight: 700;
   @include tablet {
     font-size: 0.7rem;
     margin-bottom: 0.3rem;
@@ -154,11 +212,20 @@
     gap: 0.4rem;
     margin-bottom: 0.8rem;
   }
+  @include mobile {
+    gap: 0.4rem;
+    margin-bottom: 0;
+  }
 }
 .managerName {
   color: $color-black-333236;
   font-size: 0.8rem;
   @include tablet {
     font-size: 0.7rem;
+  }
+}
+.doneDate {
+  @include mobile {
+    margin-bottom: 0.6rem;
   }
 }

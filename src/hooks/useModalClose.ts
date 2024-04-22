@@ -1,13 +1,17 @@
 import { useEffect } from 'react';
 
-const useCloseModal = (showModal, handleClose, modalRef) => {
+const useCloseModal = (
+  showModal: boolean,
+  handleClose: () => void,
+  modalRef: React.RefObject<HTMLDivElement>,
+) => {
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         handleClose();
       }
     };
-    const handleEscapeKey = (e) => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
         handleClose();
       }
