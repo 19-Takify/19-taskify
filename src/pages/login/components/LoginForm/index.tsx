@@ -63,12 +63,17 @@ function LoginForm() {
         setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
         return;
       }
-      const message = error.response.data.message;
-      if (message === SERVER_ERROR_MESSAGE.USER.NOT_FOUND) {
-        setError('email', { message });
-        return;
+      const status = error.response?.status;
+      switch (status) {
+        case 400:
+          setError('password', {
+            message: SERVER_ERROR_MESSAGE.PASSWORD.NOT_MATCH,
+          });
+          return;
+        case 404:
+          setError('email', { message: SERVER_ERROR_MESSAGE.USER.NOT_FOUND });
+          return;
       }
-      setError('password', { message });
     }
   };
 
