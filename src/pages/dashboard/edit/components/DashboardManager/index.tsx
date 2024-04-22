@@ -29,8 +29,8 @@ function DashboardManager({ usage }: TDashboardManager) {
   useEffect(() => {
     const getData = async () => {
       const url = isInvite
-        ? `dashboards/6253/invitations?page=${1}&size=1000`
-        : `members?page=${1}&size=1000&dashboardId=6253`;
+        ? `dashboards/6253/invitations?page=1&size=1000`
+        : `members?page=1&size=1000&dashboardId=6253`;
       try {
         const res = await instance.get(url);
         if (isInvite) {
