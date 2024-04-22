@@ -119,6 +119,7 @@ function SignupForm() {
           placeholder="이메일을 입력해 주세요."
           hasLabel
           errors={errors}
+          autoComplete="email"
         />
         <Input
           id="nickname"
@@ -137,6 +138,7 @@ function SignupForm() {
           placeholder="8자 이상 입력해 주세요."
           hasLabel
           errors={errors}
+          autoComplete="password"
         />
         <Input
           id="passwordConfirm"
@@ -146,6 +148,7 @@ function SignupForm() {
           placeholder="비밀번호를 한번 더 입력해 주세요."
           hasLabel
           errors={errors}
+          autoComplete="password"
         />
       </div>
       <PageButton type="submit" disabled={!isValid || isSubmitting}>

@@ -15,6 +15,7 @@ function Login() {
             className={styles.logoImage}
             width={200}
             height={280}
+            priority
           />
         </Link>
         <h2 className={styles.title}>오늘도 만나서 반가워요! </h2>

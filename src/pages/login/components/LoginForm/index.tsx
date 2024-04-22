@@ -91,6 +91,7 @@ function LoginForm() {
           register={register('email')}
           placeholder="이메일을 입력해 주세요."
           errors={errors}
+          autoComplete="email"
         />
 
         <Input
@@ -101,6 +102,7 @@ function LoginForm() {
           register={register('password')}
           placeholder="비밀번호를 입력해 주세요."
           errors={errors}
+          autoComplete="password"
         />
       </div>
       <PageButton type="submit" disabled={!isValid || isSubmitting}>
