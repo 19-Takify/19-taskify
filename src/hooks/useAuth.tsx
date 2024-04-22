@@ -15,12 +15,6 @@ export function useAuth(required: any) {
   const [auth, setAuth] = useAtom(authAtom);
   const router = useRouter();
 
-  useEffect(() => {
-    if (required && !auth.user && !auth.isPending) {
-      router.push('/login');
-    }
-  }, [auth.user, auth.isPending, router, required]);
-
   async function getMe() {
     setAuth((prevValues: any) => ({
       ...prevValues,
@@ -61,14 +55,14 @@ export function useAuth(required: any) {
   }
 
   useEffect(() => {
-    setAuth((prevValues: any) => ({
-      ...prevValues,
-      login,
-      logout,
-      updateMe,
-    }));
+    if (required && !auth.user && !auth.isPending) {
+      router.push('/login');
+    }
+  }, [auth.user, auth.isPending, router, required]);
+
+  useEffect(() => {
     getMe();
   }, []);
 
-  return [auth, setAuth];
+  return { auth, login, logout, updateMe };
 }
