@@ -12,6 +12,7 @@ const useCloseModal = (
       }
     };
     const handleEscapeKey = (e: KeyboardEvent) => {
+      //esc key
       if (e.keyCode === 27) {
         handleClose();
       }

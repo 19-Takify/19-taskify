@@ -1,9 +1,6 @@
 import Portal from './Potal';
 import styles from './Modal.module.scss';
 import Image from 'next/image';
-import kebabIcon from '@/svgs/kebab.svg';
-import closeIcon from '@/svgs/close.svg';
-import example from '@/svgs/example.svg';
 import ProfileIcon from '../Profile/ProfileIcon';
 import useCloseModal from '@/hooks/useModalClose';
 import { useEffect, useRef } from 'react';
@@ -34,10 +31,20 @@ function Modal({ showModal, handleClose }: ModalProps) {
             <div className={styles.btnBox}>
               <div className={styles.btns}>
                 <button onClick={() => showModal} className={styles.btnx}>
-                  <Image src={kebabIcon} alt="kebab" width={28} height={28} />
+                  <Image
+                    src="/svgs/kebab.svg"
+                    alt="케밥 버튼"
+                    width={28}
+                    height={28}
+                  />
                 </button>
                 <button onClick={handleClose} className={styles.btnx}>
-                  <Image src={closeIcon} alt="X" width={28} height={28} />
+                  <Image
+                    src="/svgs/close.svg"
+                    alt="닫기"
+                    width={28}
+                    height={28}
+                  />
                 </button>
               </div>
               <div className={styles.name}>새로운 일정 관리 Taskify</div>
@@ -66,7 +73,11 @@ function Modal({ showModal, handleClose }: ModalProps) {
                     eget. Cras mattis, nulla non laoreet porttitor, diam justo
                     laoreet eros, vel aliquet diam elit at leo.
                   </div>
-                  <Image src={example} alt="example" className={styles.img} />
+                  <Image
+                    src="/svgs/example.svg"
+                    alt="예시 사진"
+                    className={styles.img}
+                  />
                   <div>댓글</div>
                   <div className={styles.textarea}>
                     <textarea
