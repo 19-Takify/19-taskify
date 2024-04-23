@@ -3,28 +3,15 @@ import type { NextRequest } from 'next/server';
 import { withoutAuth } from './utils/middlewares/auth';
 
 export async function middleware(request: NextRequest) {
-  // console.log('request: ', request);
-  // const requestHeader = new Headers(request.headers);
-  // const accessToken = request.cookies.get('accessToken')?.value;
-  // console.log('middleware accessToken: ', accessToken);
-
-  // if (accessToken) {
-  //   requestHeader.set('Authrization', `Bearer ${accessToken}`);
-  // }
-
-  // const response = NextResponse.next({
-  //   request: {
-  //     headers: requestHeader,
-  //   },
-  // });
+  // 여기서 로그인 여부 확인 후 페이지에 따른 작업 처리
 
   if (request.nextUrl.pathname.startsWith('/login')) {
-    // return NextResponse.rewrite(new URL('/singup', request.url));
     console.log('로그인 페이지 진입');
     return withoutAuth(request);
   }
 }
 
+// config의 matcher에 등록된 url에 접속할 경우 middleware가 동작한다.
 export const config = {
   matcher: [
     /*

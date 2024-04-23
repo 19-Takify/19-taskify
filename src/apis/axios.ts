@@ -6,6 +6,7 @@ const instance = axios.create({
   baseURL: 'https://sp-taskify-api.vercel.app/4-19/',
 });
 
+// getServerSideProps에서 쿠키를 가져오기 위해서 변수를 만들어서 context를 주입.
 let context: GetServerSidePropsContext | null = null;
 export const setContext = (_context: GetServerSidePropsContext) => {
   context = _context;
@@ -14,18 +15,13 @@ export const setContext = (_context: GetServerSidePropsContext) => {
 // 요청 인터셉터
 instance.interceptors.request.use(
   async function (config) {
-    // 스토리지에서 토큰을 가져온다.
-    // const accessToken = localStorage.getItem('accessToken');
+    // SSR을 감지해서 SSR일 경우 context에서 쿠키 가져오기.
     const isServer = typeof window === 'undefined';
     console.log('isServer: ', isServer);
 
     const accessToken = isServer
       ? context?.req?.cookies?.accessToken
       : getCookie('accessToken');
-
-    // const accessToken = getCookie('accessToken');
-
-    // console.log('interceptor accessToken: ', accessToken);
 
     // 토큰이 있으면 요청 헤더에 추가한다.
     if (accessToken) {

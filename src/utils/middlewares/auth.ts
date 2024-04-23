@@ -8,9 +8,7 @@ export async function withoutAuth(req: NextRequest) {
   console.log('middleware accessToken: ', accessToken);
 
   try {
-    // const response = await validateUser(req)
-    // if (response.status === 200) return NextResponse.redirect(url)
-    // if (response.status === 401) return NextResponse.next()
+    // axios를 사용하니까 에러가 발생하는데 확인해 볼 필요가 있다.
     const user = await fetch(
       'https://sp-taskify-api.vercel.app/4-19/users/me',
       {
