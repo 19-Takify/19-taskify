@@ -1,4 +1,4 @@
-import DashBoardLayout from '@/components/Layout/DashBoardLayout';
+import DashBoardLayout from '@/components/Layout/DashBoardLayout2';
 import React, { ReactElement } from 'react';
 
 function Dashboard() {
