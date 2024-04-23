@@ -8,9 +8,13 @@ class HttpClient {
     this.client = instance;
   }
 
-  async get<T>(url: string): Promise<T> {
+  async get<T>(url: string, header: any = {}): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.get(url);
+      const response: AxiosResponse<T> = await this.client.get(url, {
+        headers: {
+          ...header,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -18,9 +22,13 @@ class HttpClient {
     }
   }
 
-  async post<T>(url: string, data: any): Promise<T> {
+  async post<T>(url: string, data: any, header: any = {}): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.post(url, data);
+      const response: AxiosResponse<T> = await this.client.post(url, data, {
+        headers: {
+          ...header,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error('Error posting data:', error);
@@ -28,9 +36,13 @@ class HttpClient {
     }
   }
 
-  async put<T>(url: string, data: any): Promise<T> {
+  async put<T>(url: string, data: any, header: any = {}): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.put(url, data);
+      const response: AxiosResponse<T> = await this.client.put(url, data, {
+        headers: {
+          ...header,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error('Error updating data:', error);
@@ -38,9 +50,13 @@ class HttpClient {
     }
   }
 
-  async delete<T>(url: string): Promise<T> {
+  async delete<T>(url: string, header: any = {}): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.delete(url);
+      const response: AxiosResponse<T> = await this.client.delete(url, {
+        headers: {
+          ...header,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error('Error deleting data:', error);
