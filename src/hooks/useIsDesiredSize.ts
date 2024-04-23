@@ -1,4 +1,3 @@
-// init
 import { useEffect, useState } from 'react';
 
 /*

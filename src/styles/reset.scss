@@ -73,7 +73,9 @@ th {
 }
 
 a {
+  color: $color-black-333236;
   text-decoration: none;
+  color: $color-black-000000;
 }
 
 button {
@@ -89,8 +91,18 @@ input {
   border: none;
   outline: none;
   padding: 0;
+
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px $color-white-ffffff inset;
+    box-shadow: 0 0 0 1000px $color-white-ffffff inset;
+  }
 }
 
 .react-datepicker-wrapper {
   width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
 }
