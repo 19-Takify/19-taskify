@@ -15,6 +15,7 @@ import {
 } from '@/constants/errorMessage';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/api';
+import { useAuth } from '@/hooks/useAuth';
 
 type FormValues = {
   email: string;
@@ -33,6 +34,8 @@ const schema = z.object({
 });
 
 function LoginForm() {
+  const [auth, setAuth] = useAuth(false);
+  console.log(auth);
   const router = useRouter();
   const {
     register,
