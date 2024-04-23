@@ -107,8 +107,12 @@ function DashBoardHeader() {
             onMouseLeave={handleMouseLeave}
             className={styles.popOver}
           >
-            <li>마이페이지</li>
-            <li>로그아웃</li>
+            <Link href={PAGE_PATH.MY_PAGE}>
+              <li>마이페이지</li>
+            </Link>
+            <Link href={PAGE_PATH.MAIN}>
+              <li>로그아웃</li>
+            </Link>
           </ul>
         )}
       </div>
