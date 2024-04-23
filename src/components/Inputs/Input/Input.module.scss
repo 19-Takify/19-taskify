@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  color: $color-black-333236;
+  font-size: 1.125rem;
+  font-weight: 500;
+
+  &.hiddenLabel {
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+  }
+
+  & .required {
+    color: $color-violet-5534da;
+  }
+}
+
+.inputContainer {
+  display: flex;
+  background-color: $color-white-ffffff;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  border-radius: 0.5rem;
+  width: min(100%, 60.25rem);
+  height: 3rem;
+  padding: 0 1rem;
+  gap: 0.5rem;
+
+  &.error {
+    border-color: $color-red-d6173a;
+  }
+
+  &:focus-within {
+    border-color: $color-violet-5534da;
+  }
+}
+
+.input {
+  width: 100%;
+
+  &::placeholder {
+    color: $color-gray-9fa6b2;
+  }
+}
+
+.visibleToggler {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.errorMessage {
+  color: $color-red-d6173a;
+  font-size: 0.75rem;
+}
