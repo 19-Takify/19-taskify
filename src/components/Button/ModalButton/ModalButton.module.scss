@@ -1,0 +1,48 @@
+.modal {
+  background: $color-violet-5534da;
+  width: 7.5rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-white-ffffff;
+
+  @include mobile {
+    width: 8.75rem;
+    height: 2.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+.modalCancel {
+  background: $color-white-ffffff;
+  width: 7.5rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-gray-787486;
+
+  @include mobile {
+    width: 8.75rem;
+    height: 2.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+.default {
+  background: $color-violet-5534da;
+  width: 7.5rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $color-white-ffffff;
+
+  @include mobile {
+    width: 8.75rem;
+    height: 2.75rem;
+    font-size: 0.75rem;
+  }
+}

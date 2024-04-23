@@ -1,0 +1,97 @@
+@font-face {
+  font-family: 'LeferiPoint-SpecialItalicA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-SpecialItalicA.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.wrap {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.content {
+  width: 40rem;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.title {
+  font-size: 4.2rem;
+  margin-top: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.25rem;
+  color: $color-violet-5534da;
+  font-style: italic;
+
+  @include mobile {
+    font-size: 3rem;
+  }
+}
+
+.logo {
+  margin-left: 2.3rem;
+
+  @include mobile {
+    margin-left: 1.5rem;
+    width: 10.3125rem;
+    height: 11.875rem;
+  }
+}
+
+.title-effect {
+  display: inline-block;
+  animation: loading 1.7s infinite alternate;
+  font-family: 'LeferiPoint-SpecialItalicA';
+
+  &:nth-of-type(1) {
+    font-size: 4.5rem;
+    @include mobile {
+      font-size: 3.5rem;
+    }
+  }
+  &:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-of-type(3) {
+    animation-delay: 0.3s;
+  }
+  &:nth-of-type(4) {
+    animation-delay: 0.4s;
+  }
+  &:nth-of-type(5) {
+    animation-delay: 0.5s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(6) {
+    animation-delay: 0.6s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(7) {
+    animation-delay: 0.7s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(8) {
+    animation-delay: 0.8s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(9) {
+    animation-delay: 0.9s;
+    padding: 0 0.1rem;
+  }
+
+  @keyframes loading {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
