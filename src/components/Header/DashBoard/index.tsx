@@ -5,24 +5,17 @@ import SettngIcon from '@/svgs/setting.svg';
 import InviteIcon from '@/svgs/invite.svg';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
-import { useSetAtom } from 'jotai';
-import { sideMenuAtom } from '@/components/Layout/DashBoardLayout';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 function DashBoardHeader() {
   const [isOver, setIsover] = useState(false);
-  const setIsOpenSideMenu = useSetAtom(sideMenuAtom);
   const isTablet = useIsDesiredSize(744);
   const isBreakPoint = useIsDesiredSize(550);
   const router = useRouter();
   const { id } = router.query;
   const isMyDashboard = !router.pathname.includes('my');
   const isEditPage = !router.pathname.includes('edit');
-
-  // const handleSideMenuToggle = () => {
-  //   setIsOpenSideMenu((pre) => !pre);
-  // };
 
   const handleMouseOver = () => {
     setIsover(true);
