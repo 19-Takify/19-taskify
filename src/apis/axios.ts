@@ -1,13 +1,31 @@
 import axios from 'axios';
 import { getCookie } from '@/utils/cookie';
 
-const cookie = getCookie('accessToken');
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const instance = axios.create({
-  baseURL: 'https://sp-taskify-api.vercel.app/4-19/',
+  baseURL: BASE_URL,
   headers: {
-    Authorization: cookie ? `Bearer ${cookie}` : undefined,
+    'Content-Type': 'application/json',
   },
 });
+
+//쿠키가 있으면 헤더에 추가
+instance.interceptors.request.use(
+  (config) => {
+    const cookie = getCookie('accessToken');
+
+    if (cookie) {
+      config.headers.Authorization = `Bearer ${cookie}`;
+      return config;
+    }
+
+    delete config.headers.Authorization;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 export default instance;
