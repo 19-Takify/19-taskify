@@ -9,3 +9,15 @@ export const setCookie = (cookieName: string, value: string) => {
   const cookie = `${encodedCookieName}=${encodedValue}`;
   document.cookie = cookie;
 };
+
+export const getCookie = (cookieName: string) => {
+  if (typeof document !== 'undefined') {
+    const cookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith(`${cookieName}=`))
+      ?.split('=')[1];
+    return cookie ? decodeURIComponent(cookie) : null;
+  }
+
+  return null;
+};
