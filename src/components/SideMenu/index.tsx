@@ -1,8 +1,10 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
 import Circle from '@/components/Circle';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { sideMenuAtom } from '../Layout/DashBoardLayout';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;
@@ -10,10 +12,10 @@ type DashboardList<T extends string | boolean | number> = {
 
 type SideMenuProps = {
   dashboards: DashboardList<string | boolean | number>[];
-  isOpen: boolean;
 };
 
-function SideMenu({ dashboards, isOpen }: SideMenuProps) {
+function SideMenu({ dashboards }: SideMenuProps) {
+  const isOpen = useAtomValue(sideMenuAtom);
   const router = useRouter();
   const [renderDelayed, setRenderDelayed] = useState(false);
 

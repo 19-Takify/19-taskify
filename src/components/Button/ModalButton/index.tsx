@@ -21,7 +21,6 @@ const MODAL_BUTTON_TYPE: ModalButtonType<string> = {
 };
 
 function ModalButton({ children, ...rest }: ModalButtonSignProps) {
-
   const typeCheck = children ?? 'default';
 
   return (
