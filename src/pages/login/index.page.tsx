@@ -4,22 +4,36 @@ import styles from './Login.module.scss';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import LoginForm from './components/LoginForm';
 import { GetServerSidePropsContext, NextPageContext } from 'next';
-import { authAtom, myStore } from '@/stores/auth';
+import { User, authAtom, initialUser, myStore, ssrUser } from '@/stores/auth';
 import { setContext } from '@/apis/axios';
+import axios from '@/apis/axios';
+import { getMe } from '@/utils/getMe';
+import { useHydrateAtoms } from 'jotai/utils';
+import { useAtomValue } from 'jotai';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   console.log('로그인 페이지 ssr');
   // const dashboardlist = await axios.get('dashboardlist', {});
   setContext(context);
-  // myStore.set(authAtom, (pre) => ++pre);
+  let user = initialUser;
+  try {
+    const nextUser = await getMe();
+    user = nextUser;
+  } catch (error) {
+    console.error(error);
+  }
   return {
-    props: {},
+    props: { user },
   };
 }
 
-function Login() {
-  console.log('로그인 페이지 csr');
-  console.log(myStore.get(authAtom));
+type LoginProps = {
+  user: User;
+};
+
+function Login({ user }: LoginProps) {
+  useHydrateAtoms([[ssrUser, user]]);
+  const userAtom = useAtomValue(ssrUser);
 
   return (
     <div className={styles.container}>
@@ -34,7 +48,9 @@ function Login() {
             height={280}
           />
         </Link>
-        <h2 className={styles.title}>오늘도 만나서 반가워요! </h2>
+        <h2 className={styles.title}>
+          Login Page 유저 이름: {userAtom.nickname}
+        </h2>
       </header>
       <LoginForm />
       <footer>

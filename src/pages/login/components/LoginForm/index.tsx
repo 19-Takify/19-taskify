@@ -16,6 +16,8 @@ import {
 import { PAGE_PATH } from '@/constants/pageUrl';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/api';
 import { useAuth } from '@/hooks/useAuth';
+import { useAtomValue } from 'jotai';
+import { ssrUser } from '@/stores/auth';
 
 type FormValues = {
   email: string;
@@ -36,6 +38,7 @@ const schema = z.object({
 function LoginForm() {
   // const [auth, setAuth] = useAuth(false);
   // console.log(auth);
+  const userAtom = useAtomValue(ssrUser);
   const router = useRouter();
   const {
     register,
@@ -86,6 +89,7 @@ function LoginForm() {
       className={styles.container}
       onSubmit={handleSubmit(handleValidSubmit)}
     >
+      <p>LoginForm 유저 이름: {userAtom.nickname}</p>
       <div className={styles.inputContainer}>
         <Input
           label="이메일"
