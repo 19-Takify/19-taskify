@@ -16,8 +16,8 @@ type SideMenuProps = {
 
 function SideMenu({ dashboards }: SideMenuProps) {
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
-  const router = useRouter();
   const [renderDelayed, setRenderDelayed] = useState(false);
+  const router = useRouter();
   const sideMenuRef = useRef<HTMLDivElement>(null);
 
   const handleDashboardClick = (id: number) => {
