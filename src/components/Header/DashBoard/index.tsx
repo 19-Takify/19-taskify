@@ -5,19 +5,20 @@ import SettngIcon from '@/svgs/setting.svg';
 import InviteIcon from '@/svgs/invite.svg';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
-
 import { useSetAtom } from 'jotai';
 import { sideMenuAtom } from '@/components/Layout/DashBoardLayout';
+import { useRouter } from 'next/router';
 
 function DashBoardHeader() {
   const setIsOpenSideMenu = useSetAtom(sideMenuAtom);
   const isTablet = useIsDesiredSize(744);
   const isBreakPoint = useIsDesiredSize(550);
+  const router = useRouter();
+  const isMyDashboard = !router.pathname.includes('my');
 
   const handleSideMenuToggle = () => {
     setIsOpenSideMenu((pre) => !pre);
   };
-
   return (
     <>
       <div className={styles.container}>
@@ -51,18 +52,22 @@ function DashBoardHeader() {
           <p className={styles.text}>내 대시보드11111111adsadsadsasa</p>
         </div>
         <div className={styles.box}>
-          <button className={styles.button}>
-            <Image
-              className={styles.icon}
-              src={SettngIcon}
-              alt="톱니바퀴 이미지"
-            />
-            {!isBreakPoint && '관리'}
-          </button>
-          <button className={styles.button}>
-            <Image className={styles.icon} src={InviteIcon} alt="invite" />
-            {!isBreakPoint && '초대하기'}
-          </button>
+          {isMyDashboard && (
+            <>
+              <button className={styles.button}>
+                <Image
+                  className={styles.icon}
+                  src={SettngIcon}
+                  alt="톱니바퀴 이미지"
+                />
+                {!isBreakPoint && '관리'}
+              </button>
+              <button className={styles.button}>
+                <Image className={styles.icon} src={InviteIcon} alt="invite" />
+                {!isBreakPoint && '초대하기'}
+              </button>
+            </>
+          )}
           <div className={styles.box}>
             <div className={styles.img}></div>
             <div className={styles.name}>박유빈aaaaaaaaaaaaaa</div>
