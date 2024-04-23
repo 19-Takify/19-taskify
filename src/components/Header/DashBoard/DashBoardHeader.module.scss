@@ -101,6 +101,7 @@
     height: 2.1rem;
   }
 }
+
 .name {
   color: $color-black-333236;
   width: 3.5rem;
@@ -123,7 +124,7 @@
   border-radius: 0.5rem;
   font-size: 0.9375rem;
 
-  li {
+  .list {
     padding: 1rem 0.5rem;
     text-align: center;
 

@@ -1,8 +1,8 @@
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sideMenuAtom } from '../Layout/DashBoardLayout';
 import PageButton from '../Button/PageButton';
 
@@ -15,9 +15,10 @@ type SideMenuProps = {
 };
 
 function SideMenu({ dashboards }: SideMenuProps) {
-  const isOpen = useAtomValue(sideMenuAtom);
+  const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
   const router = useRouter();
   const [renderDelayed, setRenderDelayed] = useState(false);
+  const sideMenuRef = useRef<HTMLDivElement>(null);
 
   const handleDashboardClick = (id: number) => {
     //페이지 이동
@@ -29,16 +30,37 @@ function SideMenu({ dashboards }: SideMenuProps) {
   };
 
   useEffect(() => {
+    const handleSideMenu = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.dataset.state === 'sideMenuToggle') {
+        setIsOpen((prev) => !prev);
+        return;
+      }
+
+      if (sideMenuRef.current && !sideMenuRef.current.contains(target)) {
+        setIsOpen(false);
+        return;
+      }
+    };
+
+    document.addEventListener('click', handleSideMenu);
+
     //렌더링시 0.4초 뒤에 작동 >> 초기 애니메이션 제거
     const timeout = setTimeout(() => {
       setRenderDelayed(true);
     }, 400);
 
-    return () => clearTimeout(timeout);
-  }, []);
+    return () => {
+      document.removeEventListener('click', handleSideMenu);
+      clearTimeout(timeout);
+    };
+  }, [setIsOpen]);
 
   return (
-    <div className={`${styles.sideMenu} ${isOpen && styles.open}`}>
+    <div
+      ref={sideMenuRef}
+      className={`${styles.sideMenu} ${isOpen && styles.open}`}
+    >
       {renderDelayed && (
         <div className={styles.sideMenuBox}>
           <PageButton onClick={() => handleCreateDashboard()}>

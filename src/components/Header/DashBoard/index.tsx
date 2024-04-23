@@ -16,12 +16,13 @@ function DashBoardHeader() {
   const isTablet = useIsDesiredSize(744);
   const isBreakPoint = useIsDesiredSize(550);
   const router = useRouter();
+  const { id } = router.query;
   const isMyDashboard = !router.pathname.includes('my');
   const isEditPage = !router.pathname.includes('edit');
 
-  const handleSideMenuToggle = () => {
-    setIsOpenSideMenu((pre) => !pre);
-  };
+  // const handleSideMenuToggle = () => {
+  //   setIsOpenSideMenu((pre) => !pre);
+  // };
 
   const handleMouseOver = () => {
     setIsover(true);
@@ -35,8 +36,9 @@ function DashBoardHeader() {
     <>
       <div className={styles.container}>
         <div className={styles.leftBox}>
-          <figure className={styles.menu} onClick={handleSideMenuToggle}>
+          <figure data-state="sideMenuToggle" className={styles.menu}>
             <Image
+              data-state="sideMenuToggle"
               src="/svgs/menu.svg"
               alt="사이드 메뉴 토글 버튼 이미지"
               width={20}
@@ -67,7 +69,7 @@ function DashBoardHeader() {
           {isMyDashboard && (
             <>
               {isEditPage && (
-                <Link className={styles.button} href="dashboard/edit">
+                <Link className={styles.button} href={`${id}/edit`}>
                   <Image
                     className={styles.icon}
                     src={SettngIcon}
@@ -108,10 +110,10 @@ function DashBoardHeader() {
             className={styles.popOver}
           >
             <Link href={PAGE_PATH.MY_PAGE}>
-              <li>마이페이지</li>
+              <li className={styles.list}>마이페이지</li>
             </Link>
             <Link href={PAGE_PATH.MAIN}>
-              <li>로그아웃</li>
+              <li className={styles.list}>로그아웃</li>
             </Link>
           </ul>
         )}

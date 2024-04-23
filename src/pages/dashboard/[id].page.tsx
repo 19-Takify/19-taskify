@@ -1,8 +1,12 @@
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import React, { ReactElement } from 'react';
+import { useRouter } from 'next/router';
 
 function Dashboard() {
-  return <></>;
+  const router = useRouter();
+  const { id } = router.query;
+
+  return <>{id}</>;
 }
 
 Dashboard.getLayout = function getLayout(page: ReactElement) {
