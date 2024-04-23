@@ -18,6 +18,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
   const [renderDelayed, setRenderDelayed] = useState(false);
   const router = useRouter();
+  const { id } = router.query;
   const sideMenuRef = useRef<HTMLDivElement>(null);
 
   const handleDashboardClick = (id: number) => {
@@ -74,7 +75,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
               {dashboards.map((dashboard) => (
                 <li
                   key={dashboard.id as number}
-                  className={styles.dashboardList}
+                  className={`${styles.dashboardList} ${id === String(dashboard.id) && styles.selected}`}
                   onClick={() => handleDashboardClick(dashboard.id as number)}
                 >
                   <div
