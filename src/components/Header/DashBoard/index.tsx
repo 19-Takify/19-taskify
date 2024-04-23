@@ -27,7 +27,7 @@ function DashBoardHeader() {
 
   return (
     <>
-      <div className={styles.container}>
+      <header className={styles.container}>
         <div className={styles.leftBox}>
           <figure data-state="sideMenuToggle" className={styles.menu}>
             <Image
@@ -110,7 +110,7 @@ function DashBoardHeader() {
             </Link>
           </ul>
         )}
-      </div>
+      </header>
     </>
   );
 }
