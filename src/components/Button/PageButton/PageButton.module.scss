@@ -8,16 +8,19 @@
   color: $color-white-ffffff;
 
 
+  &:disabled {
+    background: $color-gray-9fa6b2;
+  }
+
+
   @include tablet {
     width: 100%;
   }
 }
 
-
 .sign:disabled {
   background: $color-gray-9fa6b2;
 }
-
 
 .delete {
   background: $color-white-ffffff;
