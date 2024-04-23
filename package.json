@@ -24,6 +24,7 @@
     "react-datepicker": "^6.8.0",
     "react-dom": "^18",
     "react-hook-form": "^7.51.3",
+    "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
     "zod": "^3.22.4"
   },
@@ -32,6 +33,7 @@
     "@types/react": "^18",
     "@types/react-datepicker": "^6.2.0",
     "@types/react-dom": "^18",
+    "@types/react-router-dom": "^5.3.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.0",
     "eslint-config-prettier": "^9.1.0",
