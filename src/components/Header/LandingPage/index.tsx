@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import styles from './LoginHeader.module.scss';
+import styles from './LandingHeader.module.scss';
 import Logo from '/public/svgs/logo.svg';
 import Taskify from '/public/svgs/taskify.svg';
 
-function LoginHeader() {
+function LandingHeader() {
   return (
     <>
       <div className={styles.container}>
@@ -20,4 +20,4 @@ function LoginHeader() {
   );
 }
 
-export default LoginHeader;
+export default LandingHeader;
