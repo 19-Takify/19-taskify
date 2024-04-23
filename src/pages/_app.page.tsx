@@ -2,12 +2,25 @@ import type { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '@/styles/reset.scss';
+import { NextPage } from 'next';
+import { ReactElement, ReactNode } from 'react';
 import Head from 'next/head';
 
-export default function App({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <>
       <Head>
+        <title>Taskify</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="title" content="Taskify" />
         <meta name="keyword" content="Taskify, 일정관리, 간편함" />
@@ -40,7 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta property="twitter:image:alt" content="Taskify 로고 이미지" />
       </Head>
       <ToastContainer pauseOnFocusLoss={false} />
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
     </>
   );
 }
