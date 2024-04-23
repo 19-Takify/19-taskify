@@ -22,7 +22,7 @@ function Custom404() {
           priority
         />
         <h2 className={styles.text}>
-          4<span>0</span>4 Not Found
+          4<span className={styles.textEffect}>0</span>4 Not Found
         </h2>
         <h2 className={styles.text}>존재하지 않는 페이지 입니다.</h2>
         <button onClick={() => handleButtonClick()} className={styles.button}>
