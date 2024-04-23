@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { sideMenuAtom } from '../Layout/DashBoardLayout';
+import PageButton from '../Button/PageButton';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;
@@ -23,6 +24,10 @@ function SideMenu({ dashboards }: SideMenuProps) {
     router.push(`/dashboard/${id}`);
   };
 
+  const handleCreateDashboard = () => {
+    // 추후 대시보드 생성 모달 로직 추가
+  };
+
   useEffect(() => {
     //렌더링시 0.4초 뒤에 작동 >> 초기 애니메이션 제거
     const timeout = setTimeout(() => {
@@ -36,21 +41,12 @@ function SideMenu({ dashboards }: SideMenuProps) {
     <div className={`${styles.sideMenu} ${isOpen && styles.open}`}>
       {renderDelayed && (
         <div className={styles.sideMenuBox}>
-          <Image
-            src="/svgs/taskify-logo.svg"
-            alt="taskify 로고 이미지"
-            width={109}
-            height={34}
-          />
+          <PageButton onClick={() => handleCreateDashboard()}>
+            새로운 대시보드
+          </PageButton>
           <div className={styles.dashboardMenu}>
             <div className={styles.dashboardAddBox}>
               <span>Dash Boards</span>
-              <Image
-                src="/svgs/add-box.svg"
-                alt="대시보드 추가 이미지"
-                width={20}
-                height={20}
-              />
             </div>
             <ul className={styles.dashboardListBox}>
               {dashboards.map((dashboard) => (

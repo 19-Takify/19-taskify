@@ -34,19 +34,23 @@
 }
 
 .dashboard {
-  background: $color-gray-fafafa;
-  width: 20rem;
-  height: 4rem;
+  background: $color-white-ffffff;
+  width: 100%;
+  height: 3.5rem;
   border-radius: 0.5rem;
   border: 0.0625rem solid $color-gray-d9d9d9;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 500;
   color: $color-black-333236;
 
   @include mobile {
-    width: 17.75rem;
     height: 3.25rem;
     font-size: 1rem;
+  }
+
+  &:hover {
+    background: $color-violet-f1effd;
+    transition: 0.7s;
   }
 }
 

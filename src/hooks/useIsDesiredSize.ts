@@ -22,7 +22,7 @@ function useIsDesiredSize(size: number) {
 
     // 클린 업
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [size]);
 
   return isDesiredSize;
 }

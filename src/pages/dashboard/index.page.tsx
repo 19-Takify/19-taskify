@@ -2,7 +2,7 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import React, { ReactElement } from 'react';
 
 function Dashboard() {
-  return <div>Dashboard</div>;
+  return <></>;
 }
 
 Dashboard.getLayout = function getLayout(page: ReactElement) {

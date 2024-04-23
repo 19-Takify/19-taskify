@@ -19,7 +19,7 @@ function DashBoardLayout({ children }: PropsWithChildren) {
     <>
       <DashBoardHeader />
       <SideMenu dashboards={dashboards} />
-      <main>{children}</main>
+      <>{children}</>
     </>
   );
 }
