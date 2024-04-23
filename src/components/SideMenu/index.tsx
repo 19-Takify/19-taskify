@@ -3,7 +3,7 @@ import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { sideMenuAtom } from '../Layout/DashboardLayout';
+import { sideMenuAtom } from '../Layout/DashBoardLayout';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;

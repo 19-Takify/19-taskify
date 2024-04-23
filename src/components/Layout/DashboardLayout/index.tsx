@@ -14,7 +14,7 @@ const dashboards = [
   { title: '봉찬', color: '#E876EA' },
 ];
 
-function DashboardLayout({ children }: PropsWithChildren) {
+function DashBoardLayout({ children }: PropsWithChildren) {
   return (
     <>
       <DashBoard />
@@ -24,4 +24,4 @@ function DashboardLayout({ children }: PropsWithChildren) {
   );
 }
 
-export default DashboardLayout;
+export default DashBoardLayout;
