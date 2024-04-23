@@ -34,8 +34,8 @@ const schema = z.object({
 });
 
 function LoginForm() {
-  const [auth, setAuth] = useAuth(false);
-  console.log(auth);
+  // const [auth, setAuth] = useAuth(false);
+  // console.log(auth);
   const router = useRouter();
   const {
     register,
