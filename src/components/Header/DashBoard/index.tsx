@@ -8,8 +8,10 @@ import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import { useSetAtom } from 'jotai';
 import { sideMenuAtom } from '@/components/Layout/DashBoardLayout';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 function DashBoardHeader() {
+  const [isOver, setIsover] = useState(false);
   const setIsOpenSideMenu = useSetAtom(sideMenuAtom);
   const isTablet = useIsDesiredSize(744);
   const isBreakPoint = useIsDesiredSize(550);
@@ -20,6 +22,15 @@ function DashBoardHeader() {
   const handleSideMenuToggle = () => {
     setIsOpenSideMenu((pre) => !pre);
   };
+
+  const handleMouseOver = () => {
+    setIsover(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsover(false);
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -75,17 +86,31 @@ function DashBoardHeader() {
               </button>
             </>
           )}
-          <div className={styles.box}>
+          <div
+            className={styles.box}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+          >
             <Image
               className={styles.img}
-              src=""
+              src="/svgs/logo.svg"
               alt="유저 프로필 이미지"
               width={38}
               height={38}
             />
-            <div className={styles.name}>박유빈aaaaaaaaaaaaaa</div>
+            <div className={styles.name}>박유빈</div>
           </div>
         </div>
+        {isOver && (
+          <ul
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            className={styles.popOver}
+          >
+            <li>마이페이지</li>
+            <li>로그아웃</li>
+          </ul>
+        )}
       </div>
     </>
   );

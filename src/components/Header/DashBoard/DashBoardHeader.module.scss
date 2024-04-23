@@ -7,6 +7,7 @@
   padding: 0 1.5rem;
   max-width: 120rem;
   min-width: 18.75rem;
+  position: relative;
 
   @include mobile {
     height: 3.75rem;
@@ -58,16 +59,14 @@
   @media (max-width: 500px) {
     display: none;
   }
-
-  // @include mobile {
-  //   display: none;
-  // }
 }
 
 .box {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  padding-right: 0.5rem;
+  height: 100%;
 
   @include tablet {
     margin: 0;
@@ -111,5 +110,29 @@
 
   @include mobile {
     display: none;
+  }
+}
+
+.popOver {
+  position: absolute;
+  background-color: $color-white-ffffff;
+  width: 8rem;
+  right: 2rem;
+  top: 4.3rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+
+  li {
+    padding: 1rem 0.5rem;
+    text-align: center;
+
+    &:nth-of-type(1) {
+      border-bottom: 0.0625rem solid $color-gray-d9d9d9;
+    }
+
+    &:hover {
+      background-color: $color-violet-f1effd;
+    }
   }
 }
