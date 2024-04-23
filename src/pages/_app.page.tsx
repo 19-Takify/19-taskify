@@ -3,6 +3,17 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '@/styles/reset.scss';
 import Head from 'next/head';
+import { NextPageContext } from 'next';
+import { Provider } from 'jotai';
+import { myStore } from '@/stores/auth';
+
+export async function getServerSideProps(context: NextPageContext) {
+  console.log('app ssr');
+
+  return {
+    props: {},
+  };
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -39,8 +50,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content="트위터 OG 이미지 추가 예정" />
         <meta property="twitter:image:alt" content="Taskify 로고 이미지" />
       </Head>
-      <ToastContainer pauseOnFocusLoss={false} />
-      <Component {...pageProps} />
+      <Provider store={myStore}>
+        <ToastContainer pauseOnFocusLoss={false} />
+        <Component {...pageProps} />
+      </Provider>
     </>
   );
 }

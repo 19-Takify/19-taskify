@@ -22,10 +22,15 @@
     font-weight: 500;
   }
 
+  .logoImage {
+    width: 12.5rem;
+    height: auto;
+  }
+
   @include tablet {
     .logoImage {
       width: 8.75rem;
-      height: 12.25rem;
+      height: auto;
     }
   }
 }

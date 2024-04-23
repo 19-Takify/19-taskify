@@ -28,9 +28,9 @@ instance.interceptors.request.use(
     // console.log('interceptor accessToken: ', accessToken);
 
     // 토큰이 있으면 요청 헤더에 추가한다.
-    // if (accessToken) {
-    //   config.headers.Authorization = `Bearer ${accessToken}`;
-    // }
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
 
     return config;
   },

@@ -20,8 +20,7 @@ export async function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname.startsWith('/login')) {
     // return NextResponse.rewrite(new URL('/singup', request.url));
-    // console.log('로그인 페이지 진입');
-
+    console.log('로그인 페이지 진입');
     return withoutAuth(request);
   }
 }
