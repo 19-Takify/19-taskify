@@ -1,4 +1,4 @@
-import DashBoard from '@/components/Header/DashBoard';
+import DashBoardHeader from '@/components/Header/DashBoard';
 import SideMenu from '@/components/SideMenu';
 import { atom } from 'jotai';
 import { PropsWithChildren, useState } from 'react';
@@ -17,7 +17,7 @@ const dashboards = [
 function DashBoardLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <DashBoard />
+      <DashBoardHeader />
       <SideMenu dashboards={dashboards} />
       <main>{children}</main>
     </>

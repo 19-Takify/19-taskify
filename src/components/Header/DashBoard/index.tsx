@@ -1,12 +1,12 @@
 import Image from 'next/image';
-import styles from './DashBoard.module.scss';
+import styles from './DashBoardHeader.module.scss';
 import MenuIcon from '@/svgs/menu.svg';
 import SettngIcon from '@/svgs/setting.svg';
 import InviteIcon from '@/svgs/invite.svg';
 import { useSetAtom } from 'jotai';
 import { sideMenuAtom } from '@/components/Layout/DashBoardLayout';
 
-function DashBoard() {
+function DashBoardHeader() {
   const setIsOpenSideMenu = useSetAtom(sideMenuAtom);
 
   const handleSideMenuToggle = () => {
@@ -47,4 +47,4 @@ function DashBoard() {
   );
 }
 
-export default DashBoard;
+export default DashBoardHeader;
