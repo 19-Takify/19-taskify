@@ -30,6 +30,8 @@
 }
 .menu {
   cursor: pointer;
+  /* 테스트를 위해서 임시로 넣어 둠*/
+  z-index: 9999;
 }
 .button {
   background-color: $color-white-ffffff;
