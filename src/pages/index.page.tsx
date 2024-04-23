@@ -54,6 +54,7 @@ export default function Home() {
               alt="소통 관련 이미지"
               placeholder="blur"
               blurDataURL="/images/main-section.webp"
+              priority
             />
           </figure>
           <h1 className={styles.mainTitle}>
