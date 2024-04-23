@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-function MainLayout({ children }: PropsWithChildren) {
+function DashboardLayout({ children }: PropsWithChildren) {
   return (
     <>
       <header></header>
@@ -10,4 +10,4 @@ function MainLayout({ children }: PropsWithChildren) {
   );
 }
 
-export default MainLayout;
+export default DashboardLayout;
