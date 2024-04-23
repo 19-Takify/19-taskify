@@ -95,11 +95,16 @@
   justify-content: flex-start;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 0;
+  padding: 0.75rem;
   width: 100%;
   color: $color-gray-787486;
   font-size: 1.25rem;
   font-weight: 500;
+  border-radius: 0.25rem;
+
+  &:hover {
+    background-color: $color-violet-f1effd;
+  }
 }
 
 .circle {
