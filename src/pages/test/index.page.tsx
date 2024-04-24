@@ -6,6 +6,7 @@ function Test() {
   //deleteCookie('accessToken');
   //console.log(getCookie('accessToken'));
 
+  /*
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,13 +27,14 @@ function Test() {
 
     fetchData();
   }, []);
+  */
 
   /*
   useEffect(() => {
     const fetchData = async () => {
       try {
         const httpClient = new HttpClient();
-        const data = await httpClient.post('/dashboards/6399/invitations', {
+        const data = await httpClient.post('/dashboards/6603/invitations', {
           email: 'skoo1100@naver.com',
         });
 

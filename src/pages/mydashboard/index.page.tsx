@@ -1,9 +1,10 @@
 import SideMenu from '@/components/SideMenu';
 import InvitedDashboard from './components/InvitedDashboard';
 import styles from './myDashboard.module.scss';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import HttpClient from '@/apis/httpClient';
 import DashBoardHeader from '@/components/Header/DashBoard';
+import { GetServerSidePropsContext } from 'next';
 
 type Invitation = {
   id: number;
@@ -26,28 +27,13 @@ type DashBoard = {
   userId: number;
 };
 
-function MyDashboard() {
-  const [invitations, setInvitations] = useState<Invitation[]>([]);
-  const [dashboards, setDashboards] = useState<DashBoard[]>([]);
+type MyDashboardProps = {
+  invitations: Invitation[];
+  dashboards: DashBoard[];
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const httpClient = new HttpClient();
-      const invitationsData = (await httpClient.get('/invitations')) as {
-        invitations: Invitation[];
-      };
-      setInvitations(invitationsData.invitations);
-
-      const dashboardsData = (await httpClient.get(
-        '/dashboards?navigationMethod=infiniteScroll',
-      )) as {
-        dashboards: DashBoard[];
-      };
-      setDashboards(dashboardsData.dashboards);
-    };
-
-    fetchData();
-  }, []);
+function MyDashboard({ invitations, dashboards }: MyDashboardProps) {
+  const [invitation, setInvitation] = useState<Invitation[]>(invitations);
 
   return (
     <div className={styles.myDashboardPage}>
@@ -55,12 +41,49 @@ function MyDashboard() {
       <SideMenu dashboards={dashboards} />
       <div className={styles.invitedDashboard}>
         <InvitedDashboard
-          invitations={invitations}
-          setInvitations={setInvitations}
+          initialInvitations={invitations}
+          invitations={invitation}
+          setInvitations={setInvitation}
         />
       </div>
     </div>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  try {
+    const accessToken = context.req.cookies.accessToken;
+    const httpClient = new HttpClient();
+    const invitationsData = (await httpClient.get('/invitations', {
+      Authorization: `Bearer ${accessToken}`,
+    })) as {
+      invitations: Invitation[];
+    };
+    const dashboardsData = (await httpClient.get(
+      '/dashboards?navigationMethod=infiniteScroll',
+      {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    )) as {
+      dashboards: DashBoard[];
+    };
+
+    return {
+      props: {
+        invitations: invitationsData.invitations,
+        dashboards: dashboardsData.dashboards,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        invitations: [],
+        dashboards: [],
+      },
+    };
+  }
+};
 
 export default MyDashboard;

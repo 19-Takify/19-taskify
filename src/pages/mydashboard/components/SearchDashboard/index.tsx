@@ -14,18 +14,18 @@ type Invitation = {
 };
 
 type SearchDashboardProps = {
-  invitations: Invitation[];
+  initialInvitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
 };
 
 function SearchDashboard({
-  invitations,
+  initialInvitations,
   setInvitations,
 }: SearchDashboardProps) {
   const [searchText, setSearchText] = useState('');
 
   const handleSubmit = () => {
-    const searchInvitations = invitations.filter(
+    const searchInvitations = initialInvitations.filter(
       (invitation) =>
         invitation.dashboard.title.includes(searchText) ||
         invitation.inviter.nickname.includes(searchText),

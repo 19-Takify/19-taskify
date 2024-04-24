@@ -18,11 +18,13 @@ type Invitation = {
 };
 
 type InvitedDashboardProps = {
+  initialInvitations: Invitation[];
   invitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
 };
 
 function InvitedDashboard({
+  initialInvitations,
   invitations,
   setInvitations,
 }: InvitedDashboardProps) {
@@ -71,10 +73,10 @@ function InvitedDashboard({
   return (
     <div className={styles.invitedDashboard}>
       <strong>초대받은 대시보드</strong>
-      {invitations.length ? (
+      {initialInvitations.length ? (
         <div>
           <SearchDashboard
-            invitations={invitations}
+            initialInvitations={initialInvitations}
             setInvitations={setInvitations}
           />
           <ul>

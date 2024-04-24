@@ -20,7 +20,6 @@ instance.interceptors.request.use(
       return config;
     }
 
-    delete config.headers.Authorization;
     return config;
   },
   (error) => {
