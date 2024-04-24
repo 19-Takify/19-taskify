@@ -18,6 +18,8 @@ import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/api';
 import { useAuth } from '@/hooks/useAuth';
 import { useAtomValue } from 'jotai';
 import { ssrUser } from '@/stores/auth';
+import { setCookie } from '@/utils/cookie';
+import useUser from '@/hooks/useUser';
 
 type FormValues = {
   email: string;
