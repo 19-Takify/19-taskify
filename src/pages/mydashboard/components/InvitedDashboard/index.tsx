@@ -2,34 +2,30 @@ import PageButton from '@/components/Button/PageButton';
 import styles from './InvitedDashboard.module.scss';
 import Image from 'next/image';
 import SearchDashboard from '../SearchDashboard';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import HttpClient from '@/apis/httpClient';
 //import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
-type InvitedDashboardProps = {
-  invitation: {
-    id: number;
-    inviter: {
-      nickname: string;
-      email: string;
-      id: number;
-    };
-    teamId: string;
-    dashboard: {
-      title: string;
-      id: number;
-    };
-    invitee: {
-      nickname: string;
-      email: string;
-      id: number;
-    };
-    inviteAccepted: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }[];
+type Invitation = {
+  id: number;
+  inviter: { nickname: string; email: string; id: number };
+  teamId: string;
+  dashboard: { title: string; id: number };
+  invitee: { nickname: string; email: string; id: number };
+  inviteAccepted: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
-function InvitedDashboard({ invitation }: InvitedDashboardProps) {
+type InvitedDashboardProps = {
+  invitations: Invitation[];
+  setInvitations: Dispatch<SetStateAction<Invitation[]>>;
+};
+
+function InvitedDashboard({
+  invitations,
+  setInvitations,
+}: InvitedDashboardProps) {
   /*
   //무한 스크롤 할 때
   const [startIndex, setStartIndex] = useState(0);
@@ -42,7 +38,7 @@ function InvitedDashboard({ invitation }: InvitedDashboardProps) {
     // 다음 데이터를 가져와서 상태를 업데이트
     setInvitations([
       ...invitations,
-      ...test.invitations.slice(nextIndex, nextIndex + 0),
+      ...invitations.slice(nextIndex, nextIndex + 0),
     ]);
   };
 
@@ -50,14 +46,26 @@ function InvitedDashboard({ invitation }: InvitedDashboardProps) {
   const sentinelRef = useInfiniteScroll(handleInfiniteScroll);
   */
 
-  const [invitations, setInvitations] = useState(invitation);
-
-  const handleConfirmClick = () => {
-    //invitation.id 로 초대 응답 api
+  const handleConfirmClick = async (invitationId: number) => {
+    const httpClient = new HttpClient();
+    await httpClient.put(`/invitations/${invitationId}`, {
+      inviteAccepted: true,
+    });
+    const updateData = (await httpClient.get('/invitations')) as {
+      invitations: Invitation[];
+    };
+    setInvitations(updateData.invitations);
   };
 
-  const handleDenyClick = () => {
-    //invitation.id 로 초대 취소 api
+  const handleDenyClick = async (invitationId: number) => {
+    const httpClient = new HttpClient();
+    await httpClient.put(`/invitations/${invitationId}`, {
+      inviteAccepted: false,
+    });
+    const updateData = (await httpClient.get('/invitations')) as {
+      invitations: Invitation[];
+    };
+    setInvitations(updateData.invitations);
   };
 
   return (
@@ -83,13 +91,18 @@ function InvitedDashboard({ invitation }: InvitedDashboardProps) {
                   <p>{invitation.dashboard.title}</p>
                   <p>{invitation.inviter.nickname}</p>
                   <div className={styles.invitedButton}>
-                    <PageButton onClick={handleConfirmClick}>수락</PageButton>
-                    <PageButton onClick={handleDenyClick}>거절</PageButton>
+                    <PageButton
+                      onClick={() => handleConfirmClick(invitation.id)}
+                    >
+                      수락
+                    </PageButton>
+                    <PageButton onClick={() => handleDenyClick(invitation.id)}>
+                      거절
+                    </PageButton>
                   </div>
                 </div>
-                {/*
-                  //무한 스크롤
-                  index === invitation.length - 1 && (
+                {/* 무한 스크롤
+                index === invitation.length - 1 && (
                   <div ref={sentinelRef}></div>
                 )*/}
               </li>

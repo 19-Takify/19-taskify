@@ -1,4 +1,6 @@
 .myDashboardPage {
+  height: 100vh;
+  background: $color-gray-fafafa;
 }
 
 .invitedDashboard {
@@ -6,4 +8,5 @@
   overflow: hidden;
   min-height: 25rem;
   max-height: 100vh;
+  margin: 3rem;
 }
