@@ -9,7 +9,7 @@ import { TOAST_TEXT } from '@/constants/toastText';
 function Profile() {
   const [userInfo, setUserInfo] = useState({
     nickname: '유저 닉네임 전역 데이터 추가 예정',
-    profileImageUrl: '',
+    profileImageUrl: '', // 여기 url도 전역 데이터로 초기 값 설정 예정
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
