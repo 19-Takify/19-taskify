@@ -10,7 +10,11 @@ function BackButton() {
   };
 
   return (
-    <button className={styles.backBtn} onClick={() => handleRouteBack()}>
+    <button
+      type="button"
+      className={styles.backBtn}
+      onClick={() => handleRouteBack()}
+    >
       <Image
         width={20}
         height={20}
