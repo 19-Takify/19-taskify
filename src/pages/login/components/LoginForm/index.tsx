@@ -36,9 +36,7 @@ const schema = z.object({
 });
 
 function LoginForm() {
-  // const [auth, setAuth] = useAuth(false);
-  // console.log(auth);
-  const userAtom = useAtomValue(ssrUser);
+  const userAtom = useUser();
   const router = useRouter();
   const {
     register,

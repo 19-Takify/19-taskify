@@ -9,7 +9,9 @@ import { setContext } from '@/apis/axios';
 import axios from '@/apis/axios';
 import { getMe } from '@/utils/getMe';
 import { useHydrateAtoms } from 'jotai/utils';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { useEffect } from 'react';
+import useUserForPage from '@/hooks/useUserForPage';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   console.log('로그인 페이지 ssr');
@@ -32,8 +34,16 @@ type LoginProps = {
 };
 
 function Login({ user }: LoginProps) {
-  useHydrateAtoms([[ssrUser, user]]);
-  const userAtom = useAtomValue(ssrUser);
+  const userAtom = useUserForPage(user);
+  console.log('렌더링 userAtom: ', userAtom);
+
+  useEffect(() => {
+    const interval = setInterval(() => console.log('유저: ', userAtom), 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className={styles.container}>

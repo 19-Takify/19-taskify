@@ -75,7 +75,7 @@ function SignupForm() {
       await axios.post('/users', data);
       const res = await axios.post('/auth/login', data);
       const { accessToken } = res.data;
-      setCookie(AUTH_TOKEN_COOKIE_NAME, accessToken);
+      // setCookie(AUTH_TOKEN_COOKIE_NAME, accessToken);
       setToast('success', '가입이 완료되었습니다.');
       router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {
