@@ -50,6 +50,13 @@ function Profile() {
     }
   };
 
+  const handleDeleteImage = () => {
+    setUserInfo((prev) => ({
+      ...prev,
+      profileImageUrl: '',
+    }));
+  };
+
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!userInfo.nickname) {
@@ -65,7 +72,10 @@ function Profile() {
       <form onSubmit={handleFormSubmit}>
         <div className={styles.box}>
           <div className={styles.imageBox}>
-            <figure className={styles.plus}>
+            <figure
+              className={styles.plus}
+              style={{ top: userInfo.profileImageUrl ? '45%' : '50%' }}
+            >
               <Image
                 width="30"
                 height="30"
@@ -80,7 +90,7 @@ function Profile() {
                 background: userInfo.profileImageUrl
                   ? `url(${userInfo.profileImageUrl}) no-repeat center/cover`
                   : '#f5f5f5',
-                opacity: userInfo.profileImageUrl ? 0.7 : 1,
+                opacity: userInfo.profileImageUrl ? 0.8 : 1,
               }}
             />
             <input
@@ -91,7 +101,17 @@ function Profile() {
               value=""
               onChange={handleImageChange}
             />
+            {userInfo.profileImageUrl && (
+              <button
+                type="button"
+                className={styles.deleteButton}
+                onClick={() => handleDeleteImage()}
+              >
+                사진 삭제
+              </button>
+            )}
           </div>
+
           <div className={styles.inputBox}>
             <div className={styles.emailBox}>
               <label className={styles.label} htmlFor="email">
@@ -119,7 +139,7 @@ function Profile() {
             </div>
           </div>
         </div>
-        <button type="submit" className={styles.button}>
+        <button type="submit" className={styles.saveButton}>
           저장
         </button>
       </form>
