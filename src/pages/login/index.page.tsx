@@ -3,6 +3,7 @@ import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Input from '@/components/Inputs/Input';
 import DatePicker from '@/components/Inputs/DatePicker';
+import Meta from '@/components/Meta';
 
 type IFormValues = {
   email: string;
@@ -52,58 +53,61 @@ function Login() {
     console.log(data);
   };
   return (
-    <form onSubmit={handleSubmit(onValid, onInvalid)}>
-      <div>
+    <>
+      <Meta title="Taskify | 로그인" />
+      <form onSubmit={handleSubmit(onValid, onInvalid)}>
         <div>
-          <Input
-            label="이메일"
-            hasLabel
-            required
-            id="email"
-            type="email"
-            register={register('email')}
-            placeholder="이메일을 입력해주세요."
-            errors={errors}
-          />
+          <div>
+            <Input
+              label="이메일"
+              hasLabel
+              required
+              id="email"
+              type="email"
+              register={register('email')}
+              placeholder="이메일을 입력해주세요."
+              errors={errors}
+            />
+          </div>
+          <div>
+            <Input
+              id="password"
+              label="비밀번호"
+              hasLabel={true}
+              icon={{
+                src: '/svgs/search.svg',
+                alt: 'search 아이콘',
+                width: 24,
+                height: 24,
+              }}
+              type="password"
+              required
+              register={register('password')}
+              placeholder="비밀번호를 입력해주세요."
+            />
+            <p>{errors.password?.message}</p>
+          </div>
+          <div>
+            <Input
+              id="passwordConfirm"
+              type="password"
+              label="비밀번호 확인"
+              hasLabel={false}
+              register={register('passwordConfirm')}
+              placeholder="비밀번호를 입력해 주세요."
+            />
+            <p>{errors.passwordConfirm?.message}</p>
+          </div>
         </div>
-        <div>
-          <Input
-            id="password"
-            label="비밀번호"
-            hasLabel={true}
-            icon={{
-              src: '/svgs/search.svg',
-              alt: 'search 아이콘',
-              width: 24,
-              height: 24,
-            }}
-            type="password"
-            required
-            register={register('password')}
-            placeholder="비밀번호를 입력해주세요."
-          />
-          <p>{errors.password?.message}</p>
-        </div>
-        <div>
-          <Input
-            id="passwordConfirm"
-            type="password"
-            label="비밀번호 확인"
-            hasLabel={false}
-            register={register('passwordConfirm')}
-            placeholder="비밀번호를 입력해 주세요."
-          />
-          <p>{errors.passwordConfirm?.message}</p>
-        </div>
-      </div>
-      <DatePicker
-        control={control}
-        name="ReactDatepicker"
-        label="마감일"
-        hasLabel={true}
-        required
-      />
-    </form>
+        <DatePicker
+          control={control}
+          name="ReactDatepicker"
+          label="마감일"
+          hasLabel={true}
+          required
+        />
+      </form>
+    </>
   );
 }
 
