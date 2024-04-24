@@ -128,7 +128,7 @@ function DashboardManager({ usage }: TDashboardManager) {
         />
       </div>
       <h3>{MANAGER[usage].label}</h3>
-      {list.length > 0 ? (
+      {list?.length > 0 ? (
         <ul>
           {list?.map((v) => {
             return isInvite ? (

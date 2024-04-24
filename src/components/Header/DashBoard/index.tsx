@@ -56,7 +56,9 @@ function DashBoardHeader() {
               />
             )}
           </Link>
-          <p className={styles.text}>내 대시보드11111111adsadsadsasa</p>
+          {isMyDashboard && (
+            <p className={styles.text}>내 대시보드11111111adsadsadsasa</p>
+          )}
         </div>
         <div className={styles.box}>
           {isMyDashboard && (

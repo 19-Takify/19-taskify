@@ -1,4 +1,4 @@
-export enum ToastText {
+export enum TOAST_TEXT {
   success = 'success',
   info = 'info',
   warn = 'warn',
