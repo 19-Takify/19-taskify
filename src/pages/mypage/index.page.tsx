@@ -2,7 +2,7 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
 import Meta from '@/components/Meta';
 import Profile from './components/Profile';
-import styles from './style/mydashboard.module.scss';
+import styles from './style/mypage.module.scss';
 import PasswordChnage from './components/PasswordChnage';
 import BackButton from '@/components/Button/BackButton';
 

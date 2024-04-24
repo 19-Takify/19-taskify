@@ -20,7 +20,7 @@ function Profile() {
 
     setUserInfo((prev) => ({
       ...prev,
-      nickname: e.target.value,
+      nickname: e.target.value.trim(),
     }));
   };
 
@@ -51,8 +51,11 @@ function Profile() {
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    console.log('a');
     e.preventDefault();
+    if (!userInfo.nickname) {
+      setToast(TOAST_TEXT.error, '닉네임을 입력해 주세요.');
+      return;
+    }
     // users/me, POST, userInfo 넘겨주기
   };
 
