@@ -8,6 +8,7 @@ import DashboardEdit from '@/pages/dashboard/[id]/edit/components/DashboardEdit'
 import Meta from '@/components/Meta';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
+import BackButton from '@/components/Button/BackButton';
 
 // 대시보드 삭제 버튼 - 대시보드 생성자(전역 상태 관리)한테만 보이게 조건부 렌더링, 컨펌 모달
 function Edit() {
@@ -31,18 +32,7 @@ function Edit() {
       <div className={styles.wrap}>
         <div className={styles.box}>
           <div className={styles.buttonBox}>
-            <button
-              className={styles.backBtn}
-              onClick={() => handleRouteBack()}
-            >
-              <Image
-                width={20}
-                height={20}
-                src="/svgs/arrow-left.svg"
-                alt="좌측 방향 화살표"
-              />
-              뒤로가기
-            </button>
+            <BackButton />
             {
               <button
                 className={styles.deleteBtn}
