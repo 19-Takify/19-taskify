@@ -93,9 +93,6 @@
 
 .dashboardList {
   cursor: pointer;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
   gap: 1rem;
   padding: 0.75rem;
   width: 100%;
@@ -107,6 +104,13 @@
   &:hover {
     background-color: $color-violet-f1effd;
   }
+}
+
+.router {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
 .selected {

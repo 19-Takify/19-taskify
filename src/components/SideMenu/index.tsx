@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { sideMenuAtom } from '../Layout/DashBoardLayout';
 import PageButton from '../Button/PageButton';
+import Link from 'next/link';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;
@@ -20,11 +21,6 @@ function SideMenu({ dashboards }: SideMenuProps) {
   const router = useRouter();
   const { id } = router.query;
   const sideMenuRef = useRef<HTMLDivElement>(null);
-
-  const handleDashboardClick = (id: number) => {
-    //페이지 이동
-    router.push(`/dashboard/${id}`);
-  };
 
   const handleCreateDashboard = () => {
     // 추후 대시보드 생성 모달 로직 추가
@@ -76,21 +72,25 @@ function SideMenu({ dashboards }: SideMenuProps) {
                 <li
                   key={dashboard.id as number}
                   className={`${styles.dashboardList} ${id === String(dashboard.id) && styles.selected}`}
-                  onClick={() => handleDashboardClick(dashboard.id as number)}
                 >
-                  <div
-                    className={styles.circle}
-                    style={{ backgroundColor: `${dashboard.color}` }}
-                  />
-                  <p>{dashboard.title}</p>
-                  {dashboard.createdByMe && (
-                    <Image
-                      src="/svgs/crown.svg"
-                      alt="crown 이미지"
-                      width={20}
-                      height={16}
+                  <Link
+                    className={styles.router}
+                    href={`/dashboard/${dashboard.id}`}
+                  >
+                    <div
+                      className={styles.circle}
+                      style={{ backgroundColor: `${dashboard.color}` }}
                     />
-                  )}
+                    <p>{dashboard.title}</p>
+                    {dashboard.createdByMe && (
+                      <Image
+                        src="/svgs/crown.svg"
+                        alt="crown 이미지"
+                        width={20}
+                        height={16}
+                      />
+                    )}
+                  </Link>
                 </li>
               ))}
             </ul>
