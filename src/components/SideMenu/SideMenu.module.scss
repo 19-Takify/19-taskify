@@ -22,6 +22,7 @@
   background-color: $color-white-ffffff;
   position: fixed;
   top: 4.3rem;
+  transform: translateX(-100%);
   left: 0;
   animation: slideOut 0.4s ease forwards;
   z-index: 999;
@@ -94,7 +95,6 @@
 .dashboardList {
   cursor: pointer;
   gap: 1rem;
-  padding: 0.75rem;
   width: 100%;
   color: $color-gray-787486;
   font-size: 1.25rem;
@@ -111,6 +111,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 1rem;
+  padding: 0.75rem;
 }
 
 .selected {
