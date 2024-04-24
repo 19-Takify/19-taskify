@@ -5,6 +5,7 @@ import SignupForm from '@/pages/signup/components/SignupForm';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import Meta from '@/components/Meta';
 
+
 function Signup() {
   return (
     <>
@@ -18,6 +19,7 @@ function Signup() {
               className={styles.logoImage}
               width={200}
               height={280}
+              priority
             />
           </Link>
           <h2 className={styles.title}>첫 방문을 환영합니다!</h2>
