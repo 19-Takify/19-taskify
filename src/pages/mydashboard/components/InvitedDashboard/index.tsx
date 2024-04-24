@@ -4,6 +4,7 @@ import Image from 'next/image';
 import SearchDashboard from '../SearchDashboard';
 import { Dispatch, SetStateAction, useState } from 'react';
 import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 //import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type Invitation = {
@@ -49,7 +50,7 @@ function InvitedDashboard({
   */
 
   const handleConfirmClick = async (invitationId: number) => {
-    const httpClient = new HttpClient();
+    const httpClient = new HttpClient(instance);
     await httpClient.put(`/invitations/${invitationId}`, {
       inviteAccepted: true,
     });
@@ -60,7 +61,7 @@ function InvitedDashboard({
   };
 
   const handleDenyClick = async (invitationId: number) => {
-    const httpClient = new HttpClient();
+    const httpClient = new HttpClient(instance);
     await httpClient.put(`/invitations/${invitationId}`, {
       inviteAccepted: false,
     });

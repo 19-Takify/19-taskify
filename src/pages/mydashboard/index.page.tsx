@@ -5,6 +5,7 @@ import { useState } from 'react';
 import HttpClient from '@/apis/httpClient';
 import DashBoardHeader from '@/components/Header/DashBoard';
 import { GetServerSidePropsContext } from 'next';
+import instance from '@/apis/axios';
 
 type Invitation = {
   id: number;
@@ -55,7 +56,7 @@ export const getServerSideProps = async (
 ) => {
   try {
     const accessToken = context.req.cookies.accessToken;
-    const httpClient = new HttpClient();
+    const httpClient = new HttpClient(instance);
     const invitationsData = (await httpClient.get('/invitations', {
       Authorization: `Bearer ${accessToken}`,
     })) as {
