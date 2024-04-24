@@ -1,3 +1,4 @@
+import { Auth, User } from '@/types/auth';
 import { atom } from 'jotai';
 
 export const initialUser = {
@@ -5,7 +6,13 @@ export const initialUser = {
   email: '',
   nickname: '',
   profileImageUrl: '',
-  createdAt: '',
-  updatedAt: '',
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
-export const userAtom = atom(initialUser);
+
+export const userAtom = atom<User>(initialUser);
+
+export const authAtom = atom<Auth>({
+  user: initialUser,
+  isPending: false,
+});
