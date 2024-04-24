@@ -1,3 +1,5 @@
+import { isBrowser } from './constants';
+
 /**
  * @todo 고도화 예정
  * @param cookieName - cookie로 사용할 이름
@@ -11,7 +13,7 @@ export const setCookie = (cookieName: string, value: string) => {
 };
 
 export const getCookie = (cookieName: string) => {
-  if (typeof document !== 'undefined') {
+  if (isBrowser) {
     const cookie = document.cookie
       .split('; ')
       .find((row) => row.startsWith(`${cookieName}=`))

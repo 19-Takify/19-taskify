@@ -1,14 +1,13 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
-import instance from './axios';
 
 class HttpClient {
   private client: AxiosInstance;
 
-  constructor() {
-    this.client = instance;
+  constructor(client: AxiosInstance) {
+    this.client = client;
   }
 
-  async get<T>(url: string, header: any = {}): Promise<T> {
+  async get<T>(url: string, header = {}): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.client.get(url, {
         headers: {
@@ -22,7 +21,7 @@ class HttpClient {
     }
   }
 
-  async post<T>(url: string, data: any, header: any = {}): Promise<T> {
+  async post<T>(url: string, data: T, header = {}): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.client.post(url, data, {
         headers: {
@@ -36,7 +35,7 @@ class HttpClient {
     }
   }
 
-  async put<T>(url: string, data: any, header: any = {}): Promise<T> {
+  async put<T>(url: string, data: T, header = {}): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.client.put(url, data, {
         headers: {
@@ -50,7 +49,7 @@ class HttpClient {
     }
   }
 
-  async delete<T>(url: string, header: any = {}): Promise<T> {
+  async delete<T>(url: string, header = {}): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.client.delete(url, {
         headers: {
