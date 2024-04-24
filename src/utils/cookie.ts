@@ -25,7 +25,7 @@ export const getCookie = (cookieName: string) => {
 };
 
 export const deleteCookie = (cookieName: string) => {
-  if (typeof document !== 'undefined') {
+  if (isBrowser) {
     document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   }
 };
