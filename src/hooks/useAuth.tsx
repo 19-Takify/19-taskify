@@ -11,7 +11,7 @@ export function useAuth(required: boolean) {
   const [auth, setAuth] = useAtom<Auth>(authAtom);
   const router = useRouter();
 
-  async function getMe() {
+  const getMe = async () => {
     setAuth((prevValues: Auth) => ({
       ...prevValues,
       isPending: true,
@@ -27,25 +27,25 @@ export function useAuth(required: boolean) {
         isPending: false,
       }));
     }
-  }
+  };
 
-  async function login(data: Login) {
+  const login = async (data: Login) => {
     await axios.post('auth/login', data);
     await getMe();
-  }
+  };
 
-  async function logout() {
+  const logout = async () => {
     /** @TODO 로그아웃 구현하기 */
-  }
+  };
 
-  async function updateMe(formData: FormData) {
+  const updateMe = async (formData: FormData) => {
     const res = await axios.patch('users/me', formData);
     const nextUser = res.data;
     setAuth((prevValues: Auth) => ({
       ...prevValues,
       user: nextUser,
     }));
-  }
+  };
 
   useEffect(() => {
     if (required && !auth.user && !auth.isPending) {
