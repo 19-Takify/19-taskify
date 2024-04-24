@@ -6,7 +6,7 @@ import styles from './style/mydashboard.module.scss';
 import PasswordChnage from './components/PasswordChnage';
 import BackButton from '@/components/Button/BackButton';
 
-function MyDashboard() {
+function MyPage() {
   return (
     <>
       <Meta title="Taskify | 마이페이지" />
@@ -21,8 +21,8 @@ function MyDashboard() {
   );
 }
 
-MyDashboard.getLayout = function getLayout(page: ReactElement) {
+MyPage.getLayout = function getLayout(page: ReactElement) {
   return <DashBoardLayout>{page}</DashBoardLayout>;
 };
 
-export default MyDashboard;
+export default MyPage;
