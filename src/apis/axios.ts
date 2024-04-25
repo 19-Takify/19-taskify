@@ -1,14 +1,31 @@
 import axios from 'axios';
+import { getCookie } from '@/utils/cookie';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const TEMP_TOKEN = process.env.NEXT_PUBLIC_TEMP_TOKEN;
 
 const instance = axios.create({
 
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${TEMP_TOKEN}`,
   },
 });
+
+//쿠키가 있으면 헤더에 추가
+instance.interceptors.request.use(
+  (config) => {
+    const cookie = getCookie('accessToken');
+
+    if (cookie) {
+      config.headers.Authorization = `Bearer ${cookie}`;
+      return config;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
 export default instance;

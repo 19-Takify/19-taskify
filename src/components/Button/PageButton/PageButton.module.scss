@@ -7,11 +7,9 @@
   font-weight: 500;
   color: $color-white-ffffff;
 
-
   &:disabled {
     background: $color-gray-9fa6b2;
   }
-
 
   @include tablet {
     width: 100%;
