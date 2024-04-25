@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from 'next';
 import { getMe } from '@/utils/auth';
 import { setContext } from '@/apis/axios';
-import { User } from '@/types/auth';
+import { UserType } from '@/types/auth';
 import Card from './components/Card';
 import Box from './components/Box';
 import useUserForPage from '@/hooks/useUserForPage';
@@ -20,7 +20,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 type BongsongProps = {
-  user: User;
+  user: UserType;
 };
 
 function Bongsong({ user: initialUser }: BongsongProps) {

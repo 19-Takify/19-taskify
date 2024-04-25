@@ -1,4 +1,4 @@
-export type User = {
+export type UserType = {
   id: number;
   email: string;
   nickname: string;
@@ -7,12 +7,12 @@ export type User = {
   updatedAt: Date;
 };
 
-export type Login = {
+export type LoginType = {
   email: string;
   password: string;
 };
 
-export type Auth = {
-  user: User;
+export type AuthType = {
+  user: UserType;
   isPending: boolean;
 };

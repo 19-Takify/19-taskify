@@ -3,23 +3,23 @@ import { useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import axios from '@/apis/axios';
 import { useRouter } from 'next/router';
-import { Auth, Login, User } from '@/types/auth';
+import { AuthType, LoginType, UserType } from '@/types/auth';
 
 export function useAuth(required: boolean) {
-  const [auth, setAuth] = useAtom<Auth>(authAtom);
+  const [auth, setAuth] = useAtom<AuthType>(authAtom);
   const router = useRouter();
 
   const getMe = useCallback(async () => {
-    setAuth((prevValues: Auth) => ({
+    setAuth((prevValues: AuthType) => ({
       ...prevValues,
       isPending: true,
     }));
-    let nextUser: User;
+    let nextUser: UserType;
     try {
       const res = await axios.get('/users/me');
       nextUser = res.data;
     } finally {
-      setAuth((prevValues: Auth) => ({
+      setAuth((prevValues: AuthType) => ({
         ...prevValues,
         user: nextUser,
         isPending: false,
@@ -27,7 +27,7 @@ export function useAuth(required: boolean) {
     }
   }, [setAuth]);
 
-  const login = async (data: Login) => {
+  const login = async (data: LoginType) => {
     await axios.post('auth/login', data);
     await getMe();
   };
@@ -39,7 +39,7 @@ export function useAuth(required: boolean) {
   const updateMe = async (formData: FormData) => {
     const res = await axios.patch('users/me', formData);
     const nextUser = res.data;
-    setAuth((prevValues: Auth) => ({
+    setAuth((prevValues: AuthType) => ({
       ...prevValues,
       user: nextUser,
     }));

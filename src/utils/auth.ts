@@ -1,7 +1,7 @@
 import axios from '@/apis/axios';
 import { deleteCookie, setCookie } from './cookie';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
-import { Login } from '@/types/auth';
+import { LoginType } from '@/types/auth';
 
 export const getMe = async () => {
   try {
@@ -38,7 +38,7 @@ export const getMeForMiddleware = async (accessToken?: string) => {
 /**
  * @TODO 로그인 상태 유지 시 24시간 유지
  */
-export const login = async (data: Login) => {
+export const login = async (data: LoginType) => {
   const response = await axios.post('/auth/login', data);
   const { accessToken } = response.data;
   const maxAge = 43200;
