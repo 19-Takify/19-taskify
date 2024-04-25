@@ -15,7 +15,7 @@ type CardList = {
   tags?: string[];
   dueDate?: string;
   assignee?: Assignee;
-  imageUrl?: string;
+  imageUrl?: string | undefined;
   teamId?: string;
   columnId: number;
   createdAt?: string;
@@ -29,17 +29,17 @@ type CardProps = {
 function Card({ cardData }: CardProps) {
   return (
     <div className={styles.cardBox}>
-      {cardData.imageUrl && (
+      {cardData?.imageUrl && (
         <Image
-          src={cardData.imageUrl}
+          src={cardData?.imageUrl}
           alt="카드 배경 이미지"
           width={274}
           height={160}
         />
       )}
-      <span>{cardData.title}</span>
+      <span>{cardData?.title}</span>
       <ul className={styles.tags}>
-        {cardData.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
+        {cardData?.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
       </ul>
       <div className={styles.bottom}>
         <div className={styles.date}>
@@ -49,10 +49,10 @@ function Card({ cardData }: CardProps) {
             width={18}
             height={18}
           />
-          <p>{cardData.dueDate}</p>
+          <p>{cardData?.dueDate}</p>
         </div>
         <div>
-          <ProfileIcon profile={cardData.assignee || null} small />
+          <ProfileIcon profile={cardData?.assignee || null} small />
         </div>
       </div>
     </div>
