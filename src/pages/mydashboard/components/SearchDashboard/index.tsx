@@ -1,6 +1,7 @@
 import styles from './SearchDashboard.module.scss';
 import Image from 'next/image';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { debounce } from 'lodash';
 
 type Invitation = {
   id: number;
@@ -22,22 +23,17 @@ function SearchDashboard({
   initialInvitations,
   setInvitations,
 }: SearchDashboardProps) {
-  const [searchText, setSearchText] = useState('');
-
-  const handleSubmit = () => {
+  const debouncing = debounce((value: string) => {
     const searchInvitations = initialInvitations.filter(
       (invitation) =>
-        invitation.dashboard.title.includes(searchText) ||
-        invitation.inviter.nickname.includes(searchText),
+        invitation.dashboard.title.includes(value) ||
+        invitation.inviter.nickname.includes(value),
     );
     setInvitations(searchInvitations);
-  };
+  }, 400);
 
-  const handleKeyEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-      return;
-    }
+  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
+    debouncing(e.target.value);
   };
 
   return (
@@ -49,11 +45,7 @@ function SearchDashboard({
         width={24}
         height={24}
       />
-      <input
-        placeholder="검색"
-        onChange={(e) => setSearchText(e.target.value)}
-        onKeyDown={(e) => handleKeyEnter(e)}
-      />
+      <input placeholder="검색" onChange={(e) => handleSubmit(e)} />
     </div>
   );
 }

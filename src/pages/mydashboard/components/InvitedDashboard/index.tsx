@@ -2,10 +2,9 @@ import PageButton from '@/components/Button/PageButton';
 import styles from './InvitedDashboard.module.scss';
 import Image from 'next/image';
 import SearchDashboard from '../SearchDashboard';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
-//import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 type Invitation = {
   id: number;
@@ -29,26 +28,6 @@ function InvitedDashboard({
   invitations,
   setInvitations,
 }: InvitedDashboardProps) {
-  /*
-  //무한 스크롤 할 때
-  const [startIndex, setStartIndex] = useState(0);
-
-  // 무한 스크롤을 위한 콜백 함수
-  const handleInfiniteScroll = () => {
-    const nextIndex = startIndex + 0;
-    if (nextIndex > 16) return;
-    setStartIndex(nextIndex); // 시작 인덱스 업데이트
-    // 다음 데이터를 가져와서 상태를 업데이트
-    setInvitations([
-      ...invitations,
-      ...invitations.slice(nextIndex, nextIndex + 0),
-    ]);
-  };
-
-  // 무한 스크롤 훅을 사용하여 handleInfiniteScroll 콜백을 연결
-  const sentinelRef = useInfiniteScroll(handleInfiniteScroll);
-  */
-
   const handleConfirmClick = async (invitationId: number) => {
     const httpClient = new HttpClient(instance);
     await httpClient.put(`/invitations/${invitationId}`, {
@@ -88,8 +67,8 @@ function InvitedDashboard({
                 <div className={styles.invitedButton}>수락 여부</div>
               </div>
             </li>
-            {invitations.map((invitation, index) => (
-              <li key={index}>
+            {invitations.map((invitation) => (
+              <li key={invitation.id}>
                 <div className={styles.invitedBox}>
                   <p>{invitation.dashboard.title}</p>
                   <p>{invitation.inviter.nickname}</p>
@@ -104,10 +83,6 @@ function InvitedDashboard({
                     </PageButton>
                   </div>
                 </div>
-                {/* 무한 스크롤
-                index === invitation.length - 1 && (
-                  <div ref={sentinelRef}></div>
-                )*/}
               </li>
             ))}
           </ul>
