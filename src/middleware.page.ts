@@ -5,7 +5,7 @@ import { getMeForMiddleware } from './utils/auth';
 
 // 로그인하지 않은 유저만 접근할 수 있는 URL 정규식
 const guestOnlyUrlRegex = /^(\/$|\/signup|\/login)/;
-// 로그인 한 유저만 접근할 수 있는 URL 정규식
+// 로그인한 유저만 접근할 수 있는 URL 정규식
 const userOnlyUrlRegex = /^(\/mypage|\/dashboard|\/mydashboard)/;
 
 export async function middleware(request: NextRequest) {
@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/mydashboard', request.url));
   }
 
-  // 로그인하지 않은 유저가 로그인 한 유저만 접근할 수 있는 페이지에 접근했을 때 '로그인' 페이지로 redirect 시킵니다.
+  // 로그인하지 않은 유저가 로그인한 유저만 접근할 수 있는 페이지에 접근했을 때 '로그인' 페이지로 redirect 시킵니다.
   if (!isLogin && userOnlyUrlRegex.test(pathName)) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
