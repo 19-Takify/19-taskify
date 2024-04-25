@@ -2,4 +2,8 @@
   display: flex;
   gap: 1rem;
   padding: 1.25rem;
+
+  @include tablet {
+    flex-direction: column;
+  }
 }

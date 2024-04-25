@@ -2,8 +2,8 @@ import instance from '@/apis/axios';
 import HttpClient from '@/apis/httpClient';
 import Column from './components/Column';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import { useRouter } from 'next/router';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import styles from './dashboardId.module.scss';
 
 type ColumnData = {
@@ -44,50 +44,11 @@ type ColumnCardData = {
   ];
 };
 
-function DashboardId() {
-  const router = useRouter();
-  const { id } = router.query;
+type DashboardIdProps = {
+  allData: ColumnCardData[] | [];
+};
 
-  const [allData, setAllData] = useState<ColumnCardData[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      /*
-      if (id) {
-        const httpClient = new HttpClient(instance);
-        const dashboardId = Number(id);
-        const data = await httpClient.post('/cards', {
-          assigneeUserId: 3079,
-          dashboardId: dashboardId,
-          columnId: 22200,
-          title: '테스틋',
-          description: '테스트입니당',
-          dueDate: '2024-04-24 13:48',
-          tags: ['테스트1', '테스트2', '테스트3'],
-        });
-        console.log(data);
-      }
-      */
-      if (id) {
-        const httpClient = new HttpClient(instance);
-        const columnData: ColumnData = await httpClient.get(
-          `/columns?dashboardId=${id}`,
-        );
-        const cardRequests = columnData.data.map(async (column: any) => {
-          const columnCardData: ColumnCardData = await httpClient.get(
-            `/cards?columnId=${column.id}`,
-          );
-          columnCardData.columnId = column.id;
-          return columnCardData;
-        });
-        const columnCardData = await Promise.all(cardRequests);
-        setAllData(columnCardData);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
+function DashboardId({ allData }: DashboardIdProps) {
   return (
     <ul className={styles.column}>
       {allData &&
@@ -102,6 +63,47 @@ function DashboardId() {
 
 DashboardId.getLayout = function getLayout(page: ReactElement) {
   return <DashBoardLayout>{page}</DashBoardLayout>;
+};
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  try {
+    const accessToken = context.req.cookies.accessToken;
+    const id = context.params?.id;
+    if (id) {
+      const httpClient = new HttpClient(instance);
+      const columnData: ColumnData = await httpClient.get(
+        `/columns?dashboardId=${id}`,
+        {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      );
+      const cardRequests = columnData.data.map(async (column: any) => {
+        const columnCardData: ColumnCardData = await httpClient.get(
+          `/cards?columnId=${column.id}`,
+          {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        );
+        columnCardData.columnId = column.id;
+        return columnCardData;
+      });
+      const columnCardData = await Promise.all(cardRequests);
+
+      return {
+        props: {
+          allData: columnCardData,
+        },
+      };
+    }
+  } catch (error) {
+    return {
+      props: {
+        allData: [],
+      },
+    };
+  }
 };
 
 export default DashboardId;

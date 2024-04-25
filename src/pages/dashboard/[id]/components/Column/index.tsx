@@ -1,5 +1,6 @@
 import Card from '@/components/Card';
 import styles from './Column.module.scss';
+import PageButton from '@/components/Button/PageButton';
 
 type CardData = {
   columnId: number;
@@ -33,6 +34,7 @@ type ColumnProps = {
 function Column({ columnData }: ColumnProps) {
   return (
     <ul className={styles.card}>
+      <PageButton>카드</PageButton>
       {columnData.cards.length ? (
         columnData.cards.map((cardData) => (
           <li key={cardData.id}>
