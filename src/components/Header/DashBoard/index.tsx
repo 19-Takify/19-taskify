@@ -1,15 +1,27 @@
 import Image from 'next/image';
-import styles from './DashBoard.module.scss';
+import styles from './DashBoardHeader.module.scss';
 import MenuIcon from '/public/svgs/menu.svg';
 import SettngIcon from '/public/svgs/setting.svg';
 import InviteIcon from '/public/svgs/invite.svg';
+import { useSetAtom } from 'jotai';
+import { sideMenuAtom } from '@/components/Layout/DashBoardLayout';
 
-function DashBoard() {
+function DashBoardHeader() {
+  const setIsOpenSideMenu = useSetAtom(sideMenuAtom);
+
+  const handleSideMenuToggle = () => {
+    setIsOpenSideMenu((pre) => !pre);
+  };
   return (
     <>
       <div className={styles.container}>
         <div className={styles.box}>
-          <Image className={styles.menu} src={MenuIcon} alt="menu" />
+          <Image
+            className={styles.menu}
+            src={MenuIcon}
+            alt="menu"
+            onClick={handleSideMenuToggle}
+          />
           <div className={styles.text}>내 대시보드</div>
         </div>
         <div className={styles.box}>
@@ -35,4 +47,4 @@ function DashBoard() {
   );
 }
 
-export default DashBoard;
+export default DashBoardHeader;
