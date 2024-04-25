@@ -7,7 +7,7 @@ import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
 import { SERVER_ERROR_MESSAGE } from '@/constants/errorMessage';
 import setToast from '@/utils/setToast';
 const instance = axios.create({
-  baseURL: 'https://sp-taskify-api.vercel.app/2-9/',
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
 });
 
 let context: GetServerSidePropsContext | null = null;
