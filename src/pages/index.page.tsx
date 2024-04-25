@@ -1,18 +1,16 @@
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './index.module.scss';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import { PAGE_PATH } from '@/constants/pageUrl';
+import Meta from '@/components/Meta';
 
 export default function Home() {
   const isMobile = useIsDesiredSize(375);
 
   return (
     <>
-      <Head>
-        <title>Taskify | 일정 관리 </title>
-      </Head>
+      <Meta title="Taskify | 일정 관리" />
       <header className={styles.header}>
         <nav className={styles.nav}>
           <Link href={PAGE_PATH.MAIN}>
@@ -54,6 +52,7 @@ export default function Home() {
               alt="소통 관련 이미지"
               placeholder="blur"
               blurDataURL="/images/main-section.webp"
+              priority
             />
           </figure>
           <h1 className={styles.mainTitle}>
