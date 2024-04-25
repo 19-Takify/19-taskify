@@ -33,6 +33,7 @@ export const SERVER_ERROR_MESSAGE = {
   },
   USER: {
     NOT_FOUND: '존재하지 않는 유저입니다.',
+    UNAUTHORIZED: '로그인이 필요합니다.',
   },
 };
 
