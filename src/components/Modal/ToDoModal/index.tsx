@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from './ToDOModal.module.scss';
 import ProfileIcon from '../../Profile/ProfileIcon';
-import ModalDropdown from '../ModalDropdown/ModalDropdown';
-import Modal from '../Modal/Modal';
+import ModalDropdown from '../ModalDropdown';
+import Modal from '../Modal';
 
 type ModalProps = {
   showModal: boolean;

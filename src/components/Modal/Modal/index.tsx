@@ -1,7 +1,7 @@
 import Portal from '../Potal';
 import styles from './Modal.module.scss';
 import useCloseModal from '@/hooks/useModalClose';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 type ModalProps = {
   showModal: boolean;
