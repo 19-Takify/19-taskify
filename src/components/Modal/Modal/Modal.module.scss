@@ -1,0 +1,24 @@
+.background {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modalBox {
+  background-color: $color-white-ffffff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  overflow: scroll;
+  @include tablet {
+    padding: 1.5rem 1.3rem 1.7rem;
+  }
+  @include mobile {
+    padding: 1.5rem 1rem 1.7rem;
+  }
+}
