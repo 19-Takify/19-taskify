@@ -53,14 +53,22 @@ function SideMenu({ dashboards }: SideMenuProps) {
     };
   }, [setIsOpen]);
 
+  useEffect(() => {
+    if (sideMenuRef.current) {
+      // sideMenuRef에 클래스 추가
+      console.log(sideMenuRef.current);
+      sideMenuRef.current.classList.add(styles.initialState);
+    }
+  }, [isOpen]);
+
   return (
     <div
       ref={sideMenuRef}
-      className={`${styles.sideMenu} ${isOpen && styles.open}`}
+      className={`${styles.sideMenu} ${isOpen && styles.open} `}
     >
       {renderDelayed && (
         <div className={styles.sideMenuBox}>
-          <PageButton onClick={() => handleCreateDashboard()}>
+          <PageButton onClick={handleCreateDashboard}>
             새로운 대시보드
           </PageButton>
           <div className={styles.dashboardMenu}>

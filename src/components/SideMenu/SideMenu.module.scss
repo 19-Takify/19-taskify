@@ -22,9 +22,8 @@
   background-color: $color-white-ffffff;
   position: fixed;
   top: 4.3rem;
-  transform: translateX(-100%);
   left: 0;
-  animation: slideOut 0.4s ease forwards;
+  transform: translateX(-100%);
   z-index: 999;
 
   @include mobile {
@@ -32,6 +31,10 @@
     top: 3.75rem;
     height: calc(100vh - 3.75rem);
   }
+}
+
+.initialState {
+  animation: slideOut 0.4s ease forwards;
 }
 
 .open {
