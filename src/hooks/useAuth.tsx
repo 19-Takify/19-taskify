@@ -1,8 +1,6 @@
-import { Provider, atom } from 'jotai';
-import { authAtom, userAtom } from '@/store/auth';
+import { authAtom } from '@/store/auth';
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
 import axios from '@/apis/axios';
 import { useRouter } from 'next/router';
 import { Auth, Login, User } from '@/types/auth';
@@ -11,7 +9,7 @@ export function useAuth(required: boolean) {
   const [auth, setAuth] = useAtom<Auth>(authAtom);
   const router = useRouter();
 
-  const getMe = async () => {
+  const getMe = useCallback(async () => {
     setAuth((prevValues: Auth) => ({
       ...prevValues,
       isPending: true,
@@ -27,7 +25,7 @@ export function useAuth(required: boolean) {
         isPending: false,
       }));
     }
-  };
+  }, [setAuth]);
 
   const login = async (data: Login) => {
     await axios.post('auth/login', data);
@@ -55,7 +53,7 @@ export function useAuth(required: boolean) {
 
   useEffect(() => {
     getMe();
-  }, []);
+  }, [getMe]);
 
   return { auth, login, logout, updateMe };
 }
