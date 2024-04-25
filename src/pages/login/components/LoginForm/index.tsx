@@ -8,12 +8,14 @@ import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { useRouter } from 'next/router';
 import PageButton from '@/components/Button/PageButton';
+import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
 import {
   FETCH_ERROR_MESSAGE,
   SERVER_ERROR_MESSAGE,
   VALID_ERROR_MESSAGE,
 } from '@/constants/errorMessage';
 import { PAGE_PATH } from '@/constants/pageUrl';
+import { login } from '@/utils/auth';
 
 type FormValues = {
   email: string;
@@ -48,9 +50,7 @@ function LoginForm() {
   });
   const handleValidSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      const response = await axios.post('auth/login', data);
-      const result = response.data;
-      document.cookie = `accessToken=${result?.accessToken}`;
+      await login(data);
       router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {
       if (!isAxiosError(error)) {
