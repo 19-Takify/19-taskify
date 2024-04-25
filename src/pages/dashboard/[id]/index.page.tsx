@@ -1,9 +1,10 @@
-import instance from '@/apis/axios';
-import HttpClient from '@/apis/httpClient';
+import React, { ReactElement, useState, useEffect } from 'react';
 import Column from './components/Column';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import React, { ReactElement } from 'react';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
+import { resetServerContext } from 'react-beautiful-dnd';
 import styles from './dashboardId.module.scss';
 
 type ColumnData = {
@@ -49,16 +50,11 @@ type DashboardIdProps = {
 };
 
 function DashboardId({ allData }: DashboardIdProps) {
-  return (
-    <ul className={styles.column}>
-      {allData &&
-        allData.map((columnData) => (
-          <li key={columnData.columnId}>
-            <Column columnData={columnData} />
-          </li>
-        ))}
-    </ul>
-  );
+  const [data, setData] = useState(allData);
+
+  console.log(data);
+
+  return <Column data={data} setData={setData} />;
 }
 
 DashboardId.getLayout = function getLayout(page: ReactElement) {
@@ -68,6 +64,9 @@ DashboardId.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
+  // beautiful-dnd 서버 초기화
+  resetServerContext();
+
   try {
     const accessToken = context.req.cookies.accessToken;
     const id = context.params?.id;

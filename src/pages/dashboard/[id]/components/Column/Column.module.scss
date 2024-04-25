@@ -1,3 +1,13 @@
+.column {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+
+  @include tablet {
+    flex-direction: column;
+  }
+}
+
 .card {
   display: flex;
   flex-direction: column;

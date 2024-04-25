@@ -1,8 +1,12 @@
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { useState, useEffect } from 'react';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 import Card from '@/components/Card';
 import styles from './Column.module.scss';
 import PageButton from '@/components/Button/PageButton';
 
-type CardData = {
+type ColumnCardData = {
   columnId: number;
   cursorId: number;
   totalCount: number;
@@ -27,24 +31,118 @@ type CardData = {
   ];
 };
 
-type ColumnProps = {
-  columnData: CardData;
+type LocateCard = {
+  cardId: number | null;
+  startColumnId: number | null;
+  endColumnId: number | null;
 };
 
-function Column({ columnData }: ColumnProps) {
+type ColumnProps<T> = {
+  data: T;
+  setData: React.Dispatch<T>;
+};
+
+function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
+  const [locateCard, setLocateCard] = useState<LocateCard>({
+    cardId: null,
+    startColumnId: null,
+    endColumnId: null,
+  });
+
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const source = result.source;
+    const destination = result.destination;
+
+    const newData = [...data];
+
+    const sourceColumnIndex = newData.findIndex(
+      (column) => column.columnId === parseInt(source.droppableId),
+    );
+    const destinationColumnIndex = newData.findIndex(
+      (column) => column.columnId === parseInt(destination.droppableId),
+    );
+
+    const [movedCard] = newData[sourceColumnIndex].cards.splice(
+      source.index,
+      1,
+    );
+    newData[destinationColumnIndex].cards.splice(
+      destination.index,
+      0,
+      movedCard,
+    );
+
+    setData(newData);
+    setLocateCard({
+      cardId: Number(result.draggableId),
+      startColumnId: Number(result.source.droppableId),
+      endColumnId: Number(result.destination.droppableId),
+    });
+    console.log(result);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(locateCard.cardId);
+        const httpClient = new HttpClient(instance);
+        await httpClient.put(`/cards/${locateCard.cardId}`, {
+          columnId: locateCard.endColumnId,
+        });
+      } catch {
+        return;
+      }
+    };
+
+    fetchData();
+  }, [data, locateCard]);
+
   return (
-    <ul className={styles.card}>
-      <PageButton>카드</PageButton>
-      {columnData.cards.length ? (
-        columnData.cards.map((cardData) => (
-          <li key={cardData.id}>
-            <Card cardData={cardData} />
-          </li>
-        ))
-      ) : (
-        <li>없음</li>
-      )}
-    </ul>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <ul className={styles.column}>
+        {data.map((columnData) => (
+          <Droppable
+            key={columnData.columnId.toString()}
+            droppableId={columnData.columnId.toString()}
+          >
+            {(provided) => (
+              <li {...provided.droppableProps} ref={provided.innerRef}>
+                <div className={styles.card}>
+                  <PageButton>카드</PageButton>
+                  <Droppable droppableId={columnData.columnId.toString()}>
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.droppableProps}>
+                        {columnData.cards.map((cardData, index) => (
+                          <Draggable
+                            key={cardData.id.toString()}
+                            draggableId={cardData.id.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <Card cardData={cardData} />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </div>
+                {provided.placeholder}
+              </li>
+            )}
+          </Droppable>
+        ))}
+      </ul>
+    </DragDropContext>
   );
 }
 
