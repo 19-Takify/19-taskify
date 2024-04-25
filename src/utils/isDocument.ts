@@ -1,3 +1,3 @@
 export const isDocument = () => {
-  return typeof document !== undefined;
+  return typeof document !== 'undefined';
 };
