@@ -1,0 +1,15 @@
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: $color-black-333236;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: transparent;
+  height: 3.5rem;
+
+  &:hover {
+    transition: 0.7s;
+    transform: scale(1.1);
+  }
+}
