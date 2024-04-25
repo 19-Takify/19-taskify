@@ -4,12 +4,12 @@ import styles from './Signup.module.scss';
 import SignupForm from '@/pages/signup/components/SignupForm';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import Meta from '@/components/Meta';
-
+import useCurrentUrl from '@/hooks/useCurrentUrl';
 
 function Signup() {
   return (
     <>
-      <Meta title="Taskify | 회원가입" />
+      <Meta title="Taskify | 회원가입" url={useCurrentUrl()} />
       <div className={styles.container}>
         <header className={styles.header}>
           <Link href={PAGE_PATH.MAIN}>

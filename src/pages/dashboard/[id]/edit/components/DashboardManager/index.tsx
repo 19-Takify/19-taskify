@@ -69,7 +69,6 @@ function DashboardManager({ usage }: TDashboardManager) {
   };
 
   const handleSearchChange = (value: string): void => {
-    console.log(cacheAllData.current);
     if (!searchValue) {
       setList(cacheAllData.current);
       return;
@@ -172,6 +171,7 @@ function DashboardManager({ usage }: TDashboardManager) {
             alt="taskify 로고 이미지"
             width="105"
             height="130"
+            priority
           />
           데이터가 존재하지 않습니다!
         </div>

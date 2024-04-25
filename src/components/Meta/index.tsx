@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 type HeadProps = {
   title?: string;
+  url?: string;
 };
 
 /*
@@ -10,10 +11,11 @@ prop title 원하는 제목 추가
 <Meta title="Taskify | 대시보드 이름 추가 예정" />
  */
 
-function Meta(props: HeadProps) {
+function Meta({ title, url = '' }: HeadProps) {
+  console.log(`https://team19-main.vercel.app${url}`);
   return (
     <Head>
-      <title>{props.title ?? 'Taskify'}</title>
+      <title>{title ?? 'Taskify'}</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <meta name="title" content="Taskify" />
       <meta name="keyword" content="Taskify, 일정관리, 간편함" />
@@ -26,7 +28,10 @@ function Meta(props: HeadProps) {
         content="간편한 일정관리 서비스 Taskify"
       />
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://team19-main.vercel.app/" />
+      <meta
+        property="og:url"
+        content={`https://team19-main.vercel.app${url}`}
+      />
       <meta property="og:image" content="카카오 OG 이미지 추가 예정" />
       <meta property="og:image:alt" content="Taskify 로고 이미지" />
       <meta property="og:locale" content="ko_KR" />
@@ -38,7 +43,10 @@ function Meta(props: HeadProps) {
         content="간편한 일정관리 서비스 Taskify"
       />
       <meta name="twitter:card" content="website" />
-      <meta property="twitter:site" content="https://team19-main.vercel.app/" />
+      <meta
+        property="twitter:site"
+        content={`https://team19-main.vercel.app${url}`}
+      />
       <meta name="twitter:image" content="트위터 OG 이미지 추가 예정" />
       <meta property="twitter:image:alt" content="Taskify 로고 이미지" />
     </Head>
