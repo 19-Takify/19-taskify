@@ -4,9 +4,21 @@ import Link from 'next/link';
 import styles from './index.module.scss';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import { PAGE_PATH } from '@/constants/pageUrl';
+import { useState } from 'react';
+import ToDoModal from '@/components/Modal/ToDoModal/ToDoModal';
 
 export default function Home() {
   const isMobile = useIsDesiredSize(375);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClick = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -57,7 +69,10 @@ export default function Home() {
             />
           </figure>
           <h1 className={styles.mainTitle}>
-            새로운 일정 관리 <span>Taskify</span>
+            새로운 일정 관리 <span onClick={handleClick}>Taskify</span>
+            {showModal && (
+              <ToDoModal showModal={showModal} handleClose={handleCloseModal} />
+            )}
           </h1>
           <h2 className={styles.mainText}>간편하게 일정관리 하기!</h2>
           <Link className={styles.loginBtn} href={PAGE_PATH.LOGIN}>
