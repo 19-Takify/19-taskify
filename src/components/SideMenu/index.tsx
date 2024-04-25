@@ -3,14 +3,14 @@ import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { sideMenuAtom } from '../Layout/DashBoardLayout';
+import { sideMenuAtom } from '@/utils/jotai';
 
 type DashboardList<T extends string | boolean | number> = {
   [key: string]: T;
 };
 
 type SideMenuProps = {
-  dashboards: DashboardList<string | boolean | number>[];
+  dashboards?: DashboardList<string | boolean | number>[];
 };
 
 function SideMenu({ dashboards }: SideMenuProps) {
@@ -53,7 +53,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
               />
             </div>
             <ul className={styles.dashboardListBox}>
-              {dashboards.map((dashboard) => (
+              {dashboards?.map((dashboard) => (
                 <li
                   key={dashboard.id as number}
                   className={styles.dashboardList}

@@ -4,7 +4,7 @@ import MenuIcon from '@/svgs/menu.svg';
 import SettngIcon from '@/svgs/setting.svg';
 import InviteIcon from '@/svgs/invite.svg';
 import { useSetAtom } from 'jotai';
-import { sideMenuAtom } from '@/components/Layout/DashBoardLayout';
+import { sideMenuAtom } from '@/utils/jotai';
 
 function DashBoardHeader() {
   const setIsOpenSideMenu = useSetAtom(sideMenuAtom);

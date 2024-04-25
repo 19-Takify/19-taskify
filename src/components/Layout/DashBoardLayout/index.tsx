@@ -1,27 +1,70 @@
 import DashBoardHeader from '@/components/Header/DashBoard';
 import SideMenu from '@/components/SideMenu';
-import { atom } from 'jotai';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
+import { GetServerSidePropsContext } from 'next';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
+import { dashboardsAtom } from '@/utils/jotai';
+import { useAtom } from 'jotai';
 
-export const sideMenuAtom = atom(false);
+type DashBoard = {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+  userId: number;
+};
 
-// 테스트 데이터
-const dashboards = [
-  { id: 1, title: '송은', color: '#7AC555' },
-  { id: 2, title: '유빈', color: '#760DDE' },
-  { id: 3, title: '승구', color: '#FFA500' },
-  { id: 4, title: '우혁', color: '#76A5EA' },
-  { id: 5, title: '봉찬', color: '#E876EA' },
-];
+function DashBoardLayout({
+  children,
+  dashboards,
+}: PropsWithChildren<{ dashboards: DashBoard[] }>) {
+  const [dashboard, setDashboard] = useAtom(dashboardsAtom);
 
-function DashBoardLayout({ children }: PropsWithChildren) {
+  useEffect(() => {
+    setDashboard(dashboards as any);
+  }, [dashboards]);
+
+  console.log(dashboards);
+
   return (
     <>
       <DashBoardHeader />
-      <SideMenu dashboards={dashboards} />
+      <SideMenu dashboards={dashboard} />
       <main>{children}</main>
     </>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  try {
+    const accessToken = context.req.cookies.accessToken;
+    const httpClient = new HttpClient(instance);
+    const dashboardsData = (await httpClient.get(
+      '/dashboards?navigationMethod=infiniteScroll',
+      {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    )) as {
+      dashboards: DashBoard[];
+    };
+
+    return {
+      props: {
+        dashboards: dashboardsData.dashboards,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        dashboards: [],
+      },
+    };
+  }
+};
 
 export default DashBoardLayout;
