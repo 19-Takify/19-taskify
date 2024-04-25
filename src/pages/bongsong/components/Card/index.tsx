@@ -2,7 +2,7 @@ import useUser from '@/hooks/useUser';
 
 function Card() {
   // user를 사용하기 위해 컴포넌트에서 사용하는 커스텀 훅
-  const user = useUser();
+  const { user } = useUser();
 
   return (
     <>

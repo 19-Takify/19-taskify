@@ -1,11 +1,12 @@
 import { useAtom } from 'jotai';
 import { userAtom } from '@/store/auth';
+import useUser from '@/hooks/useUser';
 
 const nicknames = ['재혁', '송은', '유빈', '승구', '우혁', '봉찬'];
 
 function Box() {
   // 계정 관리 페이지 예시
-  const [user, setUser] = useAtom(userAtom);
+  const { user, setUser } = useUser();
 
   return (
     <>

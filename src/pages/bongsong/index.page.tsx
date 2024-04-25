@@ -5,6 +5,7 @@ import { User } from '@/types/auth';
 import Card from './components/Card';
 import Box from './components/Box';
 import useUserForPage from '@/hooks/useUserForPage';
+import useUser from '@/hooks/useUser';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // axios interceptor에서 cookie를 가져오기 위한 필수 함수 호출
@@ -24,7 +25,8 @@ type BongsongProps = {
 
 function Bongsong({ user: initialUser }: BongsongProps) {
   // user를 사용하기 위해 페이지 컴포넌트에서 사용하는 커스텀 훅
-  const user = useUserForPage(initialUser);
+  useUserForPage(initialUser);
+  const { user } = useUser();
   return (
     <>
       <div>Bongsong 페이지 컴포넌트</div>

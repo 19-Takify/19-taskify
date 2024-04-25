@@ -1,8 +1,9 @@
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { userAtom } from '@/store/auth';
 
 function useUser() {
-  return useAtomValue(userAtom);
+  const [user, setUser] = useAtom(userAtom);
+  return { user, setUser };
 }
 
 export default useUser;
