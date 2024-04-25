@@ -171,40 +171,42 @@ export default function Home() {
         </section>
       </main>
       <footer className={styles.footer}>
-        <p>©codeit - 2023</p>
-        <ul className={styles.subMenuList}>
-          <li>Privacy Policy</li>
-          <li>FAQ</li>
-        </ul>
-        <ul className={styles.snsList}>
-          <li>
-            <Image
-              width="20"
-              height="20"
-              src="/svgs/email.svg"
-              alt="이메일 이미지"
-              loading="lazy"
-            />
-          </li>
-          <li>
-            <Image
-              width="20"
-              height="20"
-              src="/svgs/facebook.svg"
-              alt="페이스북 이미지"
-              loading="lazy"
-            />
-          </li>
-          <li>
-            <Image
-              width="20"
-              height="20"
-              src="/svgs/instagram.svg"
-              alt="인스타그램 이미지"
-              loading="lazy"
-            />
-          </li>
-        </ul>
+        <div className={styles.footerBox}>
+          <p>©codeit - 2023</p>
+          <ul className={styles.subMenuList}>
+            <li>Privacy Policy</li>
+            <li>FAQ</li>
+          </ul>
+          <ul className={styles.snsList}>
+            <li>
+              <Image
+                width="20"
+                height="20"
+                src="/svgs/email.svg"
+                alt="이메일 이미지"
+                loading="lazy"
+              />
+            </li>
+            <li>
+              <Image
+                width="20"
+                height="20"
+                src="/svgs/facebook.svg"
+                alt="페이스북 이미지"
+                loading="lazy"
+              />
+            </li>
+            <li>
+              <Image
+                width="20"
+                height="20"
+                src="/svgs/instagram.svg"
+                alt="인스타그램 이미지"
+                loading="lazy"
+              />
+            </li>
+          </ul>
+        </div>
       </footer>
     </>
   );
