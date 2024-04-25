@@ -12,7 +12,6 @@ prop title 원하는 제목 추가
  */
 
 function Meta({ title, url = '' }: HeadProps) {
-  console.log(`https://team19-main.vercel.app${url}`);
   return (
     <Head>
       <title>{title ?? 'Taskify'}</title>

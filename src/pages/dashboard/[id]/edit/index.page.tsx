@@ -8,7 +8,6 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
-import { useRouter } from 'next/router';
 
 // 대시보드 삭제 버튼 - 대시보드 생성자(전역 상태 관리)한테만 보이게 조건부 렌더링, 컨펌 모달
 function Edit() {
@@ -29,7 +28,7 @@ function Edit() {
             <BackButton />
             <button
               className={styles.deleteBtn}
-              onClick={() => handleDeleteDashboard()}
+              onClick={handleDeleteDashboard}
             >
               대시보드 삭제하기
             </button>

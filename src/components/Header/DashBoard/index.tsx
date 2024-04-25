@@ -95,7 +95,7 @@ function DashBoardHeader() {
               width={38}
               height={38}
             />
-            <div className={styles.name}>박유빈</div>
+            <div className={styles.name}>테스트유저123</div>
           </div>
         </div>
         {isOver && (

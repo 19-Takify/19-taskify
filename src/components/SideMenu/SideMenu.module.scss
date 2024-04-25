@@ -9,7 +9,7 @@
 
 @keyframes slideOut {
   from {
-    transform: translateX(0);
+    transform: translateX(0%);
   }
   to {
     transform: translateX(-100%);
@@ -20,7 +20,7 @@
   width: 18.75rem;
   height: calc(100vh - 4.3rem);
   background-color: $color-white-ffffff;
-  position: fixed;
+  position: absolute;
   top: 4.3rem;
   left: 0;
   transform: translateX(-100%);
@@ -33,7 +33,7 @@
   }
 }
 
-.initialState {
+.close {
   animation: slideOut 0.4s ease forwards;
 }
 

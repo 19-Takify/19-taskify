@@ -17,10 +17,11 @@ type SideMenuProps = {
 
 function SideMenu({ dashboards }: SideMenuProps) {
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
+  const [isFirstRender, setIsFirstRender] = useState(false);
   const [renderDelayed, setRenderDelayed] = useState(false);
+  const sideMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { id } = router.query;
-  const sideMenuRef = useRef<HTMLDivElement>(null);
 
   const handleCreateDashboard = () => {
     // 추후 대시보드 생성 모달 로직 추가
@@ -40,6 +41,13 @@ function SideMenu({ dashboards }: SideMenuProps) {
       }
     };
 
+    // 첫 렌더링 시에는 slideOut 애니메이션 작동 x
+    setIsFirstRender(true);
+
+    if (isFirstRender && !isOpen) {
+      sideMenuRef.current?.classList.add(styles.close);
+    }
+
     document.addEventListener('click', handleSideMenu);
 
     //렌더링시 0.4초 뒤에 작동 >> 초기 애니메이션 제거
@@ -51,14 +59,6 @@ function SideMenu({ dashboards }: SideMenuProps) {
       document.removeEventListener('click', handleSideMenu);
       clearTimeout(timeout);
     };
-  }, [setIsOpen]);
-
-  useEffect(() => {
-    if (sideMenuRef.current) {
-      // sideMenuRef에 클래스 추가
-      console.log(sideMenuRef.current);
-      sideMenuRef.current.classList.add(styles.initialState);
-    }
   }, [isOpen]);
 
   return (
@@ -93,7 +93,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
                     {dashboard.createdByMe && (
                       <Image
                         src="/svgs/crown.svg"
-                        alt="crown 이미지"
+                        alt="왕관 이미지"
                         width={20}
                         height={16}
                       />
