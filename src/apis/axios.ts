@@ -1,4 +1,5 @@
 import { GetServerSidePropsContext } from 'next';
+import Router from 'next/router';
 import axios from 'axios';
 import { getCookie } from '@/utils/cookie';
 import { isDocument } from '@/utils/isDocument';
@@ -22,7 +23,7 @@ instance.interceptors.request.use((config) => {
     : getCookie(AUTH_TOKEN_COOKIE_NAME);
 
   if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}34728947`;
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
   return config;
@@ -31,11 +32,18 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
+    const isServer = !isDocument();
     const statusCode = error.response?.status;
     switch (statusCode) {
       case 401:
-        setToast('error', SERVER_ERROR_MESSAGE.USER.UNAUTHORIZED);
-        break;
+        if (isServer) {
+          context?.res.writeHead(302, { Location: '/login' });
+          context?.res.end();
+        } else {
+          Router.push('/login');
+          setToast('error', SERVER_ERROR_MESSAGE.USER.UNAUTHORIZED);
+        }
+        return;
 
       default:
         return Promise.reject(error);
