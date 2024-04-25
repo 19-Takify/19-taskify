@@ -3,8 +3,12 @@ import { deleteCookie } from './cookie';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
 
 export const getMe = async () => {
-  const res = await axios.get('/users/me');
-  return res?.data || null;
+  try {
+    const res = await axios.get('/users/me');
+    return res.data;
+  } catch {
+    return null;
+  }
 };
 
 export const getMeForMiddleware = async (accessToken?: string) => {
@@ -23,7 +27,7 @@ export const getMeForMiddleware = async (accessToken?: string) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
