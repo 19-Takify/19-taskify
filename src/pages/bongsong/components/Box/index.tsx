@@ -1,5 +1,3 @@
-import { useAtom } from 'jotai';
-import { userAtom } from '@/store/auth';
 import useUser from '@/hooks/useUser';
 
 const nicknames = ['재혁', '송은', '유빈', '승구', '우혁', '봉찬'];
