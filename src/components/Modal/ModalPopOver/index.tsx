@@ -7,7 +7,7 @@ type ModalDropdownProps = {
   handleDropdownClose: () => void;
 };
 
-function ModalDropdown({
+function ModalPopOver({
   showDropdown,
   handleDropdownClose,
 }: ModalDropdownProps) {
@@ -33,4 +33,4 @@ function ModalDropdown({
   );
 }
 
-export default ModalDropdown;
+export default ModalPopOver;
