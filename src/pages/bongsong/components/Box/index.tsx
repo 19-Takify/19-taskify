@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { userAtom } from '@/store/auth';
 
-const nicknames = ['송은', '유빈', '승구', '우혁', '봉찬'];
+const nicknames = ['재혁', '송은', '유빈', '승구', '우혁', '봉찬'];
 
 function Box() {
   // 계정 관리 페이지 예시
