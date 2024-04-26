@@ -7,11 +7,11 @@ export const sideMenuAtom = atom(false);
 
 // 테스트 데이터
 const dashboards = [
-  { title: '송은', color: '#7AC555' },
-  { title: '유빈', color: '#760DDE' },
-  { title: '승구', color: '#FFA500' },
-  { title: '우혁', color: '#76A5EA' },
-  { title: '봉찬', color: '#E876EA' },
+  { id: 1, title: '송은', color: '#7AC555' },
+  { id: 2, title: '유빈', color: '#760DDE' },
+  { id: 3, title: '승구', color: '#FFA500' },
+  { id: 4, title: '우혁', color: '#76A5EA' },
+  { id: 5, title: '봉찬', color: '#E876EA' },
 ];
 
 function DashBoardLayout({ children }: PropsWithChildren) {
@@ -19,7 +19,7 @@ function DashBoardLayout({ children }: PropsWithChildren) {
     <>
       <DashBoardHeader />
       <SideMenu dashboards={dashboards} />
-      <main>{children}</main>
+      <>{children}</>
     </>
   );
 }
