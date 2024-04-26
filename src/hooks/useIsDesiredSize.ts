@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 const isTablet = useIsDesiredSize(744);
 const isMobile = useIsDesiredSize(375);
 */
-function useIsDesiredSize(size: number) {
+const useIsDesiredSize = (size: number): boolean => {
   const [isDesiredSize, setIsDesiredSize] = useState(false);
 
   useEffect(() => {
@@ -22,9 +22,9 @@ function useIsDesiredSize(size: number) {
 
     // 클린 업
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [size]);
 
   return isDesiredSize;
-}
+};
 
 export default useIsDesiredSize;

@@ -1,6 +1,8 @@
-import React, { ReactElement, useState, useEffect } from 'react';
-import Column from './components/Column';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
+import React, { ReactElement, useState } from 'react';
+import Meta from '@/components/Meta';
+import useCurrentUrl from '@/hooks/useCurrentUrl';
+import Column from './components/Column';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
@@ -53,13 +55,20 @@ type DashboardIdProps = {
 function DashboardId({ allData }: DashboardIdProps) {
   const [data, setData] = useState(allData);
 
-  console.log(data);
-
-  return <Column data={data} setData={setData} />;
+  return (
+    <>
+      <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
+      <Column data={data} setData={setData} />
+    </>
+  );
 }
 
 DashboardId.getLayout = function getLayout(page: ReactElement) {
-  return <DashBoardLayout>{page}</DashBoardLayout>;
+  return (
+    <>
+      <DashBoardLayout>{page}</DashBoardLayout>
+    </>
+  );
 };
 
 export const getServerSideProps = async (

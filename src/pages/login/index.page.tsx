@@ -3,14 +3,13 @@ import Link from 'next/link';
 import styles from './Login.module.scss';
 import { PAGE_PATH } from '@/constants/pageUrl';
 import LoginForm from './components/LoginForm';
-import Head from 'next/head';
+import Meta from '@/components/Meta';
+import useCurrentUrl from '@/hooks/useCurrentUrl';
 
 function Login() {
   return (
     <>
-      <Head>
-        <title>Taskify | 로그인</title>
-      </Head>
+      <Meta title="Taskify | 로그인" url={useCurrentUrl()} />
       <div className={styles.container}>
         <header className={styles.header}>
           <Link href={PAGE_PATH.MAIN}>

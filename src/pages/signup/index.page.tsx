@@ -3,14 +3,13 @@ import Link from 'next/link';
 import styles from './Signup.module.scss';
 import SignupForm from '@/pages/signup/components/SignupForm';
 import { PAGE_PATH } from '@/constants/pageUrl';
-import Head from 'next/head';
+import Meta from '@/components/Meta';
+import useCurrentUrl from '@/hooks/useCurrentUrl';
 
 function Signup() {
   return (
     <>
-      <Head>
-        <title>Taskify | 회원가입</title>
-      </Head>
+      <Meta title="Taskify | 회원가입" url={useCurrentUrl()} />
       <div className={styles.container}>
         <header className={styles.header}>
           <Link href={PAGE_PATH.MAIN}>
