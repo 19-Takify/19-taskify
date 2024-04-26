@@ -6,6 +6,7 @@ import { isDocument } from '@/utils/isDocument';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
 import { SERVER_ERROR_MESSAGE } from '@/constants/errorMessage';
 import setToast from '@/utils/setToast';
+import { PAGE_PATH } from '@/constants/pageUrl';
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
 });
@@ -40,11 +41,11 @@ instance.interceptors.response.use(
       case 401:
         if (isServer) {
           // SSR 환경에서 인가에 실패했을 경우 next/router의 Router를 사용할 수 없어서 302 코드와 함께 login 페이지로 이동.
-          context?.res.writeHead(302, { Location: '/login' });
+          context?.res.writeHead(302, { Location: PAGE_PATH.LOGIN });
           context?.res.end();
         } else {
           // CSR 환경에서 인가에 실패했을 경우 login 페이지 이동과 토스트 에러 실행.
-          Router.push('/login');
+          Router.push(PAGE_PATH.LOGIN);
           setToast('error', SERVER_ERROR_MESSAGE.USER.UNAUTHORIZED);
         }
         return;
