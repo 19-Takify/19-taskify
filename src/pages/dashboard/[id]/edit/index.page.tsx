@@ -1,4 +1,4 @@
-import instance from '@/apis/axios';
+import instance, { setContext } from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import styles from './style/edit.page.module.scss';
 import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardManager';
@@ -8,6 +8,18 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
+import { GetServerSidePropsContext } from 'next';
+import { getMe } from '@/utils/auth';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  setContext(context);
+
+  const user = await getMe();
+
+  return {
+    props: { user },
+  };
+}
 
 // 대시보드 삭제 버튼 - 대시보드 생성자(전역 상태 관리)한테만 보이게 조건부 렌더링, 컨펌 모달
 function Edit() {
