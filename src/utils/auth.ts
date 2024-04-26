@@ -29,9 +29,11 @@ export const getMeForMiddleware = async (accessToken?: string) => {
       throw new Error();
     }
 
-    return true;
+    const user = await response.json();
+
+    return user;
   } catch {
-    return false;
+    return null;
   }
 };
 

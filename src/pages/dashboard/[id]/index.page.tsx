@@ -2,19 +2,6 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import React, { ReactElement } from 'react';
 import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
-import { GetServerSidePropsContext } from 'next';
-import { setContext } from '@/apis/axios';
-import { getMe } from '@/utils/auth';
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  setContext(context);
-
-  const user = await getMe();
-
-  return {
-    props: { user },
-  };
-}
 
 function Dashboard() {
   return (
