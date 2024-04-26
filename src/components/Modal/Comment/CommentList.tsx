@@ -11,15 +11,15 @@ type CommentList = {
   id: number;
   content: string;
   createdAt: string;
-  userId: number;
+  cardId: number;
   updatedAt: string;
   author: Author;
 };
 
 type CommentsListProps = {
-  commentDataArray: CommentList[];
-  onDelete: (id: number) => void;
-  onUpdate: (updatedComment: CommentList) => void;
+  commentDataArray?: CommentList[];
+  onDelete: (id: number | undefined) => void;
+  onUpdate: (id: number | undefined, text: string | undefined) => void;
 };
 
 function CommentsList({

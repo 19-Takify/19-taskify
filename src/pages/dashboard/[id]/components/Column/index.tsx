@@ -82,6 +82,10 @@ function Column({
     endColumnId: null,
   });
 
+  //무한 스크롤 용도
+  const [startIndex, setStartIndex] = useState(0);
+  const totalCount = Math.max(...data.map((item) => item.totalCount));
+
   const handleDragEnd = async (result: any) => {
     if (!result.destination) return;
 
@@ -169,28 +173,26 @@ function Column({
     setShowModal(false);
   };
 
-  const [startIndex, setStartIndex] = useState(10);
-
   const handleInfiniteScroll = async () => {
+    //데이터 다 불러오면 무한 스크롤 방지
+    if (totalCount < startIndex) return;
+
     const nextIndex = startIndex + 10;
-    const filteredData = data.some((column) => {
-      return column.totalCount > startIndex;
-    });
+    console.log(totalCount);
     const dataRequests = data.map(async (column: any) => {
       const columnCardData = await httpClient.get<ColumnCardData>(
-        `/cards?size=${nextIndex}columnId=${column.columnId}`,
+        `/cards?size=${nextIndex}&columnId=${column.columnId}`,
       );
       columnCardData.columnId = column.columnId;
       columnCardData.columnTitle = column.columnTitle;
       return columnCardData;
     });
     const columnCardData = await Promise.all(dataRequests);
-
     setData(columnCardData);
 
     setStartIndex(nextIndex);
   };
-  // 무한 스크롤 훅을 사용하여 handleInfiniteScroll 콜백을 연결
+
   const sentinelRef = useObserver(handleInfiniteScroll);
 
   //드롭시 카드 컬럼 위치 수정
@@ -232,7 +234,11 @@ function Column({
               droppableId={columnData.columnId.toString()}
             >
               {(provided) => (
-                <li {...provided.droppableProps} ref={provided.innerRef}>
+                <li
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className={styles.columnList}
+                >
                   <div className={styles.columnBox}>
                     <div className={styles.columnTitle}>
                       <div className={styles.columnName}>
@@ -257,6 +263,7 @@ function Column({
                     <Droppable droppableId={columnData.columnId.toString()}>
                       {(provided) => (
                         <div
+                          className={styles.cardList}
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                         >

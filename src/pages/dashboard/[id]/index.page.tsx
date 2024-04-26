@@ -67,8 +67,10 @@ type DashboardIdProps = {
 function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
   const [data, setData] = useState(allData);
 
+  console.log(dashboardId);
+
   return (
-    <>
+    <div>
       <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
       <Column
         dashboardId={dashboardId}
@@ -76,7 +78,7 @@ function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
         data={data}
         setData={setData}
       />
-    </>
+    </div>
   );
 }
 
@@ -91,18 +93,17 @@ DashboardId.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
+  const httpClient = new HttpClient(instance);
+  const accessToken = context.req.cookies.accessToken;
+  const id = context.params?.id;
+  const user = await getMe();
+
   // beautiful-dnd 서버 초기화
   resetServerContext();
 
   setContext(context);
 
-  const user = await getMe();
-
   try {
-    const httpClient = new HttpClient(instance);
-    const accessToken = context.req.cookies.accessToken;
-    const id = context.params?.id;
-
     const userData = await httpClient.get<UserData>('/users/me', {
       Authorization: `Bearer ${accessToken}`,
     });

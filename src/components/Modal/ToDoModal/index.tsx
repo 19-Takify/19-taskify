@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './ToDOModal.module.scss';
 import ProfileIcon from '../../Profile/ProfileIcon';
@@ -6,6 +6,9 @@ import ModalPopOver from '../ModalPopOver';
 import Modal from '../Modal';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
+import CommentsList from '../Comment/CommentList';
+import setToast from '@/utils/setToast';
+import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 
 type Assignee = {
   profileImageUrl: string;
@@ -33,22 +36,18 @@ type Author = {
   profileImageUrl: string;
 };
 
-type Comments = {
+type CommentData = {
   id: number;
   content: string;
   createdAt: string;
   updatedAt: string;
   cardId: number;
-  author: {
-    profileImageUrl: string;
-    nickname: string;
-    id: number;
-  };
+  author: Author;
 };
 
 type CommentList = {
   cursorId: number;
-  comments: Comments[];
+  comments: CommentData[];
 };
 
 type ModalProps = {
@@ -68,7 +67,8 @@ function ToDoModal({
 }: ModalProps) {
   const httpClient = new HttpClient(instance);
   const [isDropdown, setIsDropdown] = useState(false);
-  const [commentData, setCommentData] = useState<CommentList>();
+  const [isEditing, setIsEditing] = useState(false);
+  const [commentData, setCommentData] = useState<CommentData[]>([]);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleDropdownOpen = () => {
@@ -80,32 +80,47 @@ function ToDoModal({
   };
 
   const handleCommentSubmit = async () => {
-    const text = textAreaRef.current?.value;
-
-    await httpClient.post('/comments', {
-      content: text,
-      cardId: Number(cardData?.id),
+    await httpClient.post(`/comments`, {
+      content: textAreaRef.current?.value,
+      cardId: cardData?.id,
       columnId: cardData?.columnId,
       dashboardId: dashboardId,
     });
+    setIsEditing((prev) => !prev);
+  };
 
-    const comment = await httpClient.get<CommentList>(
-      `/comments?cardId=${cardData?.id}`,
-    );
+  const handleOnDelete = async (commentId: number | undefined) => {
+    commentId && (await httpClient.delete(`/comments/${commentId}`));
+    setIsEditing((prev) => !prev);
+  };
 
-    setCommentData(comment);
+  const handleOnUpdate = async (
+    commentId: number | undefined,
+    text: string | undefined,
+  ) => {
+    try {
+      commentId &&
+        (await httpClient.put(`/comments/${commentId}`, {
+          content: text,
+        }));
+      console.log('sex');
+      setIsEditing((prev) => !prev);
+    } catch {
+      setToast('error', '😰 댓글 수정에 실패했습니다.');
+      console.error(FETCH_ERROR_MESSAGE);
+    }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const comment = await httpClient.get<CommentList>(
+      const comment: CommentList = await httpClient.get(
         `/comments?cardId=${cardData?.id}`,
       );
-      setCommentData(comment);
+      setCommentData(comment.comments);
     };
 
     fetchData();
-  }, []);
+  }, [isEditing]);
 
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
@@ -182,30 +197,11 @@ function ToDoModal({
               </button>
             </div>
           </div>
-          <ul>
-            {commentData?.comments.map((comment) => (
-              <li key={comment.id} className={styles.comment}>
-                <div className={styles.profile}>
-                  <ProfileIcon small profile={comment?.author} />
-                  <div className={styles.profileName}>
-                    {comment?.author.nickname}
-                  </div>
-                  <div className={styles.createAt}>{comment?.createdAt}</div>
-                </div>
-                <div className={styles.commentBox}>
-                  <div className={styles.commentText}>{comment?.content}</div>
-                  <div className={styles.commentBtns}>
-                    <button type="button" className={styles.btn}>
-                      수정
-                    </button>
-                    <button type="button" className={styles.btn}>
-                      삭제
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <CommentsList
+            commentDataArray={commentData}
+            onDelete={handleOnDelete}
+            onUpdate={handleOnUpdate}
+          />
         </div>
       </div>
     </Modal>

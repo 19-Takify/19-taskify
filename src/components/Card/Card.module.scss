@@ -7,12 +7,38 @@
   border-radius: 0.5rem;
   border: 0.0625rem solid $color-gray-d9d9d9;
   background: $color-white-ffffff;
+
+  @include tablet {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
 }
 
 .cardBox span {
   color: $color-black-333236;
   font-size: 1rem;
   font-weight: 500;
+}
+
+.cardImage {
+  width: 17rem;
+  height: 10rem;
+
+  @include tablet {
+    max-width: 5.5rem;
+    height: 3.25rem;
+    width: 100%;
+  }
+
+  @include mobile {
+    max-width: 16.25rem;
+    height: 9.5rem;
+    width: 100%;
+  }
 }
 
 .tags {
@@ -33,5 +59,41 @@
   justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
+
+  @include mobile {
+    font-size: 0.75rem;
+  }
+}
+
+.profileIcon {
+  margin-top: auto;
+}
+
+.tabletBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.tabletContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @include tablet {
+    flex-direction: row;
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.desktopBox {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
 }
