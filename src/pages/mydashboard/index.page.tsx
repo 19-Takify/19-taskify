@@ -45,17 +45,11 @@ MyDashboard.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
+export const getServerSideProps = async () => {
   try {
-    const accessToken = context.req.cookies.accessToken;
     const httpClient = new HttpClient(instance);
     const invitationsData = await httpClient.get<{ invitations: Invitation[] }>(
       '/invitations',
-      {
-        Authorization: `Bearer ${accessToken}`,
-      },
     );
 
     return {

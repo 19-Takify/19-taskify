@@ -178,7 +178,6 @@ function Column({
     if (totalCount < startIndex) return;
 
     const nextIndex = startIndex + 10;
-    console.log(totalCount);
     const dataRequests = data.map(async (column: any) => {
       const columnCardData = await httpClient.get<ColumnCardData>(
         `/cards?size=${nextIndex}&columnId=${column.columnId}`,

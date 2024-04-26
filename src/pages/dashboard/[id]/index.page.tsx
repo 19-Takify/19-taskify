@@ -67,8 +67,6 @@ type DashboardIdProps = {
 function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
   const [data, setData] = useState(allData);
 
-  console.log(dashboardId);
-
   return (
     <div>
       <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
@@ -94,7 +92,6 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
   const httpClient = new HttpClient(instance);
-  const accessToken = context.req.cookies.accessToken;
   const id = context.params?.id;
   const user = await getMe();
 
@@ -104,23 +101,15 @@ export const getServerSideProps = async (
   setContext(context);
 
   try {
-    const userData = await httpClient.get<UserData>('/users/me', {
-      Authorization: `Bearer ${accessToken}`,
-    });
+    const userData = await httpClient.get<UserData>('/users/me');
 
     if (id) {
       const columnData = await httpClient.get<ColumnData>(
         `/columns?dashboardId=${id}`,
-        {
-          Authorization: `Bearer ${accessToken}`,
-        },
       );
       const cardRequests = columnData.data.map(async (column: any) => {
         const columnCardData = await httpClient.get<ColumnCardData>(
           `/cards?size=10&columnId=${column.id}`,
-          {
-            Authorization: `Bearer ${accessToken}`,
-          },
         );
         columnCardData.columnId = column.id;
         columnCardData.columnTitle = column.title;

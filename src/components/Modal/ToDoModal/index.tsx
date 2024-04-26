@@ -103,7 +103,6 @@ function ToDoModal({
         (await httpClient.put(`/comments/${commentId}`, {
           content: text,
         }));
-      console.log('sex');
       setIsEditing((prev) => !prev);
     } catch {
       setToast('error', '😰 댓글 수정에 실패했습니다.');
