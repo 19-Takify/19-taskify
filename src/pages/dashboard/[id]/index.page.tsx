@@ -7,6 +7,8 @@ import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
 import { resetServerContext } from 'react-beautiful-dnd';
+import { setContext } from '@/apis/axios';
+import { getMe } from '@/utils/auth';
 
 type UserData = {
   id: number;
@@ -92,6 +94,10 @@ export const getServerSideProps = async (
   // beautiful-dnd 서버 초기화
   resetServerContext();
 
+  setContext(context);
+
+  const user = await getMe();
+
   try {
     const httpClient = new HttpClient(instance);
     const accessToken = context.req.cookies.accessToken;
@@ -126,6 +132,7 @@ export const getServerSideProps = async (
           dashboardId: Number(id),
           userId: userData.id,
           allData: columnCardData,
+          user,
         },
       };
     }
@@ -133,6 +140,7 @@ export const getServerSideProps = async (
     return {
       props: {
         allData: [],
+        user,
       },
     };
   }
