@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './ToDOModal.module.scss';
 import ProfileIcon from '../../Profile/ProfileIcon';
 import ModalPopOver from '../ModalPopOver';
 import Modal from '../Modal';
+import Comment from '../Comment/Comment';
 
 type Assignee = {
   profileImageUrl: string;
@@ -25,21 +26,6 @@ type CardList = {
   updatedAt?: string;
 };
 
-type Author = {
-  id: number;
-  nickname: string;
-  profileImageUrl: string;
-};
-
-type Comment = {
-  id: number;
-  content: string;
-  createdAt: string;
-  userId: number;
-  updatedAt: string;
-  author: Author;
-};
-
 type ModalProps = {
   showModal: boolean;
   handleClose: () => void;
@@ -53,7 +39,16 @@ function ToDoModal({
   cardData,
   commentData,
 }: ModalProps) {
+  const commentInput = useRef<HTMLTextAreaElement>(null);
   const [isDropdown, setIsDropdown] = useState(false);
+  const [comment, setComment] = useState({
+    id: 0,
+    content: '',
+    createdAt: '',
+    updatedAt: '',
+    cardId: 0,
+    author: { id: 0, nickname: '', profileImageUrl: '' },
+  });
 
   const handleDropdownOpen = () => {
     setIsDropdown(true);
@@ -61,6 +56,14 @@ function ToDoModal({
 
   const handleDropdownClose = () => {
     setIsDropdown(false);
+  };
+
+  const handleCommentSubmit = () => {
+    if (comment.content.length < 1) {
+      commentInput.current?.focus();
+      return;
+    }
+    alert('댓글이 등록되었습니다.');
   };
 
   return (
@@ -123,32 +126,24 @@ function ToDoModal({
             </div>
             <div>댓글</div>
             <div className={styles.textarea}>
-              <textarea placeholder="댓글 작성하기" className={styles.input} />
-              <button className={styles.submit} type="submit">
+              <textarea
+                ref={commentInput}
+                onChange={(e) =>
+                  setComment({ ...comment, content: e.target.value })
+                }
+                placeholder="댓글 작성하기"
+                className={styles.input}
+              />
+              <button
+                onClick={handleCommentSubmit}
+                className={styles.submit}
+                type="submit"
+              >
                 입력
               </button>
             </div>
           </div>
-          <div className={styles.comment}>
-            <div className={styles.profile}>
-              <ProfileIcon small profile={commentData.author} />
-              <div className={styles.profileName}>
-                {commentData.author.nickname}
-              </div>
-              <div className={styles.createAt}>{commentData.createdAt}</div>
-            </div>
-            <div className={styles.commentBox}>
-              <div className={styles.commentText}>{commentData.content}</div>
-              <div className={styles.commentBtns}>
-                <button type="button" className={styles.btn}>
-                  수정
-                </button>
-                <button type="button" className={styles.btn}>
-                  삭제
-                </button>
-              </div>
-            </div>
-          </div>
+          <Comment commentData={commentData} />
         </div>
       </div>
     </Modal>
