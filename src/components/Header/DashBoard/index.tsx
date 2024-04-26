@@ -94,7 +94,7 @@ function DashBoardHeader() {
           >
             <Image
               className={styles.img}
-              src={user?.profileImageUrl || '/svgs/logo.svg'}
+              src={user?.profileImageUrl || '/svgs/default-profile.svg'}
               alt="유저 프로필 이미지"
               width={38}
               height={38}
@@ -108,12 +108,14 @@ function DashBoardHeader() {
             onMouseLeave={handleMouseLeave}
             className={styles.popOver}
           >
-            <Link href={PAGE_PATH.MY_PAGE}>
-              <li className={styles.list}>마이페이지</li>
-            </Link>
-            <Link href={PAGE_PATH.MAIN} onClick={logout}>
-              <li className={styles.list}>로그아웃</li>
-            </Link>
+            <li className={styles.list}>
+              <Link href={PAGE_PATH.MY_PAGE}>마이페이지</Link>
+            </li>
+            <li className={styles.list}>
+              <Link href={PAGE_PATH.MAIN} onClick={logout}>
+                로그아웃
+              </Link>
+            </li>
           </ul>
         )}
       </header>
