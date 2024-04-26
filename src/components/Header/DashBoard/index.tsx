@@ -7,6 +7,9 @@ import { PAGE_PATH } from '@/constants/pageUrl';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { logout } from '@/utils/auth';
+import useUser from '@/hooks/useUser';
+import { initialUser } from '@/store/auth';
 
 function DashBoardHeader() {
   const [isOver, setIsover] = useState(false);
@@ -16,6 +19,7 @@ function DashBoardHeader() {
   const { id } = router.query;
   const isMyDashboard = !router.pathname.includes('my');
   const isEditPage = !router.pathname.includes('edit');
+  const { user, setUser } = useUser();
 
   const handleMouseOver = () => {
     setIsover(true);
@@ -23,6 +27,11 @@ function DashBoardHeader() {
 
   const handleMouseLeave = () => {
     setIsover(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setUser(initialUser);
   };
 
   return (
@@ -90,12 +99,12 @@ function DashBoardHeader() {
           >
             <Image
               className={styles.img}
-              src="/svgs/logo.svg"
+              src={user?.profileImageUrl || '/svgs/logo.svg'}
               alt="유저 프로필 이미지"
               width={38}
               height={38}
             />
-            <div className={styles.name}>테스트유저123</div>
+            <div className={styles.name}>{user?.nickname}</div>
           </div>
         </div>
         {isOver && (
@@ -107,7 +116,7 @@ function DashBoardHeader() {
             <Link href={PAGE_PATH.MY_PAGE}>
               <li className={styles.list}>마이페이지</li>
             </Link>
-            <Link href={PAGE_PATH.MAIN}>
+            <Link href={PAGE_PATH.MAIN} onClick={handleLogout}>
               <li className={styles.list}>로그아웃</li>
             </Link>
           </ul>
