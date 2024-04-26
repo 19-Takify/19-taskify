@@ -8,8 +8,8 @@ import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { logout } from '@/utils/auth';
-import useUser from '@/hooks/useUser';
-import { initialUser } from '@/store/auth';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/store/auth';
 
 function DashBoardHeader() {
   const [isOver, setIsover] = useState(false);
@@ -19,7 +19,7 @@ function DashBoardHeader() {
   const { id } = router.query;
   const isMyDashboard = !router.pathname.includes('my');
   const isEditPage = !router.pathname.includes('edit');
-  const { user, setUser } = useUser();
+  const user = useAtomValue(userAtom);
 
   const handleMouseOver = () => {
     setIsover(true);
