@@ -1,0 +1,209 @@
+.btnBox {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  @include mobile {
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+}
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: $color-black-333236;
+  @include mobile {
+    margin: 1.5rem 0 0.5rem;
+  }
+}
+.btns {
+  display: flex;
+  align-items: center;
+}
+.btnx {
+  background-color: $color-white-ffffff;
+  position: relative;
+  @include mobile {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+  }
+}
+.contentBox {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1.3rem;
+  @include mobile {
+    flex-direction: column;
+  }
+}
+.content {
+  width: 26rem;
+  @include mobile {
+    width: 18rem;
+  }
+}
+.text {
+  font-size: 0.9rem;
+  color: $color-black-333236;
+  margin-bottom: 1rem;
+  line-height: 1.4rem;
+  margin-right: 0.2rem;
+  @include mobile {
+    font-size: 0.8rem;
+  }
+}
+.img {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: block;
+}
+.textarea {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  position: relative;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+.input {
+  display: flex;
+  align-items: flex-start;
+  border: 0.1rem solid $color-gray-d9d9d9;
+  border-radius: 0.4rem;
+  padding: 1rem 7rem 1rem 1rem;
+  width: 100%;
+  height: 6.8rem;
+  resize: none;
+  @include mobile {
+    height: 4.3rem;
+    font-size: 0.8rem;
+    color: $color-gray-9fa6b2;
+  }
+}
+.submit {
+  background-color: $color-white-ffffff;
+  width: 5rem;
+  height: 2rem;
+  border-radius: 4px;
+  border: 0.1rem solid $color-gray-d9d9d9;
+  color: $color-violet-5534da;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  @include mobile {
+    width: 5.2rem;
+    height: 2rem;
+    top: 1.6rem;
+  }
+}
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.profileName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $color-black-333236;
+  @include mobile {
+    font-size: 0.8rem;
+  }
+}
+.createAt {
+  font-size: 0.8rem;
+  color: $color-gray-9fa6b2;
+  @include mobile {
+    font-size: 0.7rem;
+  }
+}
+.commentBox {
+  position: relative;
+  left: 2rem;
+  @include mobile {
+    left: 1.9rem;
+  }
+}
+.commentText {
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+  color: $color-black-333236;
+  @include tablet {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+  }
+}
+.btn {
+  color: $color-gray-9fa6b2;
+  text-decoration: underline;
+  margin-right: 0.6rem;
+  font-size: 0.8rem;
+  background-color: $color-white-ffffff;
+  @include mobile {
+    font-size: 0.7rem;
+    margin-right: 0.4rem;
+  }
+}
+.managerBox {
+  border: 0.1rem solid $color-gray-d9d9d9;
+  border-radius: 0.5rem;
+  width: 12.5rem;
+  height: 9.6rem;
+  padding: 1rem;
+
+  @include mobile {
+    width: 18rem;
+    height: 4.5rem;
+    display: flex;
+  }
+}
+.nameBox {
+  @include mobile {
+    width: 50%;
+  }
+}
+
+.manager {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: $color-black-333236;
+  font-weight: 700;
+  @include tablet {
+    font-size: 0.7rem;
+    margin-bottom: 0.3rem;
+  }
+}
+.managerProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  @include tablet {
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+  }
+  @include mobile {
+    gap: 0.4rem;
+    margin-bottom: 0;
+  }
+}
+.managerName {
+  color: $color-black-333236;
+  font-size: 0.8rem;
+  @include tablet {
+    font-size: 0.7rem;
+  }
+}
+.doneDate {
+  @include mobile {
+    margin-bottom: 0.6rem;
+  }
+}
