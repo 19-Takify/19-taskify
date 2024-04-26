@@ -29,6 +29,11 @@ function DashBoardHeader() {
     setIsover(false);
   };
 
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
+
   return (
     <>
       <header className={styles.container}>
@@ -112,9 +117,9 @@ function DashBoardHeader() {
               <Link href={PAGE_PATH.MY_PAGE}>마이페이지</Link>
             </li>
             <li className={styles.list}>
-              <Link href={PAGE_PATH.MAIN} onClick={logout}>
+              <button type="button" onClick={handleLogout}>
                 로그아웃
-              </Link>
+              </button>
             </li>
           </ul>
         )}
