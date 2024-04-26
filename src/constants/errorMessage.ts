@@ -16,7 +16,7 @@ export const VALID_ERROR_MESSAGE = {
   NICKNAME: {
     EMPTY: '닉네임을 입력해 주세요.',
   },
-};
+} as const;
 
 export const SERVER_ERROR_MESSAGE = {
   EMAIL: {
@@ -33,10 +33,11 @@ export const SERVER_ERROR_MESSAGE = {
   },
   USER: {
     NOT_FOUND: '존재하지 않는 유저입니다.',
+    UNAUTHORIZED: '로그인이 필요합니다.',
   },
-};
+} as const;
 
 export const FETCH_ERROR_MESSAGE = {
   REQUEST: '요청에 실패했습니다.',
   UNKNOWN: '잠시 후 다시 시도해 주세요.',
-};
+} as const;

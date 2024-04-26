@@ -7,6 +7,7 @@ import axios from '@/apis/axios';
 import { isAxiosError } from 'axios';
 import PageButton from '@/components/Button/PageButton';
 import Input from '@/components/Inputs/Input';
+import { login } from '@/utils/auth';
 import setToast from '@/utils/setToast';
 import {
   FETCH_ERROR_MESSAGE,
@@ -72,9 +73,7 @@ function SignupForm() {
   const handleValidSubmit = async (data: FormValues) => {
     try {
       await axios.post('/users', data);
-      const res = await axios.post('/auth/login', data);
-      const { accessToken } = res.data;
-      setCookie('accessToken', accessToken);
+      await login(data);
       setToast('success', '가입이 완료되었습니다.');
       router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (error) {
