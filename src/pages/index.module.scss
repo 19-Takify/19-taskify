@@ -1,10 +1,12 @@
 .header {
   background-color: $color-black-000000;
-  max-width: 120rem;
+
   min-width: 19.375rem;
 }
 
 .nav {
+  max-width: 120rem;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   height: 4.375rem;
@@ -34,7 +36,6 @@
   background-color: $color-black-000000;
   color: $color-white-ffffff;
   min-width: 19.375rem;
-  max-width: 120rem;
 }
 
 .mainSection {
@@ -403,15 +404,19 @@
 }
 
 .footer {
-  max-width: 120rem;
-  min-width: 19.375rem;
-  height: 6.25rem;
-  display: flex;
-  padding: 0 9rem;
-  justify-content: space-between;
-  align-items: center;
   background-color: $color-black-000000;
   color: $color-gray-9fa6b2;
+
+  .footerBox {
+    min-width: 19.375rem;
+    max-width: 120rem;
+    height: 6.25rem;
+    padding: 0 9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+  }
 
   @media (max-width: 1200px) {
     padding: 0 2.5rem;
