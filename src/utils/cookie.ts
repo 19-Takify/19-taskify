@@ -1,31 +1,50 @@
-import { isBrowser } from './constants';
+import { isDocument } from './isDocument';
 
-/**
- * @todo 고도화 예정
- * @param cookieName - cookie로 사용할 이름
- * @param value - cookie로 사용할 값
- */
-export const setCookie = (cookieName: string, value: string) => {
-  const encodedCookieName = encodeURIComponent(cookieName);
-  const encodedValue = encodeURIComponent(value);
-  const cookie = `${encodedCookieName}=${encodedValue}`;
-  document.cookie = cookie;
-};
+export function getCookie(name: string) {
+  if (!isDocument()) return;
 
-export const getCookie = (cookieName: string) => {
-  if (isBrowser) {
-    const cookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith(`${cookieName}=`))
-      ?.split('=')[1];
-    return cookie ? decodeURIComponent(cookie) : null;
+  let matches = document.cookie.match(
+    new RegExp(
+      '(?:^|; )' +
+        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
+        '=([^;]*)',
+    ),
+  );
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+export function setCookie(
+  name: string,
+  value: string,
+  options: Record<string, any> = {},
+) {
+  if (!isDocument()) return;
+
+  options = {
+    path: '/',
+    ...options,
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
   }
 
-  return null;
-};
+  let updatedCookie =
+    encodeURIComponent(name) + '=' + encodeURIComponent(value);
 
-export const deleteCookie = (cookieName: string) => {
-  if (isBrowser) {
-    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  for (let optionKey in options) {
+    updatedCookie += '; ' + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += '=' + optionValue;
+    }
   }
-};
+
+  document.cookie = updatedCookie;
+}
+
+export function deleteCookie(name: string) {
+  setCookie(name, '', {
+    'max-age': -1,
+  });
+}

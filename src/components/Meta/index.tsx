@@ -7,8 +7,11 @@ type HeadProps = {
 
 /*
 사용 방법
-prop title 원하는 제목 추가
-<Meta title="Taskify | 대시보드 이름 추가 예정" />
+props
+title 원하는 제목 추가
+url 동적 url 주입
+import useCurrentUrl from '@/hooks/useCurrentUrl'
+<Meta title="Taskify | 마이페이지" url={useCurrentUrl()} />
  */
 
 function Meta({ title, url = '' }: HeadProps) {
