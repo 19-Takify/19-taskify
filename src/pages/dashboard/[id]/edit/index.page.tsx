@@ -1,4 +1,3 @@
-
 import setToast from '@/utils/setToast';
 import styles from './style/edit.page.module.scss';
 import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardManager';
@@ -14,25 +13,39 @@ import { getMe } from '@/utils/auth';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
-
+import { TInviteData, TMembersData } from './type/editType';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
-
+  console.log(context.query.id);
+  const inviteResponse = await axios.get(
+    `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+  );
+  const membersResponse = await axios.get(
+    `members?page=1&size=1000&dashboardId=${context.query.id}`,
+  );
+  const inviteData = inviteResponse.data.invitations;
+  const membersData = membersResponse.data.members;
+  console.log(inviteData);
   const user = await getMe();
 
   return {
-    props: { user },
+    props: { user, inviteData, membersData },
   };
 }
 
-function Edit() {
+type TEditProps = {
+  inviteData: TInviteData[];
+  membersData: TMembersData[];
+};
+
+function Edit({ inviteData, membersData }: TEditProps) {
   const selectDashboard = useAtomValue(selectDashboardAtom);
 
   const handleDeleteDashboard = async () => {
     // 컨펌 모달 추가 예정
     try {
-      const res = await axios.delete(`/dashboards/${selectDashboard.id}`);
+      await axios.delete(`/dashboards/${selectDashboard.id}`);
       setToast(TOAST_TEXT.success, '대시보드가 삭제되었습니다!');
     } catch (e: any) {
       setToast('error', e.response.data.message);
@@ -56,8 +69,10 @@ function Edit() {
             )}
           </div>
           {selectDashboard.createdByMe && <DashboardEdit />}
-          <DashboardManager usage="member" />
-          {selectDashboard.createdByMe && <DashboardManager usage="invite" />}
+          <DashboardManager usage="member" data={membersData} />
+          {selectDashboard.createdByMe && (
+            <DashboardManager usage="invite" data={inviteData} />
+          )}
         </div>
       </div>
     </>

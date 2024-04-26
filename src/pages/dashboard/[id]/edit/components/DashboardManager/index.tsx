@@ -6,9 +6,13 @@ import setToast from '@/utils/setToast';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
+import { TInviteData, TMembersData } from '../../type/editType';
 
-type TDashboardManager = {
+type TDashboardManager = TInviteData[] | TMembersData[];
+
+type TDashboardManagerProps = {
   usage: string;
+  data: TInviteData[] | TMembersData[];
 };
 
 const MANAGER: any = {
@@ -23,37 +27,12 @@ const MANAGER: any = {
 };
 
 // 구성원 삭제 버튼 - 컨펌 모달
-function DashboardManager({ usage }: TDashboardManager) {
+function DashboardManager({ usage, data }: TDashboardManagerProps) {
   const selectDashboard = useAtomValue(selectDashboardAtom);
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<TInviteData[] | TMembersData[]>(data);
   const [searchValue, setSearchValue] = useState<string>('');
-  const cacheAllData = useRef<any>(null);
+  const cacheAllData = useRef<TInviteData[] | TMembersData[]>(data);
   const isInvite = usage === 'invite';
-
-  useEffect(() => {
-    const getData = async () => {
-      const url = isInvite
-        ? `dashboards/${selectDashboard.id}/invitations?page=1&size=1000`
-        : `members?page=1&size=1000&dashboardId=${selectDashboard.id}`;
-      try {
-        const res = await axios.get(url);
-        if (isInvite) {
-          setList(res.data.invitations);
-          cacheAllData.current = res.data.invitations;
-          return;
-        }
-        setList(res.data.members);
-        cacheAllData.current = res.data.members;
-      } catch (e) {
-        console.log(e);
-        setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
-      }
-    };
-
-    if (selectDashboard.id !== 0) {
-      getData();
-    }
-  }, [selectDashboard]);
 
   const handleDelete = async (id: number) => {
     const url = isInvite
@@ -62,11 +41,11 @@ function DashboardManager({ usage }: TDashboardManager) {
     try {
       const res = await axios.delete(url);
       if (res.status === 204) {
-        const filterData = list.filter((v) => v.id !== id);
+        const filterData = list.filter((v) => v.id !== id) as TDashboardManager;
         setList(filterData);
       }
     } catch (e: any) {
-      setToast('error', e.response.data.message);
+      setToast(TOAST_TEXT.error, e.response.data.message);
     }
   };
 
@@ -84,7 +63,7 @@ function DashboardManager({ usage }: TDashboardManager) {
       (v: any) =>
         v.invitee?.email?.toLowerCase().includes(lowerSearchValue) ||
         v.nickname?.toLowerCase().includes(lowerSearchValue),
-    );
+    ) as TDashboardManager;
     setList(searchResult);
   };
 
@@ -138,23 +117,30 @@ function DashboardManager({ usage }: TDashboardManager) {
           {list?.map((v) => {
             return isInvite ? (
               <li key={v.id}>
-                <span className={styles.text}>{v.invitee.email}</span>
+                <span className={styles.text}>
+                  {(v as TInviteData).invitee.email}
+                </span>
                 <button onClick={() => handleDelete(v.id)}>취소</button>
               </li>
             ) : (
               <li key={v.id}>
                 <div className={styles.listBox}>
                   <Image
-                    src={v.profileImageUrl ?? '/svgs/default-profile.svg'}
+                    src={
+                      (v as TMembersData).profileImageUrl ??
+                      '/svgs/default-profile.svg'
+                    }
                     className={styles.userProfileImg}
                     alt="유저 프로필 이미지"
                     width={32}
                     height={32}
                     loading="lazy"
                   />
-                  <span className={styles.text}>{v.nickname}</span>
+                  <span className={styles.text}>
+                    {(v as TMembersData).nickname}
+                  </span>
                 </div>
-                {!v.isOwner ? (
+                {!(v as TMembersData).isOwner ? (
                   <>
                     {selectDashboard.createdByMe && (
                       <button onClick={() => handleDelete(v.id)}>삭제</button>
