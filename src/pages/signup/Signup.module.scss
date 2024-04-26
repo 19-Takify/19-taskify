@@ -1,6 +1,13 @@
-.container {
-  display: flex;
+.background {
+  position: fixed;
   background-color: $color-gray-fafafa;
+  height: 100vh;
+  inset: 0;
+}
+
+.container {
+  position: relative;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;

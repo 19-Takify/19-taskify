@@ -1,4 +1,12 @@
+.background {
+  position: fixed;
+  background-color: $color-gray-fafafa;
+  height: 100vh;
+  inset: 0;
+}
+
 .container {
+  position: relative;
   display: flex;
   background-color: $color-gray-fafafa;
   flex-direction: column;

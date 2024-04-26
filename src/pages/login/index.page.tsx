@@ -10,6 +10,7 @@ function Login() {
   return (
     <>
       <Meta title="Taskify | 로그인" url={useCurrentUrl()} />
+      <div className={styles.background} />
       <div className={styles.container}>
         <header className={styles.header}>
           <Link href={PAGE_PATH.MAIN}>
