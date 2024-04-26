@@ -1,3 +1,4 @@
+
 import setToast from '@/utils/setToast';
 import styles from './style/edit.page.module.scss';
 import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardManager';
@@ -13,6 +14,7 @@ import { getMe } from '@/utils/auth';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
+
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
