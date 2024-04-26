@@ -29,11 +29,6 @@ function DashBoardHeader() {
     setIsover(false);
   };
 
-  const handleLogout = () => {
-    logout();
-    setUser(initialUser);
-  };
-
   return (
     <>
       <header className={styles.container}>
@@ -116,7 +111,7 @@ function DashBoardHeader() {
             <Link href={PAGE_PATH.MY_PAGE}>
               <li className={styles.list}>마이페이지</li>
             </Link>
-            <Link href={PAGE_PATH.MAIN} onClick={handleLogout}>
+            <Link href={PAGE_PATH.MAIN} onClick={logout}>
               <li className={styles.list}>로그아웃</li>
             </Link>
           </ul>
