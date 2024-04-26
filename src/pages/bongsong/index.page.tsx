@@ -15,21 +15,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const user = await getMe();
 
   return {
-    props: { user },
+    props: { user, data: 'example' },
   };
 }
 
 type BongsongProps = {
-  user: UserType;
+  data: string;
 };
 
-function Bongsong({ user: initialUser }: BongsongProps) {
-  // user를 사용하기 위해 페이지 컴포넌트에서 사용하는 커스텀 훅
-  useUserForPage(initialUser);
+function Bongsong({ data }: BongsongProps) {
   const { user } = useUser();
   return (
     <>
-      <div>Bongsong 페이지 컴포넌트</div>
+      <div>Bongsong 페이지 컴포넌트 {data}</div>
       <div>user_id: {user.id}</div>
       <br />
       <hr />
