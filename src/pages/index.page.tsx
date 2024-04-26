@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <>
-      <Meta title="Taskify | 일정 관리" />
+      <Meta title="Taskify 일정 관리 서비스" />
       <header className={styles.header}>
         <nav className={styles.nav}>
           <Link href={PAGE_PATH.MAIN}>
