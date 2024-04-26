@@ -12,7 +12,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const user = await getMe();
 
   return {
-    props: { user, data: 'example' },
+    props: { user },
   };
 }
 
