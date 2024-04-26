@@ -7,13 +7,31 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
-import axios from '@/apis/axios';
+import axios, { setContext } from '@/apis/axios';
+import { GetServerSidePropsContext } from 'next';
+import { getMe } from '@/utils/auth';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
+import { TOAST_TEXT } from '@/constants/toastText';
 
-// 대시보드 삭제 버튼 - 대시보드 생성자(전역 상태 관리)한테만 보이게 조건부 렌더링, 컨펌 모달
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  setContext(context);
+
+  const user = await getMe();
+
+  return {
+    props: { user },
+  };
+}
+
 function Edit() {
+  const selectDashboard = useAtomValue(selectDashboardAtom);
+
   const handleDeleteDashboard = async () => {
+    // 컨펌 모달 추가 예정
     try {
-      const res = await axios.delete('/dashboards/대시보드 ID');
+      const res = await axios.delete(`/dashboards/${selectDashboard.id}`);
+      setToast(TOAST_TEXT.success, '대시보드가 삭제되었습니다!');
     } catch (e: any) {
       setToast('error', e.response.data.message);
     }
@@ -26,14 +44,16 @@ function Edit() {
         <div className={styles.box}>
           <div className={styles.buttonBox}>
             <BackButton />
-            <button
-              className={styles.deleteBtn}
-              onClick={handleDeleteDashboard}
-            >
-              대시보드 삭제하기
-            </button>
+            {selectDashboard.createdByMe && (
+              <button
+                className={styles.deleteBtn}
+                onClick={handleDeleteDashboard}
+              >
+                대시보드 삭제하기
+              </button>
+            )}
           </div>
-          <DashboardEdit />
+          {selectDashboard.createdByMe && <DashboardEdit />}
           <DashboardManager usage="member" />
           <DashboardManager usage="invite" />
         </div>

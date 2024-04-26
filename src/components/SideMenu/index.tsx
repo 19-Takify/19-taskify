@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,6 +9,7 @@ import Link from 'next/link';
 import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { TOAST_TEXT } from '@/constants/toastText';
+import { selectDashboardAtom } from '@/store/dashboard';
 
 type TDashboardList = {
   id: number;
@@ -22,6 +23,7 @@ type TDashboardList = {
 
 function SideMenu({}) {
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
+  const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [renderDelayed, setRenderDelayed] = useState(false);
   const [dashboardList, setDashboardList] = useState<TDashboardList[]>([]);
@@ -65,9 +67,8 @@ function SideMenu({}) {
       const getDashBoardList = async () => {
         try {
           const res = await axios.get(
-            'dashboards?navigationMethod=infiniteScroll&page=1&size=1000',
+            'dashboards?navigationMethod=infiniteScroll&page=1&size=10000',
           );
-          console.log(res);
           setDashboardList(res.data.dashboards);
         } catch (e: any) {
           setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요!');
@@ -82,6 +83,15 @@ function SideMenu({}) {
       clearTimeout(timeout);
     };
   }, [isOpen]);
+
+  const handleDashboardClick = async (id: number) => {
+    try {
+      const res = await axios.get(`dashboards/${id}`);
+      setSelectDashboard(res.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div
@@ -100,8 +110,9 @@ function SideMenu({}) {
             <ul className={styles.dashboardListBox}>
               {dashboardList?.map((dashboard) => (
                 <li
-                  key={dashboard.id as number}
+                  key={dashboard.id}
                   className={`${styles.dashboardList} ${id === String(dashboard.id) && styles.selected}`}
+                  onClick={() => handleDashboardClick(dashboard.id)}
                 >
                   <Link
                     className={styles.router}

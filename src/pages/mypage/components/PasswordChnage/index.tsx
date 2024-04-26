@@ -55,7 +55,6 @@ function PasswordChange() {
         newPassword: data.newPassword,
       };
       const res = await axios.put('auth/password', userInput);
-      console.log(res);
       reset();
       setToast(TOAST_TEXT.success, '비밀번호가 변경되었습니다.');
     } catch (e: any) {

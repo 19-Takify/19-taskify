@@ -1,8 +1,11 @@
 import Image from 'next/image';
 import { useEffect, useState, useRef, ChangeEvent } from 'react';
 import styles from './DashboardManager.module.scss';
-import instance from '@/apis/axios';
+import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
+import { TOAST_TEXT } from '@/constants/toastText';
 
 type TDashboardManager = {
   usage: string;
@@ -21,6 +24,7 @@ const MANAGER: any = {
 
 // 구성원 삭제 버튼 - 컨펌 모달
 function DashboardManager({ usage }: TDashboardManager) {
+  const selectDashboard = useAtomValue(selectDashboardAtom);
   const [list, setList] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const cacheAllData = useRef<any>(null);
@@ -29,32 +33,34 @@ function DashboardManager({ usage }: TDashboardManager) {
   useEffect(() => {
     const getData = async () => {
       const url = isInvite
-        ? `dashboards/6253/invitations?page=1&size=1000`
-        : `members?page=1&size=1000&dashboardId=6253`;
+        ? `dashboards/${selectDashboard.id}/invitations?page=1&size=1000`
+        : `members?page=1&size=1000&dashboardId=${selectDashboard.id}`;
       try {
-        const res = await instance.get(url);
+        const res = await axios.get(url);
         if (isInvite) {
-          setList((prev) => [...prev, ...res.data.invitations]);
+          setList(res.data.invitations);
           cacheAllData.current = res.data.invitations;
           return;
         }
-        setList((prev) => [...prev, ...res.data.members]);
+        setList(res.data.members);
         cacheAllData.current = res.data.members;
       } catch (e) {
         console.log(e);
-        setToast('error', '에러 발생 추후 처리');
+        setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
       }
     };
 
-    getData();
-  }, []);
+    if (selectDashboard.id !== 0) {
+      getData();
+    }
+  }, [selectDashboard]);
 
   const handleDelete = async (id: number) => {
     const url = isInvite
-      ? `dashboards/6253/invitations/${id}`
+      ? `dashboards/${selectDashboard.id}/invitations/${id}`
       : `/members/${id}`;
     try {
-      const res = await instance.delete(url);
+      const res = await axios.delete(url);
       if (res.status === 204) {
         const filterData = list.filter((v) => v.id !== id);
         setList(filterData);
@@ -149,7 +155,11 @@ function DashboardManager({ usage }: TDashboardManager) {
                   <span className={styles.text}>{v.nickname}</span>
                 </div>
                 {!v.isOwner ? (
-                  <button onClick={() => handleDelete(v.id)}>삭제</button>
+                  <>
+                    {selectDashboard.createdByMe && (
+                      <button onClick={() => handleDelete(v.id)}>삭제</button>
+                    )}
+                  </>
                 ) : (
                   <figure className={styles.crown}>
                     <Image
