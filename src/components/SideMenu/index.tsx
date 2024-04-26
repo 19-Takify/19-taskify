@@ -1,4 +1,5 @@
 import { useAtom } from 'jotai';
+import Circle from '@/components/Circle';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -85,10 +86,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
                     className={styles.router}
                     href={`/dashboard/${dashboard.id}`}
                   >
-                    <div
-                      className={styles.circle}
-                      style={{ backgroundColor: `${dashboard.color}` }}
-                    />
+                    <Circle color={dashboard.color as string} small />
                     <p>{dashboard.title}</p>
                     {dashboard.createdByMe && (
                       <Image
