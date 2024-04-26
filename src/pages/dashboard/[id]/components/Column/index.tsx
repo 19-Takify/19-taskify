@@ -173,8 +173,9 @@ function Column({
 
   const handleInfiniteScroll = async () => {
     const nextIndex = startIndex + 10;
-
-    /*
+    const filteredData = data.some((column) => {
+      return column.totalCount > startIndex;
+    });
     const dataRequests = data.map(async (column: any) => {
       const columnCardData = await httpClient.get<ColumnCardData>(
         `/cards?size=${nextIndex}columnId=${column.columnId}`,
@@ -186,14 +187,11 @@ function Column({
     const columnCardData = await Promise.all(dataRequests);
 
     setData(columnCardData);
-    */
 
     setStartIndex(nextIndex);
   };
   // 무한 스크롤 훅을 사용하여 handleInfiniteScroll 콜백을 연결
   const sentinelRef = useObserver(handleInfiniteScroll);
-
-  console.log(data);
 
   //드롭시 카드 컬럼 위치 수정
   useEffect(() => {
@@ -203,6 +201,18 @@ function Column({
           await httpClient.put(`/cards/${locateCard.cardId}`, {
             columnId: locateCard.endColumnId,
           });
+
+          const dataRequests = data.map(async (column: any) => {
+            const columnCardData = await httpClient.get<ColumnCardData>(
+              `/cards?columnId=${column.columnId}`,
+            );
+            columnCardData.columnId = column.columnId;
+            columnCardData.columnTitle = column.columnTitle;
+            return columnCardData;
+          });
+          const columnCardData = await Promise.all(dataRequests);
+
+          setData(columnCardData);
         } catch {
           return;
         }
@@ -210,7 +220,7 @@ function Column({
     };
 
     fetchData();
-  }, [data, locateCard]);
+  }, [locateCard]);
 
   return (
     <>
@@ -229,7 +239,7 @@ function Column({
                         <Circle color="#5534da" small />
                         <strong>{columnData.columnTitle}</strong>
                         <div className={styles.countBox}>
-                          <p>{columnData.cards.length}</p>
+                          <p>{columnData.totalCount}</p>
                         </div>
                       </div>
                       <Image
