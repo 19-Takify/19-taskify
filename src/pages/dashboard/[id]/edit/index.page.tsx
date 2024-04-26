@@ -1,4 +1,4 @@
-import instance from '@/apis/axios';
+import instance, { setContext } from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import styles from './style/edit.page.module.scss';
 import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardManager';
@@ -8,6 +8,20 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
+import { GetServerSidePropsContext } from 'next';
+import { getMe } from '@/utils/auth';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // axios interceptor에서 cookie를 가져오기 위한 필수 함수 호출
+  setContext(context);
+
+  // user 전역 상태 초기값을 넣기 위한 user 객체
+  const user = await getMe();
+
+  return {
+    props: { user, data: 'example' },
+  };
+}
 
 // 대시보드 삭제 버튼 - 대시보드 생성자(전역 상태 관리)한테만 보이게 조건부 렌더링, 컨펌 모달
 function Edit() {
