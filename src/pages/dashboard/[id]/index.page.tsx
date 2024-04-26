@@ -7,7 +7,15 @@ import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
 import { resetServerContext } from 'react-beautiful-dnd';
-import styles from './dashboardId.module.scss';
+
+type UserData = {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type ColumnData = {
   result: string;
@@ -49,16 +57,23 @@ type ColumnCardData = {
 };
 
 type DashboardIdProps = {
+  dashboardId: number;
+  userId: number;
   allData: ColumnCardData[] | [];
 };
 
-function DashboardId({ allData }: DashboardIdProps) {
+function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
   const [data, setData] = useState(allData);
 
   return (
     <>
       <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
-      <Column data={data} setData={setData} />
+      <Column
+        dashboardId={dashboardId}
+        userId={userId}
+        data={data}
+        setData={setData}
+      />
     </>
   );
 }
@@ -78,19 +93,24 @@ export const getServerSideProps = async (
   resetServerContext();
 
   try {
+    const httpClient = new HttpClient(instance);
     const accessToken = context.req.cookies.accessToken;
     const id = context.params?.id;
+
+    const userData = await httpClient.get<UserData>('/users/me', {
+      Authorization: `Bearer ${accessToken}`,
+    });
+
     if (id) {
-      const httpClient = new HttpClient(instance);
-      const columnData: ColumnData = await httpClient.get(
+      const columnData = await httpClient.get<ColumnData>(
         `/columns?dashboardId=${id}`,
         {
           Authorization: `Bearer ${accessToken}`,
         },
       );
       const cardRequests = columnData.data.map(async (column: any) => {
-        const columnCardData: ColumnCardData = await httpClient.get(
-          `/cards?columnId=${column.id}`,
+        const columnCardData = await httpClient.get<ColumnCardData>(
+          `/cards?size=10&columnId=${column.id}`,
           {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -103,6 +123,8 @@ export const getServerSideProps = async (
 
       return {
         props: {
+          dashboardId: Number(id),
+          userId: userData.id,
           allData: columnCardData,
         },
       };

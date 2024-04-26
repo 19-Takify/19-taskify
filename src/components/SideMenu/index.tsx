@@ -24,7 +24,7 @@ function SideMenu({ dashboards }: SideMenuProps) {
   const router = useRouter();
   const { id } = router.query;
 
-  const handleCreateDashboard = () => {
+  const handleCreateDashboard = async () => {
     // 추후 대시보드 생성 모달 로직 추가
   };
 

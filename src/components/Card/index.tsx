@@ -1,4 +1,5 @@
 import ProfileIcon from '../Profile/ProfileIcon';
+import Tag from '../Tag';
 import styles from './Card.module.scss';
 import Image from 'next/image';
 
@@ -39,7 +40,11 @@ function Card({ cardData }: CardProps) {
       )}
       <span>{cardData?.title}</span>
       <ul className={styles.tags}>
-        {cardData?.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
+        {cardData?.tags?.map((tag, index) => (
+          <li key={index}>
+            <Tag>{tag}</Tag>
+          </li>
+        ))}
       </ul>
       <div className={styles.bottom}>
         <div className={styles.date}>

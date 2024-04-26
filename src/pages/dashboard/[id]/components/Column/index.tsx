@@ -5,6 +5,28 @@ import instance from '@/apis/axios';
 import Card from '@/components/Card';
 import styles from './Column.module.scss';
 import PageButton from '@/components/Button/PageButton';
+import Circle from '@/components/Circle';
+import ToDoModal from '@/components/Modal/ToDoModal';
+import Image from 'next/image';
+import { useObserver } from '@/hooks/useObserver';
+
+type CardData = {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  dueDate: string;
+  assignee: {
+    profileImageUrl: string;
+    nickname: string;
+    id: number;
+  };
+  imageUrl: string;
+  teamId: string;
+  columnId: number;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type ColumnCardData = {
   columnId: number;
@@ -39,18 +61,28 @@ type LocateCard = {
 };
 
 type ColumnProps<T> = {
+  dashboardId: number;
+  userId: number;
   data: T;
   setData: React.Dispatch<T>;
 };
 
-function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
+function Column({
+  dashboardId,
+  userId,
+  data,
+  setData,
+}: ColumnProps<ColumnCardData[]>) {
+  const httpClient = new HttpClient(instance);
+  const [showModal, setShowModal] = useState(false);
+  const [modalCardData, setModalCardData] = useState<CardData>();
   const [locateCard, setLocateCard] = useState<LocateCard>({
     cardId: null,
     startColumnId: null,
     endColumnId: null,
   });
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = async (result: any) => {
     if (!result.destination) return;
 
     const source = result.source;
@@ -59,10 +91,10 @@ function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
     const newData = [...data];
 
     const sourceColumnIndex = newData.findIndex(
-      (column) => column.columnId === parseInt(source.droppableId),
+      (column) => column.columnId === Number(source.droppableId),
     );
     const destinationColumnIndex = newData.findIndex(
-      (column) => column.columnId === parseInt(destination.droppableId),
+      (column) => column.columnId === Number(destination.droppableId),
     );
 
     const [movedCard] = newData[sourceColumnIndex].cards.splice(
@@ -76,25 +108,104 @@ function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
     );
 
     setData(newData);
+
     setLocateCard({
       cardId: Number(result.draggableId),
       startColumnId: Number(result.source.droppableId),
       endColumnId: Number(result.destination.droppableId),
     });
-    console.log(result);
   };
+
+  const handleAddCardClick = async (columnId: number) => {
+    //카드 생성 모달 나중에 구현
+
+    await httpClient.post(`/cards`, {
+      assigneeUserId: userId,
+      dashboardId: dashboardId,
+      columnId: columnId,
+      title: '김치',
+      description: '대한민국 최고 반찬',
+      dueDate: '2024-04-27 18:00',
+      tags: ['총각 김치', '배추김치'],
+    });
+
+    const dataRequests = data.map(async (column: any) => {
+      const columnCardData = await httpClient.get<ColumnCardData>(
+        `/cards?columnId=${column.columnId}`,
+      );
+      columnCardData.columnId = column.columnId;
+      columnCardData.columnTitle = column.columnTitle;
+      return columnCardData;
+    });
+    const columnCardData = await Promise.all(dataRequests);
+
+    setData(columnCardData);
+  };
+
+  const handleDeleteCardClick = async () => {
+    handleCloseModal();
+
+    await httpClient.delete(`/cards/${modalCardData?.id}`);
+
+    const dataRequests = data.map(async (column: any) => {
+      const columnCardData = await httpClient.get<ColumnCardData>(
+        `/cards?columnId=${column.columnId}`,
+      );
+      columnCardData.columnId = column.columnId;
+      columnCardData.columnTitle = column.columnTitle;
+      return columnCardData;
+    });
+    const columnCardData = await Promise.all(dataRequests);
+
+    setData(columnCardData);
+  };
+
+  const handleCardClick = (cardData: CardData) => {
+    setShowModal(true);
+    setModalCardData(cardData);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const [startIndex, setStartIndex] = useState(10);
+
+  const handleInfiniteScroll = async () => {
+    const nextIndex = startIndex + 10;
+
+    /*
+    const dataRequests = data.map(async (column: any) => {
+      const columnCardData = await httpClient.get<ColumnCardData>(
+        `/cards?size=${nextIndex}columnId=${column.columnId}`,
+      );
+      columnCardData.columnId = column.columnId;
+      columnCardData.columnTitle = column.columnTitle;
+      return columnCardData;
+    });
+    const columnCardData = await Promise.all(dataRequests);
+
+    setData(columnCardData);
+    */
+
+    setStartIndex(nextIndex);
+  };
+  // 무한 스크롤 훅을 사용하여 handleInfiniteScroll 콜백을 연결
+  const sentinelRef = useObserver(handleInfiniteScroll);
+
+  console.log(data);
 
   //드롭시 카드 컬럼 위치 수정
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        console.log(locateCard.cardId);
-        const httpClient = new HttpClient(instance);
-        await httpClient.put(`/cards/${locateCard.cardId}`, {
-          columnId: locateCard.endColumnId,
-        });
-      } catch {
-        return;
+      if (locateCard.cardId) {
+        try {
+          await httpClient.put(`/cards/${locateCard.cardId}`, {
+            columnId: locateCard.endColumnId,
+          });
+        } catch {
+          return;
+        }
       }
     };
 
@@ -102,53 +213,89 @@ function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
   }, [data, locateCard]);
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <ul className={styles.column}>
-        {data.map((columnData) => (
-          <Droppable
-            key={columnData.columnId.toString()}
-            droppableId={columnData.columnId.toString()}
-          >
-            {(provided) => (
-              <li {...provided.droppableProps} ref={provided.innerRef}>
-                <div className={styles.card}>
-                  <div>
-                    <strong>{columnData.columnTitle}</strong>
-                    <p>{columnData.cards.length}</p>
-                  </div>
-                  <PageButton>카드</PageButton>
-                  <Droppable droppableId={columnData.columnId.toString()}>
-                    {(provided) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {columnData.cards.map((cardData, index) => (
-                          <Draggable
-                            key={cardData.id.toString()}
-                            draggableId={cardData.id.toString()}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <Card cardData={cardData} />
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
+    <>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <ul className={styles.columns}>
+          {data.map((columnData) => (
+            <Droppable
+              key={columnData.columnId.toString()}
+              droppableId={columnData.columnId.toString()}
+            >
+              {(provided) => (
+                <li {...provided.droppableProps} ref={provided.innerRef}>
+                  <div className={styles.columnBox}>
+                    <div className={styles.columnTitle}>
+                      <div className={styles.columnName}>
+                        <Circle color="#5534da" small />
+                        <strong>{columnData.columnTitle}</strong>
+                        <div className={styles.countBox}>
+                          <p>{columnData.cards.length}</p>
+                        </div>
                       </div>
-                    )}
-                  </Droppable>
-                </div>
-                {provided.placeholder}
-              </li>
-            )}
-          </Droppable>
-        ))}
-      </ul>
-    </DragDropContext>
+                      <Image
+                        src="/svgs/setting.svg"
+                        alt="컬럼 설정 이미지"
+                        width={24}
+                        height={24}
+                      />
+                    </div>
+                    <PageButton
+                      onClick={() => handleAddCardClick(columnData.columnId)}
+                    >
+                      카드
+                    </PageButton>
+                    <Droppable droppableId={columnData.columnId.toString()}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {columnData.cards.map((cardData, index) => (
+                            <Draggable
+                              key={cardData.id.toString()}
+                              draggableId={cardData.id.toString()}
+                              index={index}
+                            >
+                              {(provided) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  onClick={() => handleCardClick(cardData)}
+                                >
+                                  <Card cardData={cardData} />
+                                  {index === columnData.cards.length - 1 && (
+                                    <div ref={sentinelRef}></div>
+                                  )}
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                  {provided.placeholder}
+                </li>
+              )}
+            </Droppable>
+          ))}
+          <li>
+            <PageButton>새로운 컬럼 추가하기</PageButton>
+          </li>
+        </ul>
+      </DragDropContext>
+      {showModal && (
+        <ToDoModal
+          showModal={showModal}
+          handleClose={handleCloseModal}
+          cardData={modalCardData}
+          handleDeleteCardClick={handleDeleteCardClick}
+          dashboardId={dashboardId}
+        />
+      )}
+    </>
   );
 }
 
