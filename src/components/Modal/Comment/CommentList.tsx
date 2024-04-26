@@ -29,7 +29,7 @@ function CommentsList({
 }: CommentsListProps) {
   return (
     <div>
-      {commentDataArray.map((comment) => (
+      {commentDataArray?.map((comment) => (
         <Comment
           key={comment.id}
           commentData={comment}

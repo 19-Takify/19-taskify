@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styles from './Comment.module.scss';
 import ProfileIcon from '@/components/Profile/ProfileIcon';
 import axios from 'axios';
+import setToast from '@/utils/setToast';
+import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 
 type Author = {
   id: number;
@@ -48,10 +50,10 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
         onUpdate(updatedComment); // 수정된 댓글 데이터를 상위 컴포넌트로 전달합니다.
         setIsEditing(false);
       } else {
-        console.error('댓글 수정에 실패했습니다.');
+        setToast('error', '😰 댓글 수정에 실패했습니다.');
       }
     } catch (error) {
-      console.error(error);
+      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
     }
   };
 

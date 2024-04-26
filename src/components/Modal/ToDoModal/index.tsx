@@ -6,6 +6,9 @@ import ModalPopOver from '../ModalPopOver';
 import Modal from '../Modal';
 import CommentsList from '../Comment/CommentList';
 import axios from 'axios';
+import setToast from '@/utils/setToast';
+import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
+import { set } from 'date-fns';
 
 type Assignee = {
   profileImageUrl: string;
@@ -58,7 +61,7 @@ function ToDoModal({
       const response = await axios.get('/4-19/comments');
       setComments(response.data);
     } catch (error) {
-      console.error(error);
+      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
     }
   };
 
@@ -96,13 +99,15 @@ function ToDoModal({
         dashboardId: 6265,
       });
       if (response.status >= 200 && response.status < 300) {
-        console.log('댓글이 성공적으로 생성되었습니다.');
+        setToast('success', '✅ 댓글이 성공적으로 생성되었습니다.');
         fetchComments(); // 댓글 목록을 다시 불러옴
       } else {
-        console.error('댓글 생성에 실패했습니다.');
+        setToast('error', '😰 댓글 생성에 실패했습니다.');
+        return;
       }
     } catch (error) {
-      console.error(error);
+      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+      return;
     }
   };
 
@@ -112,13 +117,14 @@ function ToDoModal({
         content: newContent,
       });
       if (response.status >= 200 && response.status < 300) {
-        console.log('댓글이 성공적으로 수정되었습니다.');
+        setToast('success', '✅ 댓글이 성공적으로 수정되었습니다.');
         fetchComments(); // 댓글 목록을 다시 불러옴
       } else {
-        console.error('댓글 수정에 실패했습니다.');
+        setToast('error', '댓글 수정에 실패했습니다.');
+        return;
       }
     } catch (error) {
-      console.error(error);
+      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
     }
   };
 
@@ -129,7 +135,7 @@ function ToDoModal({
     }
 
     createComment(comment.content);
-    alert('댓글이 등록되었습니다.');
+    setToast('success', '✅ 댓글이 성공적으로 등록되었습니다.');
     setComment({
       ...comment,
       content: '',
