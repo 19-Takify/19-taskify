@@ -7,12 +7,16 @@ import DashBoardHeader from '@/components/Header/DashBoard';
 import { GetServerSidePropsContext } from 'next';
 import instance from '@/apis/axios';
 
+type Inviter = { nickname: string; email: string; id: number };
+type Dashboard = { title: string; id: number };
+type invitee = { nickname: string; email: string; id: number };
+
 type Invitation = {
   id: number;
-  inviter: { nickname: string; email: string; id: number };
+  inviter: Inviter;
   teamId: string;
-  dashboard: { title: string; id: number };
-  invitee: { nickname: string; email: string; id: number };
+  dashboard: Dashboard;
+  invitee: invitee;
   inviteAccepted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -57,19 +61,17 @@ export const getServerSideProps = async (
   try {
     const accessToken = context.req.cookies.accessToken;
     const httpClient = new HttpClient(instance);
-    const invitationsData = (await httpClient.get('/invitations', {
-      Authorization: `Bearer ${accessToken}`,
-    })) as {
-      invitations: Invitation[];
-    };
-    const dashboardsData = (await httpClient.get(
-      '/dashboards?navigationMethod=infiniteScroll',
+    const invitationsData = await httpClient.get<{ invitations: Invitation[] }>(
+      '/invitations',
       {
         Authorization: `Bearer ${accessToken}`,
       },
-    )) as {
+    );
+    const dashboardsData = await httpClient.get<{
       dashboards: DashBoard[];
-    };
+    }>('/dashboards?navigationMethod=infiniteScroll', {
+      Authorization: `Bearer ${accessToken}`,
+    });
 
     return {
       props: {

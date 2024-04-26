@@ -3,12 +3,16 @@ import Image from 'next/image';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { debounce } from 'lodash';
 
+type Inviter = { nickname: string; email: string; id: number };
+type Dashboard = { title: string; id: number };
+type invitee = { nickname: string; email: string; id: number };
+
 type Invitation = {
   id: number;
-  inviter: { nickname: string; email: string; id: number };
+  inviter: Inviter;
   teamId: string;
-  dashboard: { title: string; id: number };
-  invitee: { nickname: string; email: string; id: number };
+  dashboard: Dashboard;
+  invitee: invitee;
   inviteAccepted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -32,7 +36,7 @@ function SearchDashboard({
     setInvitations(searchInvitations);
   }, 400);
 
-  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     debouncing(e.target.value);
   };
 
@@ -45,7 +49,7 @@ function SearchDashboard({
         width={24}
         height={24}
       />
-      <input placeholder="검색" onChange={(e) => handleSubmit(e)} />
+      <input placeholder="검색" onChange={(e) => handleChange(e)} />
     </div>
   );
 }

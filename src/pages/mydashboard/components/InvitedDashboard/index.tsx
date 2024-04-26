@@ -6,12 +6,16 @@ import { Dispatch, SetStateAction } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 
+type Inviter = { nickname: string; email: string; id: number };
+type Dashboard = { title: string; id: number };
+type invitee = { nickname: string; email: string; id: number };
+
 type Invitation = {
   id: number;
-  inviter: { nickname: string; email: string; id: number };
+  inviter: Inviter;
   teamId: string;
-  dashboard: { title: string; id: number };
-  invitee: { nickname: string; email: string; id: number };
+  dashboard: Dashboard;
+  invitee: invitee;
   inviteAccepted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -33,9 +37,9 @@ function InvitedDashboard({
     await httpClient.put(`/invitations/${invitationId}`, {
       inviteAccepted: true,
     });
-    const updateData = (await httpClient.get('/invitations')) as {
-      invitations: Invitation[];
-    };
+    const updateData = await httpClient.get<{ invitations: Invitation[] }>(
+      '/invitations',
+    );
     setInvitations(updateData.invitations);
   };
 
@@ -67,7 +71,7 @@ function InvitedDashboard({
                 <div className={styles.invitedButton}>수락 여부</div>
               </div>
             </li>
-            {invitations.map((invitation) => (
+            {invitations?.map((invitation) => (
               <li key={invitation.id}>
                 <div className={styles.invitedBox}>
                   <p>{invitation.dashboard.title}</p>
@@ -95,7 +99,7 @@ function InvitedDashboard({
             width={100}
             height={100}
           />
-          <p>아직 초대받은 대시보드가 없어요</p>
+          <p className={styles.description}>아직 초대받은 대시보드가 없어요</p>
         </div>
       )}
     </div>
