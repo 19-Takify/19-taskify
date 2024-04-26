@@ -70,6 +70,7 @@ function PasswordChange() {
         <div className={styles.inputBox}>
           <Input
             type="password"
+            id="현재 비밀번호"
             label="현재 비밀번호"
             hasLabel
             register={register('password')}
@@ -77,6 +78,7 @@ function PasswordChange() {
           />
           <Input
             type="password"
+            id="새 비밀번호"
             label="새 비밀번호"
             hasLabel
             register={register('passwordConfirm')}
@@ -84,6 +86,7 @@ function PasswordChange() {
           />
           <Input
             type="password"
+            id="새 비밀번호 확인"
             label="새 비밀번호 확인"
             hasLabel
             register={register('newPassword')}
