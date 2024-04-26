@@ -57,7 +57,7 @@ function Edit() {
           </div>
           {selectDashboard.createdByMe && <DashboardEdit />}
           <DashboardManager usage="member" />
-          <DashboardManager usage="invite" />
+          {selectDashboard.createdByMe && <DashboardManager usage="invite" />}
         </div>
       </div>
     </>
