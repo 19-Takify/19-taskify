@@ -8,6 +8,7 @@ import PageButton from '@/components/Button/PageButton';
 
 type ColumnCardData = {
   columnId: number;
+  columnTitle: string;
   cursorId: number;
   totalCount: number;
   cards: [
@@ -83,6 +84,7 @@ function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
     console.log(result);
   };
 
+  //드롭시 카드 컬럼 위치 수정
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -110,6 +112,10 @@ function Column({ data, setData }: ColumnProps<ColumnCardData[] | []>) {
             {(provided) => (
               <li {...provided.droppableProps} ref={provided.innerRef}>
                 <div className={styles.card}>
+                  <div>
+                    <strong>{columnData.columnTitle}</strong>
+                    <p>{columnData.cards.length}</p>
+                  </div>
                   <PageButton>카드</PageButton>
                   <Droppable droppableId={columnData.columnId.toString()}>
                     {(provided) => (

@@ -22,6 +22,7 @@ type ColumnData = {
 
 type ColumnCardData = {
   columnId: number;
+  columnTitle: string;
   cursorId: number;
   totalCount: number;
   cards: [
@@ -86,6 +87,7 @@ export const getServerSideProps = async (
           },
         );
         columnCardData.columnId = column.id;
+        columnCardData.columnTitle = column.title;
         return columnCardData;
       });
       const columnCardData = await Promise.all(cardRequests);
