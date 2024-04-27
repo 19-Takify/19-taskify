@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { logout } from '@/utils/auth';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/auth';
+import { selectDashboardAtom } from '@/store/dashboard';
 
 function DashBoardHeader() {
   const [isOver, setIsover] = useState(false);
@@ -20,6 +21,7 @@ function DashBoardHeader() {
   const isMyDashboard = !router.pathname.includes('my');
   const isEditPage = !router.pathname.includes('edit');
   const user = useAtomValue(userAtom);
+  const selectDashboard = useAtomValue(selectDashboardAtom);
 
   const handleMouseOver = () => {
     setIsover(true);
@@ -55,6 +57,7 @@ function DashBoardHeader() {
                 height="28"
                 src="/svgs/header-small-logo-purple.svg"
                 alt="헤더 로고 이미지"
+                priority
               />
             ) : (
               <Image
@@ -62,11 +65,12 @@ function DashBoardHeader() {
                 alt="taskify 로고 이미지"
                 width={109}
                 height={34}
+                priority
               />
             )}
           </Link>
           {isMyDashboard && (
-            <p className={styles.text}>내 대시보드11111111adsadsadsasa</p>
+            <p className={styles.text}>{selectDashboard.title}</p>
           )}
         </div>
         <div className={styles.box}>

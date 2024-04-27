@@ -2,11 +2,16 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import React, { ReactElement } from 'react';
 import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
-
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
 function Dashboard() {
+  const selectDashboard = useAtomValue(selectDashboardAtom);
   return (
     <>
-      <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
+      <Meta
+        title={`Taskify | ${selectDashboard.title}`}
+        url={useCurrentUrl()}
+      />
     </>
   );
 }

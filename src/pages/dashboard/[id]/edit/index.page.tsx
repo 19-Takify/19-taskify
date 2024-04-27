@@ -1,4 +1,3 @@
-import instance from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import styles from './style/edit.page.module.scss';
 import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardManager';
@@ -8,12 +7,43 @@ import DashBoardLayout from '@/components/Layout/DashBoardLayout';
 import { ReactElement } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
+import axios, { setContext } from '@/apis/axios';
+import { GetServerSidePropsContext } from 'next';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
+import { TOAST_TEXT } from '@/constants/toastText';
+import { TInviteData, TMembersData } from './type/editType';
 
-// 대시보드 삭제 버튼 - 대시보드 생성자(전역 상태 관리)한테만 보이게 조건부 렌더링, 컨펌 모달
-function Edit() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  setContext(context);
+
+  const inviteResponse = await axios.get(
+    `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+  );
+  const membersResponse = await axios.get(
+    `members?page=1&size=1000&dashboardId=${context.query.id}`,
+  );
+  const inviteData = inviteResponse.data.invitations;
+  const membersData = membersResponse.data.members;
+
+  return {
+    props: { inviteData, membersData },
+  };
+}
+
+type TEditProps = {
+  inviteData: TInviteData[];
+  membersData: TMembersData[];
+};
+
+function Edit({ inviteData, membersData }: TEditProps) {
+  const selectDashboard = useAtomValue(selectDashboardAtom);
+
   const handleDeleteDashboard = async () => {
+    // 컨펌 모달 추가 예정
     try {
-      const res = await instance.delete('/dashboards/대시보드 ID');
+      await axios.delete(`/dashboards/${selectDashboard.id}`);
+      setToast(TOAST_TEXT.success, '대시보드가 삭제되었습니다!');
     } catch (e: any) {
       setToast('error', e.response.data.message);
     }
@@ -26,16 +56,20 @@ function Edit() {
         <div className={styles.box}>
           <div className={styles.buttonBox}>
             <BackButton />
-            <button
-              className={styles.deleteBtn}
-              onClick={handleDeleteDashboard}
-            >
-              대시보드 삭제하기
-            </button>
+            {selectDashboard.createdByMe && (
+              <button
+                className={styles.deleteBtn}
+                onClick={handleDeleteDashboard}
+              >
+                대시보드 삭제하기
+              </button>
+            )}
           </div>
-          <DashboardEdit />
-          <DashboardManager usage="member" />
-          <DashboardManager usage="invite" />
+          {selectDashboard.createdByMe && <DashboardEdit />}
+          <DashboardManager usage="member" data={membersData} />
+          {selectDashboard.createdByMe && (
+            <DashboardManager usage="invite" data={inviteData} />
+          )}
         </div>
       </div>
     </>
