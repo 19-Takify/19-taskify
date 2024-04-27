@@ -9,6 +9,7 @@ import { GetServerSidePropsContext } from 'next';
 import { resetServerContext } from 'react-beautiful-dnd';
 import { setContext } from '@/apis/axios';
 import { getMe } from '@/utils/auth';
+import { useRouter } from 'next/router';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 
@@ -67,12 +68,13 @@ type DashboardIdProps = {
 };
 
 function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
+  const router = useRouter();
   const [data, setData] = useState<ColumnCardData[]>([]);
 
   //페이지 이동시 데이터 받아오기 위해서 작성
   useEffect(() => {
     setData(allData);
-  }, [useCurrentUrl]);
+  }, [router.asPath]);
 
   const selectDashboard = useAtomValue(selectDashboardAtom);
   return (
