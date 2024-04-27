@@ -163,7 +163,7 @@ function Column({
   // 마우스 누를 때 동작
   const handleMouseDown = (e: any) => {
     const target = e.target as HTMLElement;
-    console.log(target);
+
     if (target.dataset.status === 'item') {
       return;
     }
@@ -342,75 +342,68 @@ function Column({
           ref={cardContainer}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
+          data-status="dnd"
         >
           {data.map((columnData) => (
-            <Droppable
+            <li
               key={columnData.columnId.toString()}
-              droppableId={columnData.columnId.toString()}
+              className={styles.columnList}
             >
-              {(provided) => (
-                <li
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className={styles.columnList}
-                >
-                  <div className={styles.columnBox}>
-                    <div className={styles.columnTitle}>
-                      <div className={styles.columnName}>
-                        <Circle color="#5534da" small />
-                        <strong>{columnData.columnTitle}</strong>
-                        <div className={styles.countBox}>
-                          <p>{columnData.totalCount}</p>
-                        </div>
-                      </div>
-                      <Image
-                        src="/svgs/setting.svg"
-                        alt="컬럼 설정 이미지"
-                        width={24}
-                        height={24}
-                      />
+              <div className={styles.columnBox}>
+                <div className={styles.columnTitle}>
+                  <div className={styles.columnName}>
+                    <Circle color="#5534da" small />
+                    <strong>{columnData.columnTitle}</strong>
+                    <div className={styles.countBox}>
+                      <p>{columnData.totalCount}</p>
                     </div>
-                    <PageButton
-                      onClick={() => handleAddCardClick(columnData.columnId)}
-                    >
-                      카드
-                    </PageButton>
-                    <Droppable droppableId={columnData.columnId.toString()}>
-                      {(provided) => (
-                        <div
-                          className={styles.cardList}
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {columnData.cards.map((cardData, index) => (
-                            <Draggable
-                              key={cardData.id.toString()}
-                              draggableId={cardData.id.toString()}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  onClick={() => handleCardClick(cardData)}
-                                >
-                                  <Card cardData={cardData} />
-                                  {index === columnData.cards.length - 1 && (
-                                    <div ref={sentinelRef}></div>
-                                  )}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
                   </div>
-                </li>
-              )}
-            </Droppable>
+                  <Image
+                    src="/svgs/setting.svg"
+                    alt="컬럼 설정 이미지"
+                    width={24}
+                    height={24}
+                  />
+                </div>
+                <PageButton
+                  onClick={() => handleAddCardClick(columnData.columnId)}
+                >
+                  카드
+                </PageButton>
+                <Droppable droppableId={columnData.columnId.toString()}>
+                  {(provided) => (
+                    <div
+                      className={styles.cardList}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {columnData.cards.map((cardData, index) => (
+                        <Draggable
+                          key={cardData.id.toString()}
+                          draggableId={cardData.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() => handleCardClick(cardData)}
+                            >
+                              <Card cardData={cardData} />
+                              {index === columnData.cards.length - 1 && (
+                                <div ref={sentinelRef}></div>
+                              )}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </li>
           ))}
           {/*컬럼 갯수가 10개 넘어가면 추가 X*/}
           {data.length < 10 && (

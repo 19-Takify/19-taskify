@@ -7,7 +7,11 @@ type TagProps = {
 
 function Tag({ children, color }: TagProps) {
   return (
-    <div className={styles.tag} style={{ background: `${color}` }}>
+    <div
+      className={styles.tag}
+      data-status="item"
+      style={{ background: `${color}` }}
+    >
       {children}
     </div>
   );

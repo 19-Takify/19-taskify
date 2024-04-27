@@ -29,7 +29,7 @@ type CardProps = {
 
 function Card({ cardData }: CardProps) {
   return (
-    <div className={styles.cardBox}>
+    <div className={styles.cardBox} data-status="item">
       {cardData?.imageUrl && (
         <Image
           className={styles.cardImage}
@@ -40,30 +40,31 @@ function Card({ cardData }: CardProps) {
         />
       )}
       <div className={styles.desktopBox} data-status="item">
-        <div className={styles.tabletBox}>
-          <span>{cardData?.title}</span>
-          <div className={styles.tabletContent}>
-            <ul className={styles.tags}>
+        <div className={styles.tabletBox} data-status="item">
+          <span data-status="item">{cardData?.title}</span>
+          <div className={styles.tabletContent} data-status="item">
+            <ul className={styles.tags} data-status="item">
               {cardData?.tags?.map((tag, index) => (
-                <li key={index}>
+                <li key={index} data-status="item">
                   <Tag>{tag}</Tag>
                 </li>
               ))}
             </ul>
-            <div className={styles.bottom}>
-              <div className={styles.date}>
+            <div className={styles.bottom} data-status="item">
+              <div className={styles.date} data-status="item">
                 <Image
                   src="/svgs/calendar.svg"
                   alt="달력 아이콘"
                   width={18}
                   height={18}
+                  data-status="item"
                 />
-                <p>{cardData?.dueDate?.split(' ')[0]}</p>
+                <p data-status="item">{cardData?.dueDate?.split(' ')[0]}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className={styles.profileIcon}>
+        <div className={styles.profileIcon} data-status="item">
           <ProfileIcon profile={cardData?.assignee} small />
         </div>
       </div>
