@@ -1,5 +1,5 @@
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import Card from '@/components/Card';
@@ -10,6 +10,10 @@ import ToDoModal from '@/components/Modal/ToDoModal';
 import Image from 'next/image';
 import { useObserver } from '@/hooks/useObserver';
 import setToast from '@/utils/setToast';
+import ManageColumnModal from '@/components/Modal/ManageColumnModal';
+import NewColumnModal from '@/components/Modal/NewColumnModal';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
 
 type CardData = {
   id: number;
@@ -75,12 +79,17 @@ function Column({
   setData,
 }: ColumnProps<ColumnCardData[]>) {
   const httpClient = new HttpClient(instance);
+  const selectDashboard = useAtomValue(selectDashboardAtom);
   const [showModal, setShowModal] = useState(false);
   const [modalCardData, setModalCardData] = useState<CardData>();
   const [locateCard, setLocateCard] = useState<LocateCard>({
     cardId: null,
     startColumnId: null,
     endColumnId: null,
+  });
+  const [isOpenColumnModal, setIsOpenColumnModal] = useState({
+    new: false,
+    manage: false,
   });
 
   //무한 스크롤 용도
@@ -244,11 +253,12 @@ function Column({
                           <p>{columnData.totalCount}</p>
                         </div>
                       </div>
-                      <Image
-                        src="/svgs/setting.svg"
-                        alt="컬럼 설정 이미지"
-                        width={24}
-                        height={24}
+                      <ManageColumnModal
+                        columnData={{
+                          id: columnData.columnId,
+                          title: columnData.columnTitle,
+                          dashboardId: selectDashboard.id,
+                        }}
                       />
                     </div>
                     <PageButton
@@ -297,7 +307,13 @@ function Column({
           {/*컬럼 갯수가 10개 넘어가면 추가 X*/}
           {data.length < 10 && (
             <li className={styles.addColumn}>
-              <PageButton>새로운 컬럼 추가하기</PageButton>
+              <PageButton
+                onClick={() =>
+                  setIsOpenColumnModal((prev) => ({ ...prev, new: true }))
+                }
+              >
+                새로운 컬럼 추가하기
+              </PageButton>
             </li>
           )}
         </ul>
@@ -311,6 +327,13 @@ function Column({
           dashboardId={dashboardId}
         />
       )}
+      <NewColumnModal
+        showModal={isOpenColumnModal.new}
+        handleClose={() =>
+          setIsOpenColumnModal((prev) => ({ ...prev, new: false }))
+        }
+        dashboardId={selectDashboard.id}
+      />
     </>
   );
 }

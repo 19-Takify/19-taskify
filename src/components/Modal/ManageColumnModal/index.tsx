@@ -8,10 +8,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
+import Image from 'next/image';
+import { useState } from 'react';
 
 type ManageColumnModalProps = {
-  showModal: boolean;
-  handleClose: () => void;
   columnData: ColumnType;
 };
 
@@ -22,10 +22,7 @@ type FormValues = {
 type ColumnType = {
   id: number;
   title: string;
-  teamId: string;
   dashboardId: number;
-  createdAt: string;
-  updatedAt: string;
 };
 
 type ColumnList = {
@@ -40,11 +37,7 @@ const schema = z.object({
     .min(1, { message: VALID_ERROR_MESSAGE.DASHBOARD.EMPTY }),
 });
 
-function ManageColumnModal({
-  showModal,
-  handleClose,
-  columnData,
-}: ManageColumnModalProps) {
+function ManageColumnModal({ columnData }: ManageColumnModalProps) {
   const httpClient = new HttpClient();
   const initialFormValues = {
     title: columnData.title,
@@ -62,6 +55,8 @@ function ManageColumnModal({
       ...initialFormValues,
     },
   });
+
+  const [showModal, setShowModal] = useState(false);
 
   const handleColumnUpdate = async (data: FormValues) => {
     try {
@@ -108,44 +103,56 @@ function ManageColumnModal({
 
   const handleResetClose = () => {
     reset();
-    handleClose();
+    setShowModal(false);
   };
 
   return (
-    <Modal showModal={showModal} handleClose={handleResetClose}>
-      <form
-        className={styles.modalForm}
-        onSubmit={handleSubmit(handleColumnUpdate)}
-      >
-        <strong className={styles.modalTitle}>컬럼 관리</strong>
-        <Input
-          id="title"
-          type="text"
-          register={register('title')}
-          label="이름"
-          placeholder="컬럼 이름을 입력해 주세요."
-          hasLabel
-          errors={errors}
+    <>
+      <button type="button" onClick={() => setShowModal(true)}>
+        <Image
+          src="/svgs/setting.svg"
+          alt="컬럼 설정 이미지"
+          width={24}
+          height={24}
         />
-        <div className={styles.buttonBox}>
-          <button
-            type="button"
-            className={styles.columnDelete}
-            onClick={handleColumnDelete}
+      </button>
+      {showModal && (
+        <Modal showModal={showModal} handleClose={handleResetClose}>
+          <form
+            className={styles.modalForm}
+            onSubmit={handleSubmit(handleColumnUpdate)}
           >
-            삭제하기
-          </button>
-          <div className={styles.modalButton}>
-            <ModalButton type="button" onClick={handleResetClose}>
-              취소
-            </ModalButton>
-            <ModalButton type="submit" disabled={!isValid || isSubmitting}>
-              변경
-            </ModalButton>
-          </div>
-        </div>
-      </form>
-    </Modal>
+            <strong className={styles.modalTitle}>컬럼 관리</strong>
+            <Input
+              id="title"
+              type="text"
+              register={register('title')}
+              label="이름"
+              placeholder="컬럼 이름을 입력해 주세요."
+              hasLabel
+              errors={errors}
+            />
+            <div className={styles.buttonBox}>
+              <button
+                type="button"
+                className={styles.columnDelete}
+                onClick={handleColumnDelete}
+              >
+                삭제하기
+              </button>
+              <div className={styles.modalButton}>
+                <ModalButton type="button" onClick={handleResetClose}>
+                  취소
+                </ModalButton>
+                <ModalButton type="submit" disabled={!isValid || isSubmitting}>
+                  변경
+                </ModalButton>
+              </div>
+            </div>
+          </form>
+        </Modal>
+      )}
+    </>
   );
 }
 
