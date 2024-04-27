@@ -89,15 +89,12 @@ function ToDoModal({
     setIsEditing((prev) => !prev);
   };
 
-  const handleOnDelete = async (commentId: number | undefined) => {
+  const handleOnDelete = async (commentId: number) => {
     commentId && (await httpClient.delete(`/comments/${commentId}`));
     setIsEditing((prev) => !prev);
   };
 
-  const handleOnUpdate = async (
-    commentId: number | undefined,
-    text: string | undefined,
-  ) => {
+  const handleOnUpdate = async (commentId: number, text: string) => {
     try {
       commentId &&
         (await httpClient.put(`/comments/${commentId}`, {
@@ -106,7 +103,6 @@ function ToDoModal({
       setIsEditing((prev) => !prev);
     } catch {
       setToast('error', '😰 댓글 수정에 실패했습니다.');
-      console.error(FETCH_ERROR_MESSAGE);
     }
   };
 

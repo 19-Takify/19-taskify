@@ -20,9 +20,9 @@ type Comment = {
 };
 
 type CommentProps = {
-  commentData?: Comment;
-  onDelete: (id: number | undefined) => void;
-  onUpdate: (id: number | undefined, text: string | undefined) => void;
+  commentData: Comment;
+  onDelete: (id: number) => void;
+  onUpdate: (id: number, text: string) => void;
 };
 
 function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
@@ -97,7 +97,7 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
               <button
                 type="button"
                 className={styles.btn}
-                onClick={() => onDelete(commentData ? commentData.id : 0)}
+                onClick={() => onDelete(commentData.id)}
               >
                 삭제
               </button>

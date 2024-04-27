@@ -1,5 +1,5 @@
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import Column from './components/Column';
@@ -9,6 +9,7 @@ import { GetServerSidePropsContext } from 'next';
 import { resetServerContext } from 'react-beautiful-dnd';
 import { setContext } from '@/apis/axios';
 import { getMe } from '@/utils/auth';
+import { useRouter } from 'next/router';
 
 type UserData = {
   id: number;
@@ -65,17 +66,27 @@ type DashboardIdProps = {
 };
 
 function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
-  const [data, setData] = useState(allData);
+  const router = useRouter();
+  const [data, setData] = useState<ColumnCardData[]>([]);
+
+  //페이지 이동시 데이터 받아오기 위해서 작성
+  useEffect(() => {
+    setData(allData);
+  }, [router.asPath]);
 
   return (
     <div>
       <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
-      <Column
-        dashboardId={dashboardId}
-        userId={userId}
-        data={data}
-        setData={setData}
-      />
+      {!data ? (
+        <div>Loading...</div>
+      ) : (
+        <Column
+          dashboardId={dashboardId}
+          userId={userId}
+          data={data}
+          setData={setData}
+        />
+      )}
     </div>
   );
 }

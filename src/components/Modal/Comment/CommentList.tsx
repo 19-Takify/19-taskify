@@ -17,9 +17,9 @@ type CommentList = {
 };
 
 type CommentsListProps = {
-  commentDataArray?: CommentList[];
-  onDelete: (id: number | undefined) => void;
-  onUpdate: (id: number | undefined, text: string | undefined) => void;
+  commentDataArray: CommentList[];
+  onDelete: (id: number) => void;
+  onUpdate: (id: number, text: string) => void;
 };
 
 function CommentsList({

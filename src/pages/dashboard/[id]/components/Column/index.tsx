@@ -9,6 +9,7 @@ import Circle from '@/components/Circle';
 import ToDoModal from '@/components/Modal/ToDoModal';
 import Image from 'next/image';
 import { useObserver } from '@/hooks/useObserver';
+import setToast from '@/utils/setToast';
 
 type CardData = {
   id: number;
@@ -131,6 +132,7 @@ function Column({
       description: '대한민국 최고 반찬',
       dueDate: '2024-04-27 18:00',
       tags: ['총각 김치', '배추김치'],
+      imageUrl: '',
     });
 
     const dataRequests = data.map(async (column: any) => {
@@ -149,19 +151,23 @@ function Column({
   const handleDeleteCardClick = async () => {
     handleCloseModal();
 
-    await httpClient.delete(`/cards/${modalCardData?.id}`);
+    try {
+      await httpClient.delete(`/cards/${modalCardData?.id}`);
 
-    const dataRequests = data.map(async (column: any) => {
-      const columnCardData = await httpClient.get<ColumnCardData>(
-        `/cards?columnId=${column.columnId}`,
-      );
-      columnCardData.columnId = column.columnId;
-      columnCardData.columnTitle = column.columnTitle;
-      return columnCardData;
-    });
-    const columnCardData = await Promise.all(dataRequests);
+      const dataRequests = data.map(async (column: any) => {
+        const columnCardData = await httpClient.get<ColumnCardData>(
+          `/cards?columnId=${column.columnId}`,
+        );
+        columnCardData.columnId = column.columnId;
+        columnCardData.columnTitle = column.columnTitle;
+        return columnCardData;
+      });
+      const columnCardData = await Promise.all(dataRequests);
 
-    setData(columnCardData);
+      setData(columnCardData);
+    } catch {
+      setToast('error', '😰 카드 삭제에 실패했습니다.');
+    }
   };
 
   const handleCardClick = (cardData: CardData) => {
@@ -202,18 +208,6 @@ function Column({
           await httpClient.put(`/cards/${locateCard.cardId}`, {
             columnId: locateCard.endColumnId,
           });
-
-          const dataRequests = data.map(async (column: any) => {
-            const columnCardData = await httpClient.get<ColumnCardData>(
-              `/cards?columnId=${column.columnId}`,
-            );
-            columnCardData.columnId = column.columnId;
-            columnCardData.columnTitle = column.columnTitle;
-            return columnCardData;
-          });
-          const columnCardData = await Promise.all(dataRequests);
-
-          setData(columnCardData);
         } catch {
           return;
         }

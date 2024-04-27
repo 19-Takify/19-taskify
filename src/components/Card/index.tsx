@@ -64,7 +64,7 @@ function Card({ cardData }: CardProps) {
           </div>
         </div>
         <div className={styles.profileIcon}>
-          <ProfileIcon profile={cardData?.assignee || null} small />
+          <ProfileIcon profile={cardData?.assignee} small />
         </div>
       </div>
     </div>

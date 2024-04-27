@@ -2,6 +2,8 @@ import styles from './SearchDashboard.module.scss';
 import Image from 'next/image';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { debounce } from 'lodash';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 
 type Invitation = {
   id: number;
@@ -14,23 +16,24 @@ type Invitation = {
   updatedAt: string;
 };
 
+type InvitationList = {
+  cursorId: number;
+  invitations: Invitation[];
+};
+
 type SearchDashboardProps = {
-  initialInvitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
 };
 
-function SearchDashboard({
-  initialInvitations,
-  setInvitations,
-}: SearchDashboardProps) {
-  const debouncing = debounce((value: string) => {
-    const searchInvitations = initialInvitations.filter(
-      (invitation) =>
-        invitation.dashboard.title.includes(value) ||
-        invitation.inviter.nickname.includes(value),
+function SearchDashboard({ setInvitations }: SearchDashboardProps) {
+  const httpClient = new HttpClient(instance);
+
+  const debouncing = debounce(async (value: string) => {
+    const searchInvitations = await httpClient.get<InvitationList>(
+      `/invitations?title=${value}`,
     );
-    setInvitations(searchInvitations);
-  }, 400);
+    setInvitations(searchInvitations.invitations);
+  }, 500);
 
   const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
     debouncing(e.target.value);
