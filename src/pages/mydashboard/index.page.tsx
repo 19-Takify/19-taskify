@@ -5,6 +5,8 @@ import styles from './myDashboard.module.scss';
 import HttpClient from '@/apis/httpClient';
 import { GetServerSidePropsContext } from 'next';
 import instance from '@/apis/axios';
+import Meta from '@/components/Meta';
+import useCurrentUrl from '@/hooks/useCurrentUrl';
 
 type Invitation = {
   id: number;
@@ -25,15 +27,18 @@ function MyDashboard({ invitations }: MyDashboardProps) {
   const [invitation, setInvitation] = useState<Invitation[]>(invitations);
 
   return (
-    <div className={styles.myDashboardPage}>
-      <div className={styles.invitedDashboard}>
-        <InvitedDashboard
-          initialInvitations={invitations}
-          invitations={invitation}
-          setInvitations={setInvitation}
-        />
+    <>
+      <Meta title="Taskify | 내 대시보드" url={useCurrentUrl()} />
+      <div className={styles.myDashboardPage}>
+        <div className={styles.invitedDashboard}>
+          <InvitedDashboard
+            initialInvitations={invitations}
+            invitations={invitation}
+            setInvitations={setInvitation}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

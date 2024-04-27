@@ -126,18 +126,20 @@ function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
 
   const selectDashboard = useAtomValue(selectDashboardAtom);
   return (
-    <div>
+    <>
       <Meta
         title={`Taskify | ${selectDashboard.title}`}
         url={useCurrentUrl()}
       />
-      <Column
-        dashboardId={dashboardId}
-        userId={userId}
-        data={data}
-        setData={setData}
-      />
-    </div>
+      <div>
+        <Column
+          dashboardId={dashboardId}
+          userId={userId}
+          data={data}
+          setData={setData}
+        />
+      </div>
+    </>
   );
 }
 
