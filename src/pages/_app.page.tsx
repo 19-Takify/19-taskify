@@ -9,6 +9,8 @@ import { useSetAtom } from 'jotai';
 import { initialUser, userAtom } from '@/store/auth';
 import { UserType } from '@/types/auth';
 import { getMeForServer } from '@/utils/auth';
+import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
+import { getCookieWithCookies } from '@/utils/cookie';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -46,15 +48,11 @@ MyApp.getInitialProps = async (
 ): Promise<AppOwnProps & AppInitialProps> => {
   const ctx = await App.getInitialProps(context);
 
-  const cookie = context.ctx.req?.headers.cookie?.match(
-    new RegExp(
-      '(?:^|; )' +
-        'accessToken'.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
-        '=([^;]*)',
-    ),
-  );
+  const cookies = context.ctx.req?.headers.cookie;
 
-  const accessToken = cookie ? decodeURIComponent(cookie[1]) : undefined;
+  const accessToken = cookies
+    ? getCookieWithCookies(AUTH_TOKEN_COOKIE_NAME, cookies)
+    : null;
 
   const user = accessToken ? await getMeForServer(accessToken) : initialUser;
 
