@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './ToDOModal.module.scss';
 import ProfileIcon from '../../Profile/ProfileIcon';
@@ -9,6 +9,7 @@ import instance from '@/apis/axios';
 import CommentsList from '../Comment/CommentList';
 import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
+import { SetStateAction } from 'jotai';
 
 type Assignee = {
   profileImageUrl: string;
@@ -52,7 +53,9 @@ type CommentList = {
 
 type ModalProps = {
   showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
   handleClose: () => void;
+  handleOpen: () => void;
   cardData?: CardList;
   handleDeleteCardClick: () => void;
   dashboardId: number;
@@ -60,7 +63,9 @@ type ModalProps = {
 
 function ToDoModal({
   showModal,
+  setShowModal,
   handleClose,
+  handleOpen,
   cardData,
   handleDeleteCardClick,
   dashboardId,
@@ -138,7 +143,11 @@ function ToDoModal({
             <ModalPopOver
               showDropdown={isDropdown}
               handleDropdownClose={handleDropdownClose}
+              cardData={cardData}
+              dashboardId={dashboardId}
+              setShowModal={setShowModal}
               handleDeleteCardClick={handleDeleteCardClick}
+              handleOpen={handleOpen}
             />
           )}
           <button onClick={handleClose} className={styles.btnx}>

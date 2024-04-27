@@ -1,5 +1,6 @@
 import React, {
   ChangeEvent,
+  Dispatch,
   KeyboardEvent,
   MouseEvent,
   useEffect,
@@ -17,29 +18,49 @@ import axios from '@/apis/axios';
 import Tag from '@/components/Tag';
 import styles from './EditToDoModal.module.scss';
 import { formatDate } from '@/utils/dateCalculator';
+import { SetStateAction } from 'jotai';
 
-type CardContent = {
+// type CardContent = {
+//   id: number;
+//   title: string;
+//   description: string;
+//   tags: string[];
+//   dueDate: string;
+//   assignee: {
+//     profileImageUrl: string | null;
+//     nickname: string;
+//     id: number;
+//   };
+//   imageUrl: string | null;
+//   teamId: string;
+//   columnId: number;
+//   createdAt: string;
+//   updatedAt: string;
+// };
+
+type Assignee = {
+  profileImageUrl: string;
+  nickname: string;
+  id: number;
+};
+type CardList = {
   id: number;
   title: string;
-  description: string;
-  tags: string[];
-  dueDate: string;
-  assignee: {
-    profileImageUrl: string | null;
-    nickname: string;
-    id: number;
-  };
-  imageUrl: string | null;
-  teamId: string;
+  description?: string | null;
+  tags?: string[];
+  dueDate?: string;
+  assignee?: Assignee;
+  imageUrl?: string | null;
+  teamId?: string;
   columnId: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type ModalProps = {
-  showModal: boolean;
+  showEditModal: boolean;
   handleClose: () => void;
-  cardContent: CardContent;
+  cardContent: CardList | undefined;
   dashBoardId: number;
   purpose: string;
 };
@@ -75,7 +96,7 @@ type Column = {
 };
 
 function EditToDoModal({
-  showModal,
+  showEditModal,
   handleClose,
   cardContent,
   dashBoardId,
@@ -143,12 +164,13 @@ function EditToDoModal({
   const [currentState, setCurrentState] = useState<Column | undefined>();
   useEffect(() => {
     const assignee = members.find(
-      (el) => el.userId === cardContent.assignee.id,
+      (el) => el.userId === cardContent?.assignee?.id,
     );
     setAssignee(assignee);
     console.log(columns);
-    const state = columns.find((el) => el.id === cardContent.columnId);
+    const state = columns.find((el) => el.id === cardContent?.columnId);
     setCurrentState(state);
+    console.log(members);
   }, [members, cardContent, columns]);
 
   useEffect(() => {
@@ -173,7 +195,7 @@ function EditToDoModal({
       console.log(resultb);
       data.imageUrl = resultb.imageUrl;
       data.tags = tagNameList;
-      const response = await axios.put(`/cards/${cardContent.id}`, data);
+      const response = await axios.put(`/cards/${cardContent?.id}`, data);
       const result = response.data;
       console.log(result);
     } catch (error) {
@@ -204,7 +226,7 @@ function EditToDoModal({
   const hasErrorMessage = errors && errors['description']?.message;
 
   return (
-    <Modal showModal={showModal} handleClose={handleClose}>
+    <Modal showModal={showEditModal} handleClose={handleClose}>
       <div>
         <form onSubmit={handleSubmit(handleValidSubmit)}>
           <h1>할 일 수정</h1>

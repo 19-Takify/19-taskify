@@ -10,6 +10,7 @@ import ToDoModal from '@/components/Modal/ToDoModal';
 import Image from 'next/image';
 import { useObserver } from '@/hooks/useObserver';
 import setToast from '@/utils/setToast';
+import EditToDoModal from '@/components/Modal/EditToDoModal';
 
 type CardData = {
   id: number;
@@ -203,6 +204,16 @@ function Column({
 
   const sentinelRef = useObserver(handleInfiniteScroll);
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const handleCloseButtonClick = () => {
+    setShowEditModal(false);
+    setShowModal(true);
+  };
+  const handleEditButtonClick = () => {
+    setShowEditModal(true);
+    setShowModal(false);
+  };
+
   //드롭시 카드 컬럼 위치 수정
   useEffect(() => {
     const fetchData = async () => {
@@ -305,10 +316,21 @@ function Column({
       {showModal && (
         <ToDoModal
           showModal={showModal}
+          setShowModal={setShowModal}
           handleClose={handleCloseModal}
+          handleOpen={handleEditButtonClick}
           cardData={modalCardData}
           handleDeleteCardClick={handleDeleteCardClick}
           dashboardId={dashboardId}
+        />
+      )}
+      {showEditModal && (
+        <EditToDoModal
+          showEditModal={showEditModal}
+          handleClose={handleCloseButtonClick}
+          cardContent={modalCardData}
+          dashBoardId={dashboardId}
+          purpose="edit"
         />
       )}
     </>
