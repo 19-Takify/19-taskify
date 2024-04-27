@@ -93,7 +93,7 @@ function SideMenu({}) {
       const res = await axios.get(`dashboards/${id}`);
       setSelectDashboard(res.data);
     } catch (e) {
-      console.error(e);
+      setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
     }
   };
 
