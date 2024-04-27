@@ -1,4 +1,4 @@
-import styles from './NewColumnModal.module.scss';
+import styles from './ManageColumnModal.module.scss';
 import Modal from '../Modal';
 import Input from '@/components/Inputs/Input';
 import HttpClient from '@/apis/httpClient';
@@ -12,7 +12,7 @@ import setToast from '@/utils/setToast';
 type NewDashboardModalProps = {
   showModal: boolean;
   handleClose: () => void;
-  dashboardId: number;
+  columnData: ColumnType;
 };
 
 type FormValues = {
@@ -23,6 +23,7 @@ type ColumnType = {
   id: number;
   title: string;
   teamId: string;
+  dashboardId: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -32,23 +33,22 @@ type ColumnList = {
   data: ColumnType[];
 };
 
-const initialFormValues = {
-  title: '',
-};
-
 const schema = z.object({
   title: z
     .string()
     .trim()
-    .min(1, { message: VALID_ERROR_MESSAGE.COLUMN.EMPTY }),
+    .min(1, { message: VALID_ERROR_MESSAGE.DASHBOARD.EMPTY }),
 });
 
-function NewColumnModal({
+function ManageColumnModal({
   showModal,
   handleClose,
-  dashboardId,
+  columnData,
 }: NewDashboardModalProps) {
   const httpClient = new HttpClient();
+  const initialFormValues = {
+    title: columnData.title,
+  };
   const {
     register,
     formState: { errors, isValid, isSubmitting },
@@ -71,22 +71,34 @@ function NewColumnModal({
         return;
       }
 
-      await httpClient.post('/columns', { ...data, dashboardId: dashboardId });
-      setToast('success', '컬럼이 생성되었습니다.');
+      await httpClient.put(`/columns/${columnData.id}`, {
+        ...data,
+      });
+      setToast('success', '컬럼 이름이 변경되었습니다.');
 
       handleResetClose();
     } catch {
-      setToast('error', '컬럼 생성에 실패했습니다.');
+      setToast('error', '컬럼 이름 변경에 실패했습니다.');
+    }
+  };
+
+  const handleColumnDelete = async () => {
+    try {
+      await httpClient.delete(`/columns/${columnData.id}`);
+      setToast('success', '컬럼 삭제에 성공되었습니다.');
+      handleResetClose();
+    } catch {
+      setToast('error', '컬럼 삭제에 실패했습니다.');
     }
   };
 
   const handleValidColumn = async (data: FormValues) => {
     try {
       const columnList: ColumnList = await httpClient.get(
-        `/columns?dashboardId=${dashboardId}`,
+        `/columns?dashboardId=${columnData.dashboardId}`,
       );
       const isValid = !columnList.data.some(
-        ({ title }) => title === data.title,
+        ({ id, title }) => id !== columnData.id && title === data.title,
       );
       return isValid;
     } catch {
@@ -105,7 +117,7 @@ function NewColumnModal({
         className={styles.modalForm}
         onSubmit={handleSubmit(handleColumnUpdate)}
       >
-        <strong className={styles.modalTitle}>새 컬럼 생성</strong>
+        <strong className={styles.modalTitle}>컬럼 관리</strong>
         <Input
           id="title"
           type="text"
@@ -115,17 +127,26 @@ function NewColumnModal({
           hasLabel
           errors={errors}
         />
-        <div className={styles.modalButton}>
-          <ModalButton type="button" onClick={handleResetClose}>
-            취소
-          </ModalButton>
-          <ModalButton type="submit" disabled={!isValid || isSubmitting}>
-            생성
-          </ModalButton>
+        <div className={styles.buttonBox}>
+          <button
+            type="button"
+            className={styles.columnDelete}
+            onClick={handleColumnDelete}
+          >
+            삭제하기
+          </button>
+          <div className={styles.modalButton}>
+            <ModalButton type="button" onClick={handleResetClose}>
+              취소
+            </ModalButton>
+            <ModalButton type="submit" disabled={!isValid || isSubmitting}>
+              변경
+            </ModalButton>
+          </div>
         </div>
       </form>
     </Modal>
   );
 }
 
-export default NewColumnModal;
+export default ManageColumnModal;

@@ -1,0 +1,32 @@
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 36rem;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+}
+
+.modalButton {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.columnDelete {
+  position: relative;
+  color: $color-gray-9fa6b2;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-position: under;
+  bottom: -0.5rem;
+}
+
+.buttonBox {
+  display: flex;
+  justify-content: space-between;
+}
