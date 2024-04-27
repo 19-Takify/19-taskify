@@ -1,13 +1,11 @@
 import { GetServerSidePropsContext } from 'next';
 import { getMe } from '@/utils/auth';
 import { setContext } from '@/apis/axios';
-import { UserType } from '@/types/auth';
 import Card from './components/Card';
 import Box from './components/Box';
-import useUserForPage from '@/hooks/useUserForPage';
 import useUser from '@/hooks/useUser';
 import { useState } from 'react';
-import NewDashboardModal from '@/components/Modal/NewDashboard';
+import NewDashboardModal from '@/components/Modal/NewDashboardModal';
 import PageButton from '@/components/Button/PageButton';
 import NewColumnModal from '@/components/Modal/NewColumnModal';
 import ManageColumnModal from '@/components/Modal/ManageColumnModal';
