@@ -16,7 +16,7 @@ type CardList = {
   tags?: string[];
   dueDate?: string;
   assignee?: Assignee;
-  imageUrl?: string | undefined;
+  imageUrl?: string;
   teamId?: string;
   columnId: number;
   createdAt?: string;
