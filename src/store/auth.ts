@@ -1,7 +1,7 @@
 import { AuthType, UserType } from '@/types/auth';
 import { atom } from 'jotai';
 
-export const initialUser = {
+export const initialUser: UserType = {
   id: 0,
   email: '',
   nickname: '',
