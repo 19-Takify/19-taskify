@@ -10,6 +10,8 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { setContext } from '@/apis/axios';
 import { getMe } from '@/utils/auth';
 import { useRouter } from 'next/router';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
 
 type UserData = {
   id: number;
@@ -74,19 +76,19 @@ function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
     setData(allData);
   }, [router.asPath]);
 
+  const selectDashboard = useAtomValue(selectDashboardAtom);
   return (
     <div>
-      <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
-      {!data ? (
-        <div>Loading...</div>
-      ) : (
-        <Column
-          dashboardId={dashboardId}
-          userId={userId}
-          data={data}
-          setData={setData}
-        />
-      )}
+      <Meta
+        title={`Taskify | ${selectDashboard.title}`}
+        url={useCurrentUrl()}
+      />
+      <Column
+        dashboardId={dashboardId}
+        userId={userId}
+        data={data}
+        setData={setData}
+      />
     </div>
   );
 }

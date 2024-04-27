@@ -20,7 +20,7 @@
   width: 18.75rem;
   height: calc(100vh - 4.3rem);
   background-color: $color-white-ffffff;
-  position: absolute;
+  position: fixed;
   top: 4.3rem;
   left: 0;
   transform: translateX(-100%);
@@ -120,4 +120,11 @@
 
 .selected {
   background-color: $color-violet-f1effd;
+}
+
+.title {
+  width: 10.625rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

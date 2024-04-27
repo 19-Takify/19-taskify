@@ -2,9 +2,8 @@ import DashBoardHeader from '@/components/Header/DashBoard';
 import SideMenu from '@/components/SideMenu';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
-import { PropsWithChildren, useEffect } from 'react';
-import { dashboardsAtom } from '@/utils/jotai';
-import { useAtom } from 'jotai';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { atom } from 'jotai/experimental';
 
 type DashBoard = {
   id: number;
@@ -15,9 +14,10 @@ type DashBoard = {
   createdByMe: boolean;
   userId: number;
 };
+export const sideMenuAtom = atom(false);
 
 function DashBoardLayout({ children }: PropsWithChildren) {
-  const [dashboards, setDashboards] = useAtom(dashboardsAtom);
+  const [dashboards, setDashboards] = useState<DashBoard[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,7 @@ function DashBoardLayout({ children }: PropsWithChildren) {
   return (
     <>
       <DashBoardHeader />
-      <SideMenu dashboards={dashboards} />
+      <SideMenu />
       <>{children}</>
     </>
   );

@@ -1,5 +1,5 @@
-import { useAtom } from 'jotai';
 import Circle from '@/components/Circle';
+import { useAtom, useSetAtom } from 'jotai';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -7,19 +7,30 @@ import { useEffect, useRef, useState } from 'react';
 import { sideMenuAtom } from '@/utils/jotai';
 import PageButton from '../Button/PageButton';
 import Link from 'next/link';
+import axios from '@/apis/axios';
+import setToast from '@/utils/setToast';
+import { TOAST_TEXT } from '@/constants/toastText';
+import { selectDashboardAtom } from '@/store/dashboard';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 
-type DashboardList<T extends string | boolean | number> = {
-  [key: string]: T;
+type TDashboardList = {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+  userId: number;
 };
 
-type SideMenuProps = {
-  dashboards?: DashboardList<string | boolean | number>[];
-};
-
-function SideMenu({ dashboards }: SideMenuProps) {
+function SideMenu({}) {
+  const httpClient = new HttpClient(instance);
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
+  const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [renderDelayed, setRenderDelayed] = useState(false);
+  const [dashboardList, setDashboardList] = useState<TDashboardList[]>([]);
   const sideMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { id } = router.query;
@@ -56,11 +67,35 @@ function SideMenu({ dashboards }: SideMenuProps) {
       setRenderDelayed(true);
     }, 400);
 
+    if (isOpen) {
+      const getDashBoardList = async () => {
+        try {
+          const dashboardsData = await httpClient.get<{
+            dashboards: TDashboardList[];
+          }>('dashboards?navigationMethod=infiniteScroll&page=1&size=10000');
+          setDashboardList(dashboardsData.dashboards);
+        } catch (error: any) {
+          setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요!');
+        }
+      };
+
+      getDashBoardList();
+    }
+
     return () => {
       document.removeEventListener('click', handleSideMenu);
       clearTimeout(timeout);
     };
   }, [isOpen]);
+
+  const handleDashboardClick = async (id: number) => {
+    try {
+      const res = await axios.get(`dashboards/${id}`);
+      setSelectDashboard(res.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div
@@ -77,17 +112,18 @@ function SideMenu({ dashboards }: SideMenuProps) {
               <span>Dash Boards</span>
             </div>
             <ul className={styles.dashboardListBox}>
-              {dashboards?.map((dashboard) => (
+              {dashboardList?.map((dashboard) => (
                 <li
-                  key={dashboard.id as number}
+                  key={dashboard.id}
                   className={`${styles.dashboardList} ${id === String(dashboard.id) && styles.selected}`}
+                  onClick={() => handleDashboardClick(dashboard.id)}
                 >
                   <Link
                     className={styles.router}
                     href={`/dashboard/${dashboard.id}`}
                   >
-                    <Circle color={dashboard.color as string} small />
-                    <p>{dashboard.title}</p>
+                    <Circle color={dashboard.color} small />
+                    <p className={styles.title}>{dashboard.title}</p>
                     {dashboard.createdByMe && (
                       <Image
                         src="/svgs/crown.svg"
