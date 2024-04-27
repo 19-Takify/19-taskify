@@ -6,6 +6,9 @@ import Card from './components/Card';
 import Box from './components/Box';
 import useUserForPage from '@/hooks/useUserForPage';
 import useUser from '@/hooks/useUser';
+import { useState } from 'react';
+import NewDashboardModal from '@/components/Modal/NewDashboard';
+import PageButton from '@/components/Button/PageButton';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // axios interceptor에서 cookie를 가져오기 위한 필수 함수 호출
@@ -25,6 +28,12 @@ type BongsongProps = {
 
 function Bongsong({ data }: BongsongProps) {
   const { user } = useUser();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleOpenClick = () => {
+    setShowModal(true);
+  };
+
   return (
     <>
       <div>Bongsong 페이지 컴포넌트 {data}</div>
@@ -37,6 +46,11 @@ function Bongsong({ data }: BongsongProps) {
       <hr />
       <br />
       <Box />
+      <PageButton onClick={handleOpenClick}>새로운 대시보드</PageButton>
+      <NewDashboardModal
+        showModal={showModal}
+        handleClose={() => setShowModal(false)}
+      />
     </>
   );
 }
