@@ -8,8 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
-
-const COLORS = ['#7AC555', '#760DDE', '#FFA500', '#76A5EA', '#E876EA'];
+import { DASHBOARD_COLORS } from '@/constants/colors';
 
 type NewDashboardModalProps = {
   showModal: boolean;
@@ -23,7 +22,7 @@ type FormValues = {
 
 const initialFormValues = {
   title: '',
-  color: COLORS[0],
+  color: DASHBOARD_COLORS[0],
 };
 
 const schema = z.object({
@@ -81,7 +80,7 @@ function NewDashboardModal({ showModal, handleClose }: NewDashboardModalProps) {
           errors={errors}
         />
         <div style={{ display: 'flex', gap: '8px' }}>
-          {COLORS?.map((color) => (
+          {DASHBOARD_COLORS?.map((color) => (
             <input
               className={styles.circle}
               key={color}
