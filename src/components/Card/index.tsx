@@ -37,6 +37,7 @@ function Card({ cardData }: CardProps) {
           alt="카드 배경 이미지"
           width={274}
           height={160}
+          priority={true}
         />
       )}
       <div className={styles.desktopBox}>

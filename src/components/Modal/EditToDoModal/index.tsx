@@ -167,6 +167,8 @@ function EditToDoModal({
       (el) => el.userId === cardContent?.assignee?.id,
     );
     setAssignee(assignee);
+    //////dfssss
+    console.log(assignee);
     console.log(columns);
     const state = columns.find((el) => el.id === cardContent?.columnId);
     setCurrentState(state);
@@ -177,6 +179,7 @@ function EditToDoModal({
     console.log(currentState);
   }, [currentState]);
   const handleValidSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log('송은');
     console.log(data);
     try {
       // data.assigneeUserId = 3079;
@@ -243,7 +246,7 @@ function EditToDoModal({
             initialData={{
               nickname: assignee?.nickname,
               profileImageUrl: assignee?.profileImageUrl || undefined,
-              id: assignee?.id,
+              id: assignee?.userId,
             }}
             register={register('assigneeUserId')}
             setValue={setValue}

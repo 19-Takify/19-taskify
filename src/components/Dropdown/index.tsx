@@ -39,7 +39,6 @@ function Dropdown({
     profileImageUrl: initialData?.profileImageUrl ?? '',
   });
   const uniqueId = useId();
-
   useEffect(() => {
     document.addEventListener('click', handleDropdownClick);
 
@@ -58,16 +57,31 @@ function Dropdown({
     setIsOpen(false);
   };
 
-  const handleItemClick = (data: TData): void => {
+  const handleItemClick = (data: any): void => {
+    const id = usage === 'manager' ? data.userId : data.id;
     setIsSelectData({
       isClick: true,
-      id: data.id,
+      id,
       title: data.title,
       nickname: data.nickname,
       profileImageUrl: data.profileImageUrl,
     });
-    setValue(register.name, data.id);
+    setValue(register.name, id);
   };
+
+  //initialData가 변경될 때 마다 IsSelectData 변경, setValue 설정
+  //안 해주면 isSelectData의 초기값이 initialData의 초기값으로 설정이 된다.
+  useEffect(() => {
+    const id = initialData?.id;
+    setIsSelectData({
+      isClick: false,
+      id: initialData?.id ?? 1,
+      title: initialData?.title ?? '',
+      nickname: initialData?.nickname ?? '',
+      profileImageUrl: initialData?.profileImageUrl ?? '',
+    });
+    setValue(register.name, id);
+  }, [initialData, register.name, setValue]);
 
   return (
     <>
