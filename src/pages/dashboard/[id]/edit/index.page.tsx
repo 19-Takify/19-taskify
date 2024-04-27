@@ -25,7 +25,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   );
 
   const membersData = membersResponse.data.members;
-  console.log(checkResponse.data.createdByMe);
+
   let inviteData = '';
   if (checkResponse.data.createdByMe) {
     const inviteResponse = await axios.get(
