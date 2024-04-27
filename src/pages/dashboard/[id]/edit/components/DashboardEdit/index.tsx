@@ -1,21 +1,19 @@
 import { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
-import instance from '@/apis/axios';
+import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import styles from './Dashboard.module.scss';
+import { useAtom } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
+import { TOAST_TEXT } from '@/constants/toastText';
 
 const COLOR = ['#7AC555', '#760DDE', '#FFA500', '#76A5EA', '#E876EA'];
 
-// 추후에 전역 상태 데이터로 변경
-const tempData = {
-  title: '비브리지',
-  color: '#7AC555',
-};
-
 function DashboardEdit() {
+  const [selectDashboard, setSelectDashboard] = useAtom(selectDashboardAtom);
   const [value, setValue] = useState({
-    title: tempData.title,
-    color: tempData.color,
+    title: selectDashboard.title,
+    color: selectDashboard.color,
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,16 +32,23 @@ function DashboardEdit() {
 
   const handleEditDashboard = async () => {
     try {
-      const res = await instance.put('/dashboards/대시보드 ID', value);
+      const res = await axios.put(`/dashboards/${selectDashboard.id}`, value);
+      setSelectDashboard((prev) => ({
+        ...prev,
+        title: value.title,
+        color: value.color,
+      }));
+      setToast(TOAST_TEXT.success, '대시보드가 수정되었습니다.');
+      console.log(res);
     } catch (e: any) {
-      setToast('error', e.response.data.message);
+      setToast(TOAST_TEXT.error, e.response.data.message);
     }
   };
 
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <h2>{tempData.title}</h2>
+        <h2 className={styles.title}>{selectDashboard.title}</h2>
         <ul>
           {COLOR.map((v, idx) => (
             <li
