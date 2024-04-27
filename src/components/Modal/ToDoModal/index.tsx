@@ -87,6 +87,11 @@ function ToDoModal({
       dashboardId: dashboardId,
     });
     setIsEditing((prev) => !prev);
+
+    //입력 버튼 수행 후 입력 값 초기화
+    if (textAreaRef.current) {
+      textAreaRef.current.value = '';
+    }
   };
 
   const handleOnDelete = async (commentId: number) => {

@@ -132,7 +132,6 @@ function Column({
       description: '대한민국 최고 반찬',
       dueDate: '2024-04-27 18:00',
       tags: ['총각 김치', '배추김치'],
-      imageUrl: '',
     });
 
     const dataRequests = data.map(async (column: any) => {
@@ -291,9 +290,12 @@ function Column({
               )}
             </Droppable>
           ))}
-          <li>
-            <PageButton>새로운 컬럼 추가하기</PageButton>
-          </li>
+          {/*컬럼 갯수가 10개 넘어가면 추가 X*/}
+          {data.length < 10 && (
+            <li className={styles.addColumn}>
+              <PageButton>새로운 컬럼 추가하기</PageButton>
+            </li>
+          )}
         </ul>
       </DragDropContext>
       {showModal && (

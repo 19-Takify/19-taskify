@@ -4,7 +4,7 @@ import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { sideMenuAtom } from '@/utils/jotai';
+import { sideMenuAtom } from '../Layout/DashBoardLayout';
 import PageButton from '../Button/PageButton';
 import Link from 'next/link';
 import axios from '@/apis/axios';
