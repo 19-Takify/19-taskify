@@ -17,7 +17,7 @@ import { TInviteData, TMembersData } from './type/editType';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
-  console.log(context.query.id);
+
   const inviteResponse = await axios.get(
     `dashboards/${context.query.id}/invitations?page=1&size=1000`,
   );
@@ -26,7 +26,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   );
   const inviteData = inviteResponse.data.invitations;
   const membersData = membersResponse.data.members;
-  console.log(inviteData);
+
   const user = await getMe();
 
   return {

@@ -153,6 +153,7 @@ function DashboardManager({ usage, data }: TDashboardManagerProps) {
                       alt="대시보드 주인을 뜻하는 왕관 이미지"
                       width={26}
                       height={22}
+                      style={{ height: 22 }}
                     />
                   </figure>
                 )}

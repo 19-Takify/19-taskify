@@ -75,6 +75,7 @@ function PasswordChange() {
             hasLabel
             register={register('password')}
             errors={errors}
+            autoComplete="current-password"
           />
           <Input
             type="password"
@@ -83,6 +84,7 @@ function PasswordChange() {
             hasLabel
             register={register('passwordConfirm')}
             errors={errors}
+            autoComplete="current-password"
           />
           <Input
             type="password"
@@ -91,6 +93,7 @@ function PasswordChange() {
             hasLabel
             register={register('newPassword')}
             errors={errors}
+            autoComplete="current-password"
           />
         </div>
         <button
