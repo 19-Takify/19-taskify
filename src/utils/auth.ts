@@ -1,7 +1,8 @@
 import axios from '@/apis/axios';
 import { deleteCookie, setCookie } from './cookie';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
-import { LoginType } from '@/types/auth';
+import { LoginType, UserType } from '@/types/auth';
+import { initialUser } from '@/store/auth';
 
 export const getMe = async () => {
   try {
@@ -13,8 +14,9 @@ export const getMe = async () => {
 };
 
 // middleware에서는 axios를 사용할 수 없어서 middleware에서 인가처리를 위한 함수를 따로 만들었습니다.
-// 로그인 여부만 체크하면 되기 때문에 boolean 값을 return 합니다.
-export const getMeForMiddleware = async (accessToken?: string) => {
+export const getMeForServer = async (
+  accessToken?: string,
+): Promise<UserType> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/users/me`,
@@ -29,9 +31,11 @@ export const getMeForMiddleware = async (accessToken?: string) => {
       throw new Error();
     }
 
-    return true;
+    const user = await response.json();
+
+    return user;
   } catch {
-    return false;
+    return initialUser;
   }
 };
 

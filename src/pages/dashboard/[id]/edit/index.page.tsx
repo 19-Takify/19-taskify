@@ -9,7 +9,6 @@ import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import axios, { setContext } from '@/apis/axios';
 import { GetServerSidePropsContext } from 'next';
-import { getMe } from '@/utils/auth';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
@@ -17,7 +16,6 @@ import { TInviteData, TMembersData } from './type/editType';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
-  const user = await getMe();
   const checkResponse = await axios.get(`dashboards/${context.query.id}`);
 
   const membersResponse = await axios.get(
@@ -34,7 +32,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: { user, inviteData, membersData },
+    props: { inviteData, membersData },
   };
 }
 
