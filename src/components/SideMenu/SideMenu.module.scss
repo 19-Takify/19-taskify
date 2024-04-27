@@ -42,6 +42,7 @@
 }
 
 .sideMenuBox {
+  background: $color-white-ffffff;
   width: 100%;
   height: 100%;
   padding: 1.25rem 1.5rem;
@@ -119,12 +120,6 @@
 
 .selected {
   background-color: $color-violet-f1effd;
-}
-
-.circle {
-  border-radius: 50%;
-  width: 0.5rem;
-  height: 0.5rem;
 }
 
 .title {

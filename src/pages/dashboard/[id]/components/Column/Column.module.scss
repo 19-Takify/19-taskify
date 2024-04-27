@@ -1,0 +1,57 @@
+.columns {
+  background: $color-gray-fafafa;
+  display: flex;
+
+  @include tablet {
+    flex-direction: column;
+  }
+}
+
+.columnList {
+  min-width: 22.5rem;
+  padding: 1.25rem;
+  border-right: 0.0625rem solid $color-gray-d9d9d9;
+}
+
+.columnBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.columnTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.columnName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.countBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0.25rem, 0.5rem;
+  border-radius: 0.25rem;
+  background: $color-gray-eeeeee;
+  color: $color-gray-787486;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.addColumn {
+  margin: 1.25rem;
+}

@@ -1,4 +1,5 @@
 import ProfileIcon from '../Profile/ProfileIcon';
+import Tag from '../Tag';
 import styles from './Card.module.scss';
 import Image from 'next/image';
 
@@ -29,30 +30,41 @@ type CardProps = {
 function Card({ cardData }: CardProps) {
   return (
     <div className={styles.cardBox}>
-      {cardData.imageUrl && (
+      {cardData?.imageUrl && (
         <Image
-          src={cardData.imageUrl}
+          className={styles.cardImage}
+          src={cardData?.imageUrl}
           alt="카드 배경 이미지"
           width={274}
           height={160}
         />
       )}
-      <span>{cardData.title}</span>
-      <ul className={styles.tags}>
-        {cardData.tags?.map((tag, index) => <li key={index}>{tag}</li>)}
-      </ul>
-      <div className={styles.bottom}>
-        <div className={styles.date}>
-          <Image
-            src="/svgs/calendar.svg"
-            alt="달력 아이콘"
-            width={18}
-            height={18}
-          />
-          <p>{cardData.dueDate}</p>
+      <div className={styles.desktopBox}>
+        <div className={styles.tabletBox}>
+          <span>{cardData?.title}</span>
+          <div className={styles.tabletContent}>
+            <ul className={styles.tags}>
+              {cardData?.tags?.map((tag, index) => (
+                <li key={index}>
+                  <Tag>{tag}</Tag>
+                </li>
+              ))}
+            </ul>
+            <div className={styles.bottom}>
+              <div className={styles.date}>
+                <Image
+                  src="/svgs/calendar.svg"
+                  alt="달력 아이콘"
+                  width={18}
+                  height={18}
+                />
+                <p>{cardData?.dueDate?.split(' ')[0]}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <ProfileIcon profile={cardData.assignee || null} small />
+        <div className={styles.profileIcon}>
+          <ProfileIcon profile={cardData?.assignee} small />
         </div>
       </div>
     </div>

@@ -16,15 +16,20 @@ import { TInviteData, TMembersData } from './type/editType';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
+  const checkResponse = await axios.get(`dashboards/${context.query.id}`);
 
-  const inviteResponse = await axios.get(
-    `dashboards/${context.query.id}/invitations?page=1&size=1000`,
-  );
   const membersResponse = await axios.get(
     `members?page=1&size=1000&dashboardId=${context.query.id}`,
   );
-  const inviteData = inviteResponse.data.invitations;
   const membersData = membersResponse.data.members;
+
+  let inviteData = '';
+  if (checkResponse.data.createdByMe) {
+    const inviteResponse = await axios.get(
+      `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+    );
+    inviteData = inviteResponse.data.invitations;
+  }
 
   return {
     props: { inviteData, membersData },
