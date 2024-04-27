@@ -1,0 +1,54 @@
+.invitedDashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 1.75rem;
+  max-width: 64rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  background: $color-white-ffffff;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-gray-d9d9d9;
+    border-radius: 0.5rem;
+  }
+}
+
+.invitedBox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem 2rem;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.invitedBox.title {
+  color: $color-gray-9fa6b2;
+}
+
+.invitedBox > p {
+  width: 40%;
+}
+
+.invitedButton {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.noInvited {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  color: $color-gray-9fa6b2;
+  font-size: 1.25rem;
+}
