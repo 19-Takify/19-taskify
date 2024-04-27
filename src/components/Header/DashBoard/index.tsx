@@ -57,6 +57,7 @@ function DashBoardHeader() {
                 height="28"
                 src="/svgs/header-small-logo-purple.svg"
                 alt="헤더 로고 이미지"
+                priority
               />
             ) : (
               <Image
@@ -64,6 +65,7 @@ function DashBoardHeader() {
                 alt="taskify 로고 이미지"
                 width={109}
                 height={34}
+                priority
               />
             )}
           </Link>
