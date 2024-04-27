@@ -20,16 +20,23 @@ type TDropdownProps = {
   data: TData[];
   initialData?: TData;
   register: UseFormRegisterReturn;
+  setValue: any;
 };
 
-function Dropdown({ usage, initialData, data, register }: TDropdownProps) {
+function Dropdown({
+  usage,
+  initialData,
+  data,
+  register,
+  setValue,
+}: TDropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isSelectData, setIsSelectData] = useState<TIsSelect>({
     isClick: false,
-    id: 9999999,
-    title: '',
-    nickname: '',
-    profileImageUrl: '',
+    id: initialData?.id ?? 1,
+    title: initialData?.title ?? '',
+    nickname: initialData?.nickname ?? '',
+    profileImageUrl: initialData?.profileImageUrl ?? '',
   });
   const uniqueId = useId();
 
@@ -59,6 +66,7 @@ function Dropdown({ usage, initialData, data, register }: TDropdownProps) {
       nickname: data.nickname,
       profileImageUrl: data.profileImageUrl,
     });
+    setValue(register.name, data.id);
   };
 
   return (
@@ -67,7 +75,7 @@ function Dropdown({ usage, initialData, data, register }: TDropdownProps) {
         className={`${styles.initial} ${isOpen && styles.active}`}
         data-state={`Dropdown${uniqueId}`}
       >
-        <input type="hidden" value={isSelectData.id} {...register} />
+        <input type="hidden" {...register} />
         {isSelectData.isClick ? (
           <DropDownItem usage={usage} data={isSelectData} />
         ) : initialData ? (

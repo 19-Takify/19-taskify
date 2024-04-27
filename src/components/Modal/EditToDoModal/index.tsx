@@ -16,6 +16,7 @@ import DatePicker from '@/components/Inputs/DatePicker';
 import axios from '@/apis/axios';
 import Tag from '@/components/Tag';
 import styles from './EditToDoModal.module.scss';
+import { formatDate } from '@/utils/dateCalculator';
 
 type CardContent = {
   id: number;
@@ -94,6 +95,7 @@ function EditToDoModal({
     setError,
     handleSubmit,
     control,
+    setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: 'all',
@@ -154,8 +156,22 @@ function EditToDoModal({
   const handleValidSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log(data);
     try {
-      data.assigneeUserId = 666666;
-      console.log(data);
+      // data.assigneeUserId = 3079;
+      // data.columnId = 22433;
+      const timestamp = new Date(data.dueDate).getTime();
+      const date = formatDate(timestamp);
+      data.dueDate = date;
+      data.imageUrl = data.imageUrl[0];
+      // const imageFile = data.imageUrl[0];
+      // const imgdata = new FormData();
+      // imgdata.append('image', imageFile);
+      // const response = await axios.post(`/cards/${cardContent.id}`, data);
+      // const result = response.data;
+      // console.log(result);
+      data.tags = tagNameList;
+      const response = await axios.put(`/cards/${cardContent.id}`, data);
+      const result = response.data;
+      console.log(result);
     } catch (error) {
       ///참고용
       // if (!isAxiosError(error)) {
@@ -191,6 +207,7 @@ function EditToDoModal({
             data={columns}
             initialData={{ title: currentState?.title, id: currentState?.id }}
             register={register('columnId')}
+            setValue={setValue}
           />
           <Dropdown
             usage="manager"
@@ -201,6 +218,7 @@ function EditToDoModal({
               id: assignee?.id,
             }}
             register={register('assigneeUserId')}
+            setValue={setValue}
           />
           <Input
             type=""
