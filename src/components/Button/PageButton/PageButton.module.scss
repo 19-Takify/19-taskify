@@ -110,11 +110,13 @@
   color: $color-black-333236;
 
   @include tablet {
-    width: 34rem;
+    max-width: 34rem;
+    width: 100%;
   }
 
   @include mobile {
-    width: 17.75rem;
+    max-width: 17.75rem;
+    width: 100%;
     height: 4rem;
     font-size: 1rem;
   }
@@ -129,11 +131,11 @@
   color: $color-black-333236;
 
   @include tablet {
-    width: 34rem;
+    width: 100%;
   }
 
   @include mobile {
-    width: 17.75rem;
+    width: 100%;
     height: 2rem;
   }
 }

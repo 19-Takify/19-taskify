@@ -1,7 +1,7 @@
 import DashBoardHeader from '@/components/Header/DashBoard';
 import SideMenu from '@/components/SideMenu';
-import { atom } from 'jotai';
 import { PropsWithChildren } from 'react';
+import { atom } from 'jotai/experimental';
 
 export const sideMenuAtom = atom(false);
 

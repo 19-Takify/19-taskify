@@ -5,11 +5,13 @@ import useCloseModal from '@/hooks/useModalClose';
 type ModalDropdownProps = {
   showDropdown: boolean;
   handleDropdownClose: () => void;
+  handleDeleteCardClick: () => void;
 };
 
 function ModalPopOver({
   showDropdown,
   handleDropdownClose,
+  handleDeleteCardClick,
 }: ModalDropdownProps) {
   const modalRef: any = useRef();
   useCloseModal(showDropdown, handleDropdownClose, modalRef);
@@ -27,7 +29,9 @@ function ModalPopOver({
     <div className={styles.dropdownBox}>
       <div className={styles.dropdownBtns} ref={modalRef}>
         <div className={styles.dropdownBtn}>수정하기</div>
-        <div className={styles.dropdownBtn}>삭제하기</div>
+        <div className={styles.dropdownBtn} onClick={handleDeleteCardClick}>
+          삭제하기
+        </div>
       </div>
     </div>
   );

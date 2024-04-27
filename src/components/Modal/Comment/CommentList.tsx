@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import Comment from './Comment';
 
 type Author = {
@@ -11,7 +10,7 @@ type CommentList = {
   id: number;
   content: string;
   createdAt: string;
-  userId: number;
+  cardId: number;
   updatedAt: string;
   author: Author;
 };
@@ -19,7 +18,7 @@ type CommentList = {
 type CommentsListProps = {
   commentDataArray: CommentList[];
   onDelete: (id: number) => void;
-  onUpdate: (updatedComment: CommentList) => void;
+  onUpdate: (id: number, text: string) => void;
 };
 
 function CommentsList({
