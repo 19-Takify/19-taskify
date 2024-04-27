@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './ToDOModal.module.scss';
 import ProfileIcon from '../../Profile/ProfileIcon';
 import ModalPopOver from '../ModalPopOver';
 import Modal from '../Modal';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 import CommentsList from '../Comment/CommentList';
-import axios from 'axios';
 import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 
@@ -29,57 +30,46 @@ type CardList = {
   updatedAt?: string;
 };
 
+type Author = {
+  id: number;
+  nickname: string;
+  profileImageUrl: string;
+};
+
 type CommentData = {
   id: number;
   content: string;
   createdAt: string;
-  userId: number;
   updatedAt: string;
-  author: {
-    id: number;
-    nickname: string;
-    profileImageUrl: string;
-  };
+  cardId: number;
+  author: Author;
+};
+
+type CommentList = {
+  cursorId: number;
+  comments: CommentData[];
 };
 
 type ModalProps = {
   showModal: boolean;
   handleClose: () => void;
-  cardData: CardList;
-  commentData: CommentData[];
+  cardData?: CardList;
+  handleDeleteCardClick: () => void;
+  dashboardId: number;
 };
 
 function ToDoModal({
   showModal,
   handleClose,
   cardData,
-  commentData,
+  handleDeleteCardClick,
+  dashboardId,
 }: ModalProps) {
-  const fetchComments = async () => {
-    try {
-      const response = await axios.get('/4-19/comments');
-      setComments(response.data);
-    } catch (error) {
-      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
-    }
-  };
-
-  const commentInput = useRef<HTMLTextAreaElement>(null);
+  const httpClient = new HttpClient(instance);
   const [isDropdown, setIsDropdown] = useState(false);
-  const [comment, setComment] = useState<CommentData>({
-    id: 0,
-    content: '',
-    createdAt: '',
-    userId: 0,
-    updatedAt: '',
-    author: {
-      id: 0,
-      nickname: '',
-      profileImageUrl: '',
-    },
-  });
-  const [comments, setComments] = useState<CommentData[]>(commentData);
-  const [editedComment, setEditedComment] = useState<CommentData | null>(null); // 수정된 댓글 데이터를 관리할 상태
+  const [isEditing, setIsEditing] = useState(false);
+  const [commentData, setCommentData] = useState<CommentData[]>([]);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleDropdownOpen = () => {
     setIsDropdown(true);
@@ -89,68 +79,48 @@ function ToDoModal({
     setIsDropdown(false);
   };
 
-  const createComment = async (content: string) => {
-    try {
-      const response = await axios.post('/comments', {
-        content: content,
-        cardId: 5163,
-        columnId: 21073,
-        dashboardId: 6265,
-      });
-      if (response.status >= 200 && response.status < 300) {
-        setToast('success', '✅ 댓글이 성공적으로 생성되었습니다.');
-        fetchComments(); // 댓글 목록을 다시 불러옴
-      } else {
-        setToast('error', '😰 댓글 생성에 실패했습니다.');
-        return;
-      }
-    } catch (error) {
-      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
-      return;
-    }
-  };
-
-  const updateComment = async (id: number, newContent: string) => {
-    try {
-      const response = await axios.put(`/comments/${id}`, {
-        content: newContent,
-      });
-      if (response.status >= 200 && response.status < 300) {
-        setToast('success', '✅ 댓글이 성공적으로 수정되었습니다.');
-        fetchComments(); // 댓글 목록을 다시 불러옴
-      } else {
-        setToast('error', '댓글 수정에 실패했습니다.');
-        return;
-      }
-    } catch (error) {
-      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
-    }
-  };
-
-  const handleCommentSubmit = () => {
-    if (comment.content.length < 1) {
-      commentInput.current?.focus();
-      return;
-    }
-
-    createComment(comment.content);
-    setToast('success', '✅ 댓글이 성공적으로 등록되었습니다.');
-    setComment({
-      ...comment,
-      content: '',
+  const handleCommentSubmit = async () => {
+    await httpClient.post(`/comments`, {
+      content: textAreaRef.current?.value,
+      cardId: cardData?.id,
+      columnId: cardData?.columnId,
+      dashboardId: dashboardId,
     });
+    setIsEditing((prev) => !prev);
+
+    //입력 버튼 수행 후 입력 값 초기화
+    if (textAreaRef.current) {
+      textAreaRef.current.value = '';
+    }
   };
 
-  const onDelete = (id: number) => {
-    setComments((prevComments) =>
-      prevComments.filter((comment) => comment.id !== id),
-    );
-    fetchComments();
+  const handleOnDelete = async (commentId: number) => {
+    commentId && (await httpClient.delete(`/comments/${commentId}`));
+    setIsEditing((prev) => !prev);
   };
 
-  const onUpdate = (updatedComment: CommentData) => {
-    setEditedComment(updatedComment); // 수정된 댓글 데이터를 상태에 업데이트
+  const handleOnUpdate = async (commentId: number, text: string) => {
+    try {
+      commentId &&
+        (await httpClient.put(`/comments/${commentId}`, {
+          content: text,
+        }));
+      setIsEditing((prev) => !prev);
+    } catch {
+      setToast('error', '😰 댓글 수정에 실패했습니다.');
+    }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const comment: CommentList = await httpClient.get(
+        `/comments?cardId=${cardData?.id}`,
+      );
+      setCommentData(comment.comments);
+    };
+
+    fetchData();
+  }, [isEditing]);
 
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
@@ -168,6 +138,7 @@ function ToDoModal({
             <ModalPopOver
               showDropdown={isDropdown}
               handleDropdownClose={handleDropdownClose}
+              handleDeleteCardClick={handleDeleteCardClick}
             />
           )}
           <button onClick={handleClose} className={styles.btnx}>
@@ -181,26 +152,26 @@ function ToDoModal({
           <div className={styles.nameBox}>
             <div className={styles.manager}>담당자</div>
             <div className={styles.managerProfile}>
-              <ProfileIcon profile={cardData.assignee} small />
+              <ProfileIcon profile={cardData?.assignee} small />
               <div className={styles.managerName}>
-                {cardData.assignee?.nickname || '담당자 없음'}
+                {cardData?.assignee?.nickname || '담당자 없음'}
               </div>
             </div>
           </div>
           <div>
             <div className={`${styles.manager} ${styles.doneDate}`}>마감일</div>
             <div className={styles.managerName}>
-              {cardData.dueDate || '마감일 없음'}
+              {cardData?.dueDate || '마감일 없음'}
             </div>
           </div>
         </div>
         <div>
           <div className={styles.content}>
             <div className={styles.text}>
-              {cardData.description || '설명이 없습니다.'}
+              {cardData?.description || '설명이 없습니다.'}
             </div>
             <div className={styles.img}>
-              {cardData.imageUrl && (
+              {cardData?.imageUrl && (
                 <Image
                   src="/svgs/example.svg"
                   alt="예시 사진"
@@ -213,16 +184,13 @@ function ToDoModal({
             <div>댓글</div>
             <div className={styles.textarea}>
               <textarea
-                ref={commentInput}
-                onChange={(e) =>
-                  setComment({ ...comment, content: e.target.value })
-                }
                 placeholder="댓글 작성하기"
                 className={styles.input}
+                ref={textAreaRef}
               />
               <button
-                onClick={handleCommentSubmit}
                 className={styles.submit}
+                onClick={handleCommentSubmit}
                 type="submit"
               >
                 입력
@@ -230,9 +198,9 @@ function ToDoModal({
             </div>
           </div>
           <CommentsList
-            commentDataArray={comments}
-            onDelete={onDelete}
-            onUpdate={onUpdate} // onUpdate 함수를 CommentList 컴포넌트로 전달합니다.
+            commentDataArray={commentData}
+            onDelete={handleOnDelete}
+            onUpdate={handleOnUpdate}
           />
         </div>
       </div>

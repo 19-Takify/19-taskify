@@ -1,3 +1,4 @@
+import Circle from '@/components/Circle';
 import { useAtom, useSetAtom } from 'jotai';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
@@ -10,6 +11,8 @@ import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { TOAST_TEXT } from '@/constants/toastText';
 import { selectDashboardAtom } from '@/store/dashboard';
+import HttpClient from '@/apis/httpClient';
+import instance from '@/apis/axios';
 
 type TDashboardList = {
   id: number;
@@ -22,6 +25,7 @@ type TDashboardList = {
 };
 
 function SideMenu({}) {
+  const httpClient = new HttpClient(instance);
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
   const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const [isFirstRender, setIsFirstRender] = useState(false);
@@ -31,7 +35,7 @@ function SideMenu({}) {
   const router = useRouter();
   const { id } = router.query;
 
-  const handleCreateDashboard = () => {
+  const handleCreateDashboard = async () => {
     // 추후 대시보드 생성 모달 로직 추가
   };
 
@@ -66,11 +70,11 @@ function SideMenu({}) {
     if (isOpen) {
       const getDashBoardList = async () => {
         try {
-          const res = await axios.get(
-            'dashboards?navigationMethod=infiniteScroll&page=1&size=10000',
-          );
-          setDashboardList(res.data.dashboards);
-        } catch (e: any) {
+          const dashboardsData = await httpClient.get<{
+            dashboards: TDashboardList[];
+          }>('dashboards?navigationMethod=infiniteScroll&page=1&size=10000');
+          setDashboardList(dashboardsData.dashboards);
+        } catch (error: any) {
           setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요!');
         }
       };
@@ -89,7 +93,7 @@ function SideMenu({}) {
       const res = await axios.get(`dashboards/${id}`);
       setSelectDashboard(res.data);
     } catch (e) {
-      console.error(e);
+      setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
     }
   };
 
@@ -118,10 +122,7 @@ function SideMenu({}) {
                     className={styles.router}
                     href={`/dashboard/${dashboard.id}`}
                   >
-                    <div
-                      className={styles.circle}
-                      style={{ backgroundColor: `${dashboard.color}` }}
-                    />
+                    <Circle color={dashboard.color} small />
                     <p className={styles.title}>{dashboard.title}</p>
                     {dashboard.createdByMe && (
                       <Image
