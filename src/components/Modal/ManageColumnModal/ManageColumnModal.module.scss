@@ -4,11 +4,12 @@
   justify-content: flex-start;
   gap: 1.5rem;
   padding: 1rem;
-  width: 36rem;
+  width: 100%;
 }
 
 .modalTitle {
   font-size: 1.5rem;
+  width: 36rem;
 }
 
 .modalButton {
@@ -24,9 +25,19 @@
   text-decoration: underline;
   text-underline-position: under;
   bottom: -0.5rem;
+
+  @include tablet {
+    bottom: 0;
+  }
 }
 
 .buttonBox {
   display: flex;
   justify-content: space-between;
+
+  @include tablet {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 }
