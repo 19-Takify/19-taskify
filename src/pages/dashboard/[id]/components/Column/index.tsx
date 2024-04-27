@@ -412,26 +412,34 @@ function Column({
             </li>
           )}
           {buttonVisible.prev && !isTablet && (
-            <Image
-              width="40"
-              height="40"
+            <button
+              type="button"
               className={styles.prevBtn}
-              src="/svgs/prev-button.svg"
-              alt="이전 버튼"
               onClick={handlePrevCard}
-            />
+            >
+              <Image
+                width="20"
+                height="20"
+                src="/svgs/prev-button.svg"
+                alt="이전 버튼"
+              />
+            </button>
           )}
-          {buttonVisible.next && !isTablet && (
+        </ul>
+        {buttonVisible.next && !isTablet && (
+          <button
+            type="button"
+            onClick={handleNextCard}
+            className={styles.nextBtn}
+          >
             <Image
-              width="40"
-              height="40"
-              className={styles.nextBtn}
-              onClick={handleNextCard}
+              width="20"
+              height="20"
               src="/svgs/next-button.svg"
               alt="다음 버튼"
             />
-          )}
-        </ul>
+          </button>
+        )}
       </DragDropContext>
       {showModal && (
         <ToDoModal
