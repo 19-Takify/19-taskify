@@ -67,12 +67,11 @@
   transform: translate(-50%, -50%);
   border-radius: 50%;
   z-index: 998;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 0.0625rem solid gray;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 0.0625rem solid $color-gray-787486;
   padding: 0.5rem;
   cursor: pointer;
   left: 1.875rem;
-  opacity: 0.8;
 }
 
 .nextBtn {
@@ -81,10 +80,9 @@
   transform: translate(-50%, -50%);
   border-radius: 50%;
   z-index: 998;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 0.0625rem solid gray;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 0.0625rem solid $color-gray-787486;
   padding: 0.5rem;
   cursor: pointer;
   right: -0.3125rem;
-  opacity: 0.8;
 }
