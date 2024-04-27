@@ -19,6 +19,9 @@ export const VALID_ERROR_MESSAGE = {
   DASHBOARD: {
     EMPTY: '대시보드 이름을 입력해 주세요.',
   },
+  COLUMN: {
+    EMPTY: '컬럼 이름을 입력해 주세요.',
+  },
 } as const;
 
 export const SERVER_ERROR_MESSAGE = {
