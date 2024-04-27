@@ -72,7 +72,7 @@ function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
   //페이지 이동시 데이터 받아오기 위해서 작성
   useEffect(() => {
     setData(allData);
-  }, [useCurrentUrl()]);
+  }, [useCurrentUrl]);
 
   const selectDashboard = useAtomValue(selectDashboardAtom);
   return (
