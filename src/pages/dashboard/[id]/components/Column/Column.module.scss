@@ -1,6 +1,10 @@
 .columns {
   background: $color-gray-fafafa;
   display: flex;
+  min-height: calc(100vh - 4.3rem);
+  width: auto;
+  scrollbar-width: none;
+  overflow-x: auto;
 
   @include tablet {
     flex-direction: column;
@@ -54,4 +58,30 @@
 
 .addColumn {
   margin: 1.25rem;
+}
+
+.prevBtn {
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 998;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 0.0625rem solid gray;
+  padding: 0.5rem;
+  cursor: pointer;
+  left: 1.875rem;
+}
+
+.nextBtn {
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 998;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 0.0625rem solid gray;
+  padding: 0.5rem;
+  cursor: pointer;
+  right: -0.3125rem;
 }

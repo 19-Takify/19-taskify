@@ -13,6 +13,54 @@ import { useRouter } from 'next/router';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const httpClient = new HttpClient(instance);
+  const id = context.params?.id;
+  const user = await getMe();
+
+  // beautiful-dnd 서버 초기화
+  resetServerContext();
+
+  setContext(context);
+
+  try {
+    const userData = await httpClient.get<UserData>('/users/me');
+
+    if (id) {
+      const columnData = await httpClient.get<ColumnData>(
+        `/columns?dashboardId=${id}`,
+      );
+      const cardRequests = columnData.data.map(async (column: any) => {
+        const columnCardData = await httpClient.get<ColumnCardData>(
+          `/cards?size=10&columnId=${column.id}`,
+        );
+        columnCardData.columnId = column.id;
+        columnCardData.columnTitle = column.title;
+        return columnCardData;
+      });
+      const columnCardData = await Promise.all(cardRequests);
+
+      return {
+        props: {
+          dashboardId: Number(id),
+          userId: userData.id,
+          allData: columnCardData,
+          user,
+        },
+      };
+    }
+  } catch (error) {
+    return {
+      props: {
+        allData: [],
+        user,
+      },
+    };
+  }
+};
+
 type UserData = {
   id: number;
   email: string;
@@ -99,54 +147,6 @@ DashboardId.getLayout = function getLayout(page: ReactElement) {
       <DashBoardLayout>{page}</DashBoardLayout>
     </>
   );
-};
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const httpClient = new HttpClient(instance);
-  const id = context.params?.id;
-  const user = await getMe();
-
-  // beautiful-dnd 서버 초기화
-  resetServerContext();
-
-  setContext(context);
-
-  try {
-    const userData = await httpClient.get<UserData>('/users/me');
-
-    if (id) {
-      const columnData = await httpClient.get<ColumnData>(
-        `/columns?dashboardId=${id}`,
-      );
-      const cardRequests = columnData.data.map(async (column: any) => {
-        const columnCardData = await httpClient.get<ColumnCardData>(
-          `/cards?size=10&columnId=${column.id}`,
-        );
-        columnCardData.columnId = column.id;
-        columnCardData.columnTitle = column.title;
-        return columnCardData;
-      });
-      const columnCardData = await Promise.all(cardRequests);
-
-      return {
-        props: {
-          dashboardId: Number(id),
-          userId: userData.id,
-          allData: columnCardData,
-          user,
-        },
-      };
-    }
-  } catch (error) {
-    return {
-      props: {
-        allData: [],
-        user,
-      },
-    };
-  }
 };
 
 export default DashboardId;

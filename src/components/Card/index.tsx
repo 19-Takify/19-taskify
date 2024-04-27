@@ -39,7 +39,7 @@ function Card({ cardData }: CardProps) {
           height={160}
         />
       )}
-      <div className={styles.desktopBox}>
+      <div className={styles.desktopBox} data-status="item">
         <div className={styles.tabletBox}>
           <span>{cardData?.title}</span>
           <div className={styles.tabletContent}>
