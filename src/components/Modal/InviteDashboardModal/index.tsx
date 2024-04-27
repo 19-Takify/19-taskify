@@ -1,4 +1,4 @@
-import styles from './NewColumnModal.module.scss';
+import styles from './InviteDashboard.module.scss';
 import Modal from '../Modal';
 import Input from '@/components/Inputs/Input';
 import HttpClient from '@/apis/httpClient';
@@ -8,46 +8,35 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
+import { isAxiosError } from 'axios';
 
-type NewColumnModalProps = {
+type InviteDashboardModalProps = {
   showModal: boolean;
   handleClose: () => void;
   dashboardId: number;
 };
 
 type FormValues = {
-  title: string;
-};
-
-type ColumnType = {
-  id: number;
-  title: string;
-  teamId: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type ColumnList = {
-  result: string;
-  data: ColumnType[];
+  email: string;
 };
 
 const initialFormValues = {
-  title: '',
+  email: '',
 };
 
 const schema = z.object({
-  title: z
+  email: z
     .string()
     .trim()
-    .min(1, { message: VALID_ERROR_MESSAGE.COLUMN.EMPTY }),
+    .min(1, { message: VALID_ERROR_MESSAGE.EMAIL.EMPTY })
+    .email({ message: VALID_ERROR_MESSAGE.EMAIL.INVALID }),
 });
 
-function NewColumnModal({
+function InviteDashBoardModal({
   showModal,
   handleClose,
   dashboardId,
-}: NewColumnModalProps) {
+}: InviteDashboardModalProps) {
   const httpClient = new HttpClient();
   const {
     register,
@@ -63,34 +52,22 @@ function NewColumnModal({
     },
   });
 
-  const handleColumnUpdate = async (data: FormValues) => {
+  const handleInviteDashboard = async (data: FormValues) => {
     try {
-      const isValid = await handleValidColumn(data);
-      if (!isValid) {
-        setError('title', { message: '중복된 컬럼 입니다.' });
-        return;
-      }
-
-      await httpClient.post('/columns', { ...data, dashboardId: dashboardId });
-      setToast('success', '컬럼이 생성되었습니다.');
+      await httpClient.post(`/dashboards/${dashboardId}/invitations`, data);
+      setToast('success', '대시보드 초대에 성공했습니다.');
 
       handleResetClose();
-    } catch {
-      setToast('error', '컬럼 생성에 실패했습니다.');
-    }
-  };
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const message =
+          error.response?.data?.message || '대시보드 초대에 실패했습니다.';
 
-  const handleValidColumn = async (data: FormValues) => {
-    try {
-      const columnList: ColumnList = await httpClient.get(
-        `/columns?dashboardId=${dashboardId}`,
-      );
-      const isValid = !columnList.data.some(
-        ({ title }) => title === data.title,
-      );
-      return isValid;
-    } catch {
-      setToast('error', '컬럼 조회에 실패했습니다.');
+        status === 400
+          ? setError('email', { message })
+          : setToast('error', message);
+      }
     }
   };
 
@@ -103,15 +80,15 @@ function NewColumnModal({
     <Modal showModal={showModal} handleClose={handleResetClose}>
       <form
         className={styles.modalForm}
-        onSubmit={handleSubmit(handleColumnUpdate)}
+        onSubmit={handleSubmit(handleInviteDashboard)}
       >
-        <strong className={styles.modalTitle}>새 컬럼 생성</strong>
+        <strong className={styles.modalTitle}>초대하기</strong>
         <Input
           id="title"
-          type="text"
-          register={register('title')}
-          label="이름"
-          placeholder="컬럼 이름을 입력해 주세요."
+          type="email"
+          register={register('email')}
+          label="이메일"
+          placeholder="이메일을 입력해 주세요."
           hasLabel
           errors={errors}
         />
@@ -120,7 +97,7 @@ function NewColumnModal({
             취소
           </ModalButton>
           <ModalButton type="submit" disabled={!isValid || isSubmitting}>
-            생성
+            초대
           </ModalButton>
         </div>
       </form>
@@ -128,4 +105,4 @@ function NewColumnModal({
   );
 }
 
-export default NewColumnModal;
+export default InviteDashBoardModal;

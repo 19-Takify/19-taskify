@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
 
-type NewDashboardModalProps = {
+type ManageColumnModalProps = {
   showModal: boolean;
   handleClose: () => void;
   columnData: ColumnType;
@@ -44,7 +44,7 @@ function ManageColumnModal({
   showModal,
   handleClose,
   columnData,
-}: NewDashboardModalProps) {
+}: ManageColumnModalProps) {
   const httpClient = new HttpClient();
   const initialFormValues = {
     title: columnData.title,
