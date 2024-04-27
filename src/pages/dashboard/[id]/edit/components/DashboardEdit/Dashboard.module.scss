@@ -28,10 +28,14 @@
       align-items: normal;
     }
 
-    h2 {
+    .title {
       color: $color-black-333236;
       font-size: 1.25rem;
       font-weight: 700;
+      width: 23.125rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     ul {

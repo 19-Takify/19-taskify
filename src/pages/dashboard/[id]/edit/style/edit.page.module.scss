@@ -1,5 +1,6 @@
 .wrap {
   background-color: $color-gray-fafafa;
+  min-height: calc(100vh - 4.3rem);
   padding: 1rem 0 2.5rem 2rem;
 
   .box {

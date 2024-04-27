@@ -1,15 +1,22 @@
 import Image from 'next/image';
 import styles from './Profile.module.scss';
-import axios from '@/apis/axios';
-import { isAxiosError } from 'axios';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import setToast from '@/utils/setToast';
 import { TOAST_TEXT } from '@/constants/toastText';
+import axios from '@/apis/axios';
+import { useAtom } from 'jotai';
+import { userAtom } from '@/store/auth';
+
+type TUserInfo = {
+  nickname: string;
+  profileImageUrl: string | null;
+};
 
 function Profile() {
-  const [userInfo, setUserInfo] = useState({
-    nickname: '유저 닉네임 전역 데이터 추가 예정',
-    profileImageUrl: '', // 여기 url도 전역 데이터로 초기 값 설정 예정
+  const [user, setUser] = useAtom(userAtom);
+  const [userInfo, setUserInfo] = useState<TUserInfo>({
+    nickname: user.nickname,
+    profileImageUrl: user.profileImageUrl,
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,21 +38,16 @@ function Profile() {
       const imageFile = e.target.files[0];
       const data = new FormData();
       data.append('image', imageFile);
-      const res = await fetch(
-        'https://sp-taskify-api.vercel.app/4-19/users/me/image',
-        {
-          method: 'POST',
-          headers: {
-            ContentType: 'multipart/form-data',
-            Authorization: `Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mjk5MiwidGVhbUlkIjoiNC0xOSIsImlhdCI6MTcxMzk0NDQ5MCwiaXNzIjoic3AtdGFza2lmeSJ9.aKsrEU2a61BNejHSa6NwHOBncsV1-6CLrxMdIQlatyI`,
-          },
-          body: data,
+
+      const res = await axios.post('users/me/image', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
-      );
-      const result = await res.json();
+      });
+
       setUserInfo((prev) => ({
         ...prev,
-        profileImageUrl: result.profileImageUrl,
+        profileImageUrl: res.data.profileImageUrl,
       }));
     }
   };
@@ -57,13 +59,23 @@ function Profile() {
     }));
   };
 
+  const updateUserProfile = async (userInfo: TUserInfo) => {
+    try {
+      const res = await axios.put('users/me', userInfo);
+      setUser(res.data);
+      setToast(TOAST_TEXT.success, '프로필이 변경되었습니다.');
+    } catch (e) {
+      setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요');
+    }
+  };
+
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!userInfo.nickname) {
       setToast(TOAST_TEXT.error, '닉네임을 입력해 주세요.');
       return;
     }
-    // users/me, POST, userInfo 넘겨주기
+    updateUserProfile(userInfo);
   };
 
   return (
@@ -122,7 +134,7 @@ function Profile() {
                 id="email"
                 type="email"
                 readOnly
-                value="유저 이메일 전역 데이터 추가 예정"
+                value={user.email}
               />
             </div>
             <div className={styles.nicknameBox}>

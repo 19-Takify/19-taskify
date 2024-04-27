@@ -53,6 +53,7 @@ export default function Home() {
               placeholder="blur"
               blurDataURL="/images/main-section.webp"
               priority
+              style={{ height: 'auto' }}
             />
           </figure>
           <h1 className={styles.mainTitle}>
@@ -140,6 +141,7 @@ export default function Home() {
                     placeholder="blur"
                     blurDataURL="/svgs/dashboard.svg"
                     loading="lazy"
+                    style={{ height: 230 }}
                   />
                 </figure>
               </div>
@@ -159,6 +161,7 @@ export default function Home() {
                     placeholder="blur"
                     blurDataURL="/svgs/dashboard.svg"
                     loading="lazy"
+                    style={{ height: 195 }}
                   />
                 </figure>
               </div>
