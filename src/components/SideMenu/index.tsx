@@ -69,7 +69,6 @@ function SideMenu() {
 
     if (isOpen) {
       const getDashBoardList = async () => {
-        console.log('A');
         try {
           const dashboardsData = await httpClient.get<{
             dashboards: TDashboardList[];
