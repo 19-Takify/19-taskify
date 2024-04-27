@@ -2,6 +2,7 @@ import Card from './components/Card';
 import Box from './components/Box';
 import useUser from '@/hooks/useUser';
 
+// 이제 getServerSideProps로 user를 넘겨주지 않아도 됩니다.
 function Bongsong() {
   const { user } = useUser();
   return (
