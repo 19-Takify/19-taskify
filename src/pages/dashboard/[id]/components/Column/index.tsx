@@ -112,6 +112,10 @@ function Column({
       movedCard,
     );
 
+    //컬럼 totalCount 조정
+    newData[destinationColumnIndex].totalCount += 1;
+    newData[sourceColumnIndex].totalCount -= 1;
+
     setData(newData);
 
     setLocateCard({
