@@ -10,7 +10,7 @@ function ModalPage() {
     setShowModal(true);
   };
   const cardContent = {
-    id: 5580,
+    id: 5583,
     title: '김치',
     description: '대한민국 최고 반찬',
     tags: ['총각김치', '배추김치'],
@@ -36,6 +36,7 @@ function ModalPage() {
         handleClose={handleClose}
         cardContent={cardContent}
         dashBoardId={6679}
+        purpose="edit"
       />
     </>
   );

@@ -41,6 +41,7 @@ type ModalProps = {
   handleClose: () => void;
   cardContent: CardContent;
   dashBoardId: number;
+  purpose: string;
 };
 
 type FormValues = {
@@ -78,6 +79,7 @@ function EditToDoModal({
   handleClose,
   cardContent,
   dashBoardId,
+  purpose,
 }: ModalProps) {
   const schema = z.object({
     columnId: z.any(),
@@ -99,15 +101,6 @@ function EditToDoModal({
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: 'all',
-    defaultValues: {
-      columnId: 0,
-      assigneeUserId: 0,
-      title: '',
-      description: '',
-      dueDate: '',
-      tags: [''],
-      imageUrl: '',
-    },
   });
 
   const [tagNameList, setTagNameList] = useState<string[]>([]);
@@ -117,10 +110,18 @@ function EditToDoModal({
     if (e.key === 'Enter') {
       e.preventDefault();
       const tagName = (e.target as HTMLInputElement).value;
-      setTagNameList((prevList) => [...prevList, tagName]);
+      if (tagName !== '') {
+        setTagNameList((prevList) => [...prevList, tagName]);
+        (e.target as HTMLInputElement).value = '';
+      }
     }
   };
-
+  const handleTagNameClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const tagName = (e.target as HTMLButtonElement).textContent || '';
+    setTagNameList((prevList) => prevList.filter((tag) => tag !== tagName));
+  };
+  //태그네임이 중복됐을 때?
   useEffect(() => {
     const getMembers = async () => {
       try {
@@ -161,13 +162,16 @@ function EditToDoModal({
       const timestamp = new Date(data.dueDate).getTime();
       const date = formatDate(timestamp);
       data.dueDate = date;
-      data.imageUrl = data.imageUrl[0];
-      // const imageFile = data.imageUrl[0];
-      // const imgdata = new FormData();
-      // imgdata.append('image', imageFile);
-      // const response = await axios.post(`/cards/${cardContent.id}`, data);
-      // const result = response.data;
-      // console.log(result);
+      // data.imageUrl = data.imageUrl[0];
+      const imageFile = data.imageUrl[0];
+      console.log(imageFile);
+      const imgdata = new FormData();
+      imgdata.append('image', imageFile);
+      console.log(imgdata);
+      const responseb = await axios.post(`/columns/22433/card-image`, imgdata);
+      const resultb = responseb.data;
+      console.log(resultb);
+      data.imageUrl = resultb.imageUrl;
       data.tags = tagNameList;
       const response = await axios.put(`/cards/${cardContent.id}`, data);
       const result = response.data;
@@ -197,6 +201,8 @@ function EditToDoModal({
       // }
     }
   };
+  const hasErrorMessage = errors && errors['description']?.message;
+
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
       <div>
@@ -226,10 +232,16 @@ function EditToDoModal({
             hasLabel
             required
             register={register('title')}
+            errors={errors}
           />
           <label htmlFor="description">설명</label>
           {/* 설명에 필수 표시 */}
           <textarea id="description" {...register('description')} />
+          {hasErrorMessage && (
+            <p className={styles.errorMessage}>
+              {errors['description']?.message?.toString()}
+            </p>
+          )}
           <DatePicker
             control={control}
             name="dueDate"
@@ -247,8 +259,13 @@ function EditToDoModal({
           />
           <div className={styles.tags}>
             {tagNameList.map((tagName, i) => {
-              console.log(tagName);
-              return <Tag key={i}>{tagName}</Tag>;
+              return (
+                <Tag key={i}>
+                  <button onClick={handleTagNameClick} type="button">
+                    {tagName}
+                  </button>
+                </Tag>
+              );
             })}
           </div>
           <label>이미지</label>
@@ -272,33 +289,3 @@ function EditToDoModal({
 }
 
 export default EditToDoModal;
-
-// import { useState } from "react"
-
-// const [isOpen, setIsOpen]=useState(false)
-
-// function handleClick(){
-//   setIsOpen(true)
-// }
-
-// function handleClickb(){
-//   setIsOpen(false)
-// }
-
-// <button onClick={handleClick}>모달열기</button>
-// <EditToDoModal isOpen={isOpen} handleClickb={handleClickb}>
-
-// const members = [
-//   {
-//     nickname: '짱구',
-//     profileImageUrl: '',
-//   },
-//   {
-//     nickname: '철수',
-//     profileImageUrl: '',
-//   },
-//   {
-//     nickname: '맹구',
-//     profileImageUrl: '',
-//   },
-// ];
