@@ -23,7 +23,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const membersResponse = await axios.get(
     `members?page=1&size=1000&dashboardId=${context.query.id}`,
   );
-
   const membersData = membersResponse.data.members;
 
   let inviteData = '';
