@@ -5,9 +5,10 @@ import '@/styles/reset.scss';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 import { useSetAtom } from 'jotai';
-import { initialUser, userAtom } from '@/store/auth';
+import { userAtom } from '@/store/auth';
 import App from 'next/app';
 import { UserType } from '@/types/auth';
+import axios from 'axios';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -25,12 +26,8 @@ export default function MyApp({
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const setUser = useSetAtom(userAtom);
-  setUser(initialUser);
-  // if (pageProps?.user) {
-  //   setUser(pageProps.user);
-  // }
 
-  if (user) {
+  if (user?.email) {
     setUser(user);
   }
 
@@ -47,16 +44,36 @@ type AppOwnProps = { user: any };
 MyApp.getInitialProps = async (
   context: AppContext,
 ): Promise<AppOwnProps & AppInitialProps> => {
-  console.log('initialProps');
-
   const ctx = await App.getInitialProps(context);
-  // const user = context.ctx;
-  const headers = context.ctx.req?.headers;
-  const encodedUser = headers?.['x-user'] as string;
 
-  const user = encodedUser
-    ? JSON.parse(decodeURIComponent(encodedUser))
-    : initialUser;
+  const cookie = context.ctx.req?.headers.cookie?.match(
+    new RegExp(
+      '(?:^|; )' +
+        'accessToken'.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
+        '=([^;]*)',
+    ),
+  );
+
+  const accessToken = cookie ? decodeURIComponent(cookie[1]) : undefined;
+
+  let user;
+  if (accessToken) {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/users/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      user = res.data;
+    } catch (error) {
+      console.log(error);
+
+      user = null;
+    }
+  }
 
   return { ...ctx, user };
 };
