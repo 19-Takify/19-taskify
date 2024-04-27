@@ -14,7 +14,6 @@ export const getMe = async () => {
 };
 
 // middleware에서는 axios를 사용할 수 없어서 middleware에서 인가처리를 위한 함수를 따로 만들었습니다.
-// 로그인 여부만 체크하면 되기 때문에 boolean 값을 return 합니다.
 export const getMeForServer = async (
   accessToken?: string,
 ): Promise<UserType> => {
