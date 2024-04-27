@@ -118,10 +118,16 @@ function DashBoardHeader() {
             className={styles.popOver}
           >
             <li className={styles.list}>
-              <Link href={PAGE_PATH.MY_PAGE}>마이페이지</Link>
+              <Link className={styles.listBtn} href={PAGE_PATH.MY_PAGE}>
+                마이페이지
+              </Link>
             </li>
             <li className={styles.list}>
-              <button type="button" onClick={handleLogout}>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className={styles.listBtn}
+              >
                 로그아웃
               </button>
             </li>
