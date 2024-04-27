@@ -17,7 +17,7 @@ function Modal({ showModal, handleClose, children }: ModalProps) {
     if (showModal) {
       document.body.style.cssText = `overflow: hidden;`;
       return () => {
-        document.body.style.cssText = `overflow: scroll;`;
+        document.body.style.cssText = `position: ""; top: "";`;
       };
     }
   }, [showModal]);

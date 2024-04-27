@@ -8,7 +8,6 @@ import CommentsList from '../Comment/CommentList';
 import axios from 'axios';
 import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
-import { set } from 'date-fns';
 
 type Assignee = {
   profileImageUrl: string;

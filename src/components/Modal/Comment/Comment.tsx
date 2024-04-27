@@ -82,14 +82,14 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
               <>
                 <button
                   type="button"
-                  className={styles.btnSave}
+                  className={styles.btn}
                   onClick={handleSaveEdit}
                 >
                   저장
                 </button>
                 <button
                   type="button"
-                  className={styles.btnCancel}
+                  className={styles.btn}
                   onClick={handleEditToggle}
                 >
                   취소
