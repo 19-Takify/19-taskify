@@ -4,7 +4,7 @@ import InvitedDashboard from './components/InvitedDashboard';
 import styles from './myDashboard.module.scss';
 import HttpClient from '@/apis/httpClient';
 import { GetServerSidePropsContext } from 'next';
-import instance from '@/apis/axios';
+import instance, { setContext } from '@/apis/axios';
 
 type Invitation = {
   id: number;
@@ -45,7 +45,11 @@ MyDashboard.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  setContext(context);
+
   try {
     const httpClient = new HttpClient(instance);
     const invitationsData = await httpClient.get<{ invitations: Invitation[] }>(

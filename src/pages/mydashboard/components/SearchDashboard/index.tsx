@@ -22,18 +22,26 @@ type InvitationList = {
 };
 
 type SearchDashboardProps = {
+  initialInvitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
 };
 
-function SearchDashboard({ setInvitations }: SearchDashboardProps) {
+function SearchDashboard({
+  initialInvitations,
+  setInvitations,
+}: SearchDashboardProps) {
   const httpClient = new HttpClient(instance);
-
   const debouncing = debounce(async (value: string) => {
-    const searchInvitations = await httpClient.get<InvitationList>(
-      `/invitations?title=${value}`,
-    );
-    setInvitations(searchInvitations.invitations);
-  }, 500);
+    if (value) {
+      const searchInvitations = await httpClient.get<InvitationList>(
+        `/invitations?title=${value}`,
+      );
+      setInvitations(searchInvitations.invitations);
+      return;
+    }
+
+    setInvitations(initialInvitations);
+  }, 300);
 
   const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
     debouncing(e.target.value);
