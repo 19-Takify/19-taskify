@@ -5,6 +5,8 @@ import useCurrentUrl from '@/hooks/useCurrentUrl';
 import { GetServerSidePropsContext } from 'next';
 import { setContext } from '@/apis/axios';
 import { getMe } from '@/utils/auth';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
@@ -17,9 +19,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 function Dashboard() {
+  const selectDashboard = useAtomValue(selectDashboardAtom);
   return (
     <>
-      <Meta title="Taskify | 대시보드 이름 추가 예정" url={useCurrentUrl()} />
+      <Meta
+        title={`Taskify | ${selectDashboard.title}`}
+        url={useCurrentUrl()}
+      />
     </>
   );
 }

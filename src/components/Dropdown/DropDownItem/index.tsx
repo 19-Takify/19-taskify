@@ -30,7 +30,9 @@ function DropDownItem({ usage, data }: TItemProps) {
               width={24}
               height={24}
               className={styles.profile}
-              src={`${profileImageUrl}`}
+              src={
+                profileImageUrl ? profileImageUrl : '/svgs/default-profile.svg'
+              }
               alt="유저 프로필 이미지"
             />
             <span className={styles.nickname}>{nickname}</span>

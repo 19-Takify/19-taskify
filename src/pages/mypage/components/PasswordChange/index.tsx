@@ -1,16 +1,12 @@
-import { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import axios from '@/apis/axios';
-import { isAxiosError } from 'axios';
 import Input from '@/components/Inputs/Input';
-import {
-  FETCH_ERROR_MESSAGE,
-  SERVER_ERROR_MESSAGE,
-  VALID_ERROR_MESSAGE,
-} from '@/constants/errorMessage';
+import { VALID_ERROR_MESSAGE } from '@/constants/errorMessage';
 import styles from './Password.module.scss';
+import axios from '@/apis/axios';
+import setToast from '@/utils/setToast';
+import { TOAST_TEXT } from '@/constants/toastText';
 
 const schema = z
   .object({
@@ -46,14 +42,25 @@ function PasswordChange() {
     formState: { errors, isValid, isSubmitting },
     handleSubmit,
     setError,
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: 'all',
   });
 
   const handleFormSubmit = async (data: FormValues) => {
-    console.log(data);
-    // auth/password, POST, (data.password, data.newPassword) 넘겨주기
+    try {
+      const userInput = {
+        password: data.password,
+        newPassword: data.newPassword,
+      };
+      const res = await axios.put('auth/password', userInput);
+      reset();
+      setToast(TOAST_TEXT.success, '비밀번호가 변경되었습니다.');
+    } catch (e: any) {
+      console.error(e.response.data.message);
+      setError('newPassword', { message: e.response.data.message });
+    }
   };
 
   return (
@@ -63,27 +70,37 @@ function PasswordChange() {
         <div className={styles.inputBox}>
           <Input
             type="password"
+            id="현재 비밀번호"
             label="현재 비밀번호"
             hasLabel
             register={register('password')}
             errors={errors}
+            autoComplete="current-password"
           />
           <Input
             type="password"
+            id="새 비밀번호"
             label="새 비밀번호"
             hasLabel
             register={register('passwordConfirm')}
             errors={errors}
+            autoComplete="current-password"
           />
           <Input
             type="password"
+            id="새 비밀번호 확인"
             label="새 비밀번호 확인"
             hasLabel
             register={register('newPassword')}
             errors={errors}
+            autoComplete="current-password"
           />
         </div>
-        <button type="submit" className={styles.button}>
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={!isValid || isSubmitting}
+        >
           저장
         </button>
       </form>
