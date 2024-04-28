@@ -85,23 +85,36 @@ function ToDoModal({
   };
 
   const handleCommentSubmit = async () => {
-    await httpClient.post(`/comments`, {
-      content: textAreaRef.current?.value,
-      cardId: cardData?.id,
-      columnId: cardData?.columnId,
-      dashboardId: dashboardId,
-    });
-    setIsEditing((prev) => !prev);
+    if (!textAreaRef.current?.value) {
+      setToast('error', '😰 댓글을 입력해 주세요.');
+      return;
+    }
 
-    //입력 버튼 수행 후 입력 값 초기화
-    if (textAreaRef.current) {
-      textAreaRef.current.value = '';
+    try {
+      await httpClient.post(`/comments`, {
+        content: textAreaRef.current?.value,
+        cardId: cardData?.id,
+        columnId: cardData?.columnId,
+        dashboardId: dashboardId,
+      });
+      setIsEditing((prev) => !prev);
+
+      //입력 버튼 수행 후 입력 값 초기화
+      if (textAreaRef.current) {
+        textAreaRef.current.value = '';
+      }
+    } catch {
+      setToast('error', '😰 댓글 작성에 실패하였습니다.');
     }
   };
 
   const handleOnDelete = async (commentId: number) => {
-    commentId && (await httpClient.delete(`/comments/${commentId}`));
-    setIsEditing((prev) => !prev);
+    try {
+      commentId && (await httpClient.delete(`/comments/${commentId}`));
+      setIsEditing((prev) => !prev);
+    } catch {
+      setToast('error', '😰 댓글 삭제에 실패했습니다.');
+    }
   };
 
   const handleOnUpdate = async (commentId: number, text: string) => {

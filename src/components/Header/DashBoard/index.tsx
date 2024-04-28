@@ -11,6 +11,7 @@ import { logout } from '@/utils/auth';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/auth';
 import { selectDashboardAtom } from '@/store/dashboard';
+import InviteDashBoardModal from '@/components/Modal/InviteDashboardModal';
 
 function DashBoardHeader() {
   const [isOver, setIsover] = useState(false);
@@ -22,6 +23,7 @@ function DashBoardHeader() {
   const isEditPage = !router.pathname.includes('edit');
   const user = useAtomValue(userAtom);
   const selectDashboard = useAtomValue(selectDashboardAtom);
+  const [isOpenInviteModal, setIsOpenInviteModal] = useState(false);
 
   const handleMouseOver = () => {
     setIsover(true);
@@ -34,6 +36,10 @@ function DashBoardHeader() {
   const handleLogout = () => {
     logout();
     router.push('/');
+  };
+
+  const handleInviteDashboard = () => {
+    setIsOpenInviteModal(true);
   };
 
   return (
@@ -86,14 +92,19 @@ function DashBoardHeader() {
                   {!isBreakPoint && '관리'}
                 </Link>
               )}
-              <button className={styles.button}>
-                <Image
-                  className={styles.icon}
-                  src={InviteIcon}
-                  alt="초대하기 버튼 플러스 이미지"
-                />
-                {!isBreakPoint && '초대하기'}
-              </button>
+              {user.id === selectDashboard.userId && (
+                <button
+                  className={styles.button}
+                  onClick={handleInviteDashboard}
+                >
+                  <Image
+                    className={styles.icon}
+                    src={InviteIcon}
+                    alt="초대하기 버튼 플러스 이미지"
+                  />
+                  {!isBreakPoint && '초대하기'}
+                </button>
+              )}
             </>
           )}
           <div
@@ -134,6 +145,11 @@ function DashBoardHeader() {
           </ul>
         )}
       </header>
+      <InviteDashBoardModal
+        showModal={isOpenInviteModal}
+        handleClose={() => setIsOpenInviteModal(false)}
+        dashboardId={selectDashboard.id}
+      />
     </>
   );
 }

@@ -36,6 +36,10 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      @include mobile {
+        width: 100%;
+      }
     }
 
     ul {

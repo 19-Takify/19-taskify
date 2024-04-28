@@ -25,7 +25,8 @@
   appearance: none;
   cursor: pointer;
 
-  &:checked {
-    border: 0.25rem solid tomato;
+  &:checked::before,
+  &:hover::before {
+    content: url('/svgs/check-white.svg');
   }
 }
