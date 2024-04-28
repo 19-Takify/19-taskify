@@ -19,24 +19,9 @@ import Tag from '@/components/Tag';
 import styles from './EditToDoModal.module.scss';
 import { formatDate } from '@/utils/dateCalculator';
 import { SetStateAction } from 'jotai';
-
-// type CardContent = {
-//   id: number;
-//   title: string;
-//   description: string;
-//   tags: string[];
-//   dueDate: string;
-//   assignee: {
-//     profileImageUrl: string | null;
-//     nickname: string;
-//     id: number;
-//   };
-//   imageUrl: string | null;
-//   teamId: string;
-//   columnId: number;
-//   createdAt: string;
-//   updatedAt: string;
-// };
+import Image from 'next/image';
+import pen from '@/svgs/pen.svg';
+import add from '@/svgs/add.svg';
 
 type Assignee = {
   profileImageUrl: string;
@@ -46,7 +31,7 @@ type Assignee = {
 type CardList = {
   id: number;
   title: string;
-  description?: string | null;
+  description?: string;
   tags?: string[];
   dueDate?: string;
   assignee?: Assignee;
@@ -60,7 +45,7 @@ type CardList = {
 type ModalProps = {
   showEditModal: boolean;
   handleClose: () => void;
-  cardContent: CardList | undefined;
+  cardContent: CardList;
   dashBoardId: number;
   purpose: string;
 };
@@ -72,7 +57,7 @@ type FormValues = {
   description: string;
   dueDate: string;
   tags: string[];
-  imageUrl: string;
+  imageUrl: string | null;
 };
 
 type Member = {
@@ -122,6 +107,12 @@ function EditToDoModal({
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: 'all',
+    defaultValues: {
+      title: cardContent.title,
+      description: cardContent.description,
+      tags: cardContent.tags,
+      dueDate: cardContent.dueDate,
+    },
   });
 
   const [tagNameList, setTagNameList] = useState<string[]>([]);
@@ -188,15 +179,21 @@ function EditToDoModal({
       const date = formatDate(timestamp);
       data.dueDate = date;
       // data.imageUrl = data.imageUrl[0];
-      const imageFile = data.imageUrl[0];
-      console.log(imageFile);
-      const imgdata = new FormData();
-      imgdata.append('image', imageFile);
-      console.log(imgdata);
-      const responseb = await axios.post(`/columns/22433/card-image`, imgdata);
-      const resultb = responseb.data;
-      console.log(resultb);
-      data.imageUrl = resultb.imageUrl;
+      if (data.imageUrl !== null && data.imageUrl.length !== 0) {
+        const imageFile = data.imageUrl[0];
+        const imgdata = new FormData();
+        imgdata.append('image', imageFile);
+        console.log(imgdata);
+        const responseb = await axios.post(
+          `/columns/22433/card-image`,
+          imgdata,
+        );
+        const resultb = responseb.data;
+        console.log(resultb);
+        data.imageUrl = resultb.imageUrl;
+      } else {
+        data.imageUrl = null;
+      }
       data.tags = tagNameList;
       const response = await axios.put(`/cards/${cardContent?.id}`, data);
       const result = response.data;
@@ -252,7 +249,7 @@ function EditToDoModal({
             setValue={setValue}
           />
           <Input
-            type=""
+            type="text"
             label="제목"
             hasLabel
             required
@@ -276,7 +273,7 @@ function EditToDoModal({
             placeholder="날짜를 선택해 주세요."
           />
           <Input
-            type=""
+            type="text"
             label="태그"
             hasLabel
             register={register('tags')}
@@ -300,6 +297,34 @@ function EditToDoModal({
             accept="image/*"
             {...register('imageUrl')}
           />
+          {cardContent.imageUrl ? (
+            <div className={styles.imagePreview}>
+              <Image
+                src={cardContent.imageUrl}
+                alt="카드 이미지 미리보기"
+                width={80}
+                height={80}
+              />
+              <Image
+                className={styles.imageIcon}
+                src={pen}
+                alt="펜 이미지"
+                width={30}
+                height={30}
+              />
+            </div>
+          ) : (
+            <div className={styles.imagePreview}>
+              <Image
+                className={styles.imageIcon}
+                src={add}
+                alt="더하기 이미지"
+                width={30}
+                height={30}
+              />
+            </div>
+          )}
+
           <ModalButton onClick={handleClose}>취소</ModalButton>
           <ModalButton type="submit" disabled={!isValid || isSubmitting}>
             수정
