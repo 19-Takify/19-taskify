@@ -24,7 +24,7 @@ type TDashboardList = {
   userId: number;
 };
 
-function SideMenu({}) {
+function SideMenu() {
   const httpClient = new HttpClient(instance);
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
   const setSelectDashboard = useSetAtom(selectDashboardAtom);
@@ -92,6 +92,7 @@ function SideMenu({}) {
     try {
       const res = await axios.get(`dashboards/${id}`);
       setSelectDashboard(res.data);
+      setIsOpen(false);
     } catch (e) {
       setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
     }
