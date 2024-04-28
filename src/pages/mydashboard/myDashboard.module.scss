@@ -1,13 +1,19 @@
 .myDashboardPage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   height: 100vh;
   height: calc(100vh - 4.3rem);
   background: $color-gray-fafafa;
+  padding: 1.5rem 1rem;
+}
+
+.backButton {
+  margin-right: 2rem;
 }
 
 .invitedDashboard {
   display: flex;
   overflow: hidden;
   min-height: 25rem;
-  max-height: 100vh;
-  padding: 3rem;
 }
