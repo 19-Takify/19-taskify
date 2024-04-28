@@ -350,8 +350,6 @@ function Column({
     return null;
   }
 
-  console.log(isOpenColumnModal.manage || isOpenColumnModal.new || showModal);
-
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
