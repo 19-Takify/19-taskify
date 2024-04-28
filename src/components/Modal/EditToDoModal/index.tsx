@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   Dispatch,
+  FormEvent,
   KeyboardEvent,
   MouseEvent,
   useEffect,
@@ -9,7 +10,7 @@ import React, {
 import Modal from '../Modal';
 import ModalButton from '@/components/Button/ModalButton';
 import Dropdown from '@/components/Dropdown';
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { string, z } from 'zod';
 import Input from '@/components/Inputs/Input';
@@ -23,6 +24,7 @@ import Image from 'next/image';
 import pen from '@/svgs/pen.svg';
 import add from '@/svgs/add.svg';
 import { TAG_COLORS } from '@/components/ColorPicker';
+import useFilePreview from '@/hooks/useFilePreview';
 
 type Assignee = {
   profileImageUrl: string;
@@ -58,6 +60,7 @@ type FormValues = {
   description: string;
   dueDate: string;
   tags: string[];
+  uploadedFile: FileList;
   imageUrl: string | null;
   dashboardId: number;
 };
@@ -97,11 +100,12 @@ function EditToDoModal({
     dueDate: z.any(),
     tags: z.any(),
     imageUrl: z.any(),
+    uploadedFile: z.any(),
     dashBoardId: z.any(),
   });
 
   console.log('바람구름');
-  console.log(cardContent);
+  console.log(dashBoardId);
   const {
     register,
     formState: { errors, isValid, isSubmitting },
@@ -199,8 +203,8 @@ function EditToDoModal({
       const date = formatDate(timestamp);
       data.dueDate = date;
       // data.imageUrl = data.imageUrl[0];
-      if (data.imageUrl !== null && data.imageUrl.length !== 0) {
-        const imageFile = data.imageUrl[0];
+      if (data.uploadedFile !== null && data.uploadedFile.length !== 0) {
+        const imageFile = data.uploadedFile[0];
         const imgdata = new FormData();
         imgdata.append('image', imageFile);
         console.log(imgdata);
@@ -257,6 +261,12 @@ function EditToDoModal({
   };
   const hasErrorMessage = errors && errors['description']?.message;
 
+  const watchedUploadedFile = useWatch({
+    name: 'uploadedFile',
+    control,
+  });
+  const [filePreview] = useFilePreview(watchedUploadedFile);
+  console.log(filePreview);
   return (
     <Modal showModal={showEditModal} handleClose={handleClose}>
       <form onSubmit={handleSubmit(handleValidSubmit)}>
@@ -371,7 +381,7 @@ function EditToDoModal({
           type="file"
           accept="image/*"
           style={{ display: 'none' }}
-          {...register('imageUrl')}
+          {...register('uploadedFile')}
         />
         <div>
           <ModalButton className={styles.modalButton} onClick={handleClose}>
