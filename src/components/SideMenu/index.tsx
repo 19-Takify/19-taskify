@@ -27,7 +27,6 @@ type TDashboardList = {
 function SideMenu() {
   const httpClient = new HttpClient(instance);
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
-  const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [renderDelayed, setRenderDelayed] = useState(false);
   const [dashboardList, setDashboardList] = useState<TDashboardList[]>([]);
@@ -89,6 +88,10 @@ function SideMenu() {
     };
   }, [isOpen]);
 
+  const handleSidemenuClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div
       ref={sideMenuRef}
@@ -112,6 +115,7 @@ function SideMenu() {
                   <Link
                     className={styles.router}
                     href={`/dashboard/${dashboard.id}`}
+                    onClick={() => handleSidemenuClose()}
                   >
                     <Circle color={dashboard.color} small />
                     <p className={styles.title}>{dashboard.title}</p>
