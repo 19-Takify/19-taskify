@@ -161,6 +161,7 @@ function Column({
 
     try {
       await httpClient.delete(`/cards/${modalCardData?.id}`);
+      setToast('success', `${modalCardData?.title} 카드 삭제에 성공했습니다.`);
       resetDashboardPage();
     } catch {
       setToast('error', '😰 카드 삭제에 실패했습니다.');
