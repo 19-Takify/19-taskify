@@ -1,7 +1,6 @@
 import styles from './NewDashboardModal.module.scss';
 import Modal from '../Modal';
 import Input from '@/components/Inputs/Input';
-import HttpClient from '@/apis/httpClient';
 import { z } from 'zod';
 import { VALID_ERROR_MESSAGE } from '@/constants/errorMessage';
 import { useForm } from 'react-hook-form';
@@ -9,6 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
 import { DASHBOARD_COLORS } from '@/constants/colors';
+import { useRouter } from 'next/router';
+import axios from '@/apis/axios';
 
 type NewDashboardModalProps = {
   showModal: boolean;
@@ -34,7 +35,7 @@ const schema = z.object({
 });
 
 function NewDashboardModal({ showModal, handleClose }: NewDashboardModalProps) {
-  const httpClient = new HttpClient();
+  const router = useRouter();
   const {
     register,
     formState: { errors, isValid, isSubmitting },
@@ -50,9 +51,10 @@ function NewDashboardModal({ showModal, handleClose }: NewDashboardModalProps) {
 
   const handleNewDashboard = async (data: FormValues) => {
     try {
-      await httpClient.post('/dashboards', data);
+      const res = await axios.post('/dashboards', data);
       setToast('success', '대시보드가 생성되었습니다.');
       handleResetClose();
+      router.push(`/dashboard/${res.data.id}`);
     } catch {
       setToast('error', '대시보드 생성에 실패했습니다.');
     }
