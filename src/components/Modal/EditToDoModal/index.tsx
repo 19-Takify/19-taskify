@@ -22,6 +22,7 @@ import { SetStateAction } from 'jotai';
 import Image from 'next/image';
 import pen from '@/svgs/pen.svg';
 import add from '@/svgs/add.svg';
+import { TAG_COLORS } from '@/components/ColorPicker';
 
 type Assignee = {
   profileImageUrl: string;
@@ -114,17 +115,24 @@ function EditToDoModal({
     },
   });
 
+  const [selectedColor, setSelectedColor] = useState(
+    TAG_COLORS[Math.floor(Math.random() * TAG_COLORS.length)],
+  );
   const [tagNameList, setTagNameList] = useState<string[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
+  const divison = '!@#$%^&*';
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       const tagName = (e.target as HTMLInputElement).value;
       if (tagName !== '') {
-        if (tagNameList !== undefined) {
-          setTagNameList((prevList) => [...prevList, tagName]);
-        }
+        setTagNameList((prevList) => [
+          ...prevList,
+          `${tagName}!@#$%^&*${selectedColor}`,
+        ]);
+
         (e.target as HTMLInputElement).value = '';
       }
     }
@@ -283,16 +291,23 @@ function EditToDoModal({
           type="text"
           label="태그"
           hasLabel
+          tag
           register={register('tags')}
           onKeyDown={handleKeyDown}
           className={styles.datePicker}
+          selectedColor={selectedColor}
+          setSelectedColor={setSelectedColor}
         />
         <div className={styles.tags}>
           {tagNameList.map((tagName, i) => {
             return (
-              <Tag key={i}>
-                <button onClick={handleTagNameClick} type="button">
-                  {tagName}
+              <Tag key={i} color={tagName.split(divison)[1]}>
+                <button
+                  onClick={handleTagNameClick}
+                  type="button"
+                  style={{ backgroundColor: tagName.split(divison)[1] }}
+                >
+                  {tagName.split(divison)[0]}
                 </button>
               </Tag>
             );

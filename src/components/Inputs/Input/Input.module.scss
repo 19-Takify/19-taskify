@@ -28,6 +28,8 @@
 }
 
 .inputContainer {
+  position: relative;
+  align-items: center;
   display: flex;
   background-color: $color-white-ffffff;
   border: 0.0625rem solid $color-gray-d9d9d9;
