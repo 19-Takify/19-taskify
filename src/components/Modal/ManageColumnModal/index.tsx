@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteColumnModal from '../DeleteModal';
 
 type ManageColumnModalProps = {
@@ -44,22 +44,22 @@ function ManageColumnModal({
   resetDashboardPage,
 }: ManageColumnModalProps) {
   const httpClient = new HttpClient();
-  const initialFormValues = {
-    title: columnData.title,
-  };
   const {
     register,
     formState: { errors, isValid, isSubmitting },
     handleSubmit,
     reset,
     setError,
+    setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: 'all',
-    defaultValues: {
-      ...initialFormValues,
-    },
   });
+
+  //기본 입력값 초기화
+  useEffect(() => {
+    setValue('title', columnData.title);
+  }, [columnData]);
 
   const [showModal, setShowModal] = useState({
     manage: false,
