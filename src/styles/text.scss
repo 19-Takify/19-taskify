@@ -1,0 +1,5 @@
+@mixin shortText {
+  white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
+  overflow: hidden; /* 넘치는 부분을 숨김 */
+  text-overflow: ellipsis; /* 넘치는 부분을 '...'으로 생략 */
+}

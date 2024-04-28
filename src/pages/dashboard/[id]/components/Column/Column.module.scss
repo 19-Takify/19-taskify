@@ -36,6 +36,11 @@
   gap: 0.75rem;
 }
 
+.columnText {
+  max-width: 12.5rem;
+  @include shortText;
+}
+
 .countBox {
   display: flex;
   justify-content: center;

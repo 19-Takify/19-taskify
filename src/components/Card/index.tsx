@@ -41,7 +41,9 @@ function Card({ cardData }: CardProps) {
       )}
       <div className={styles.desktopBox} data-status="item">
         <div className={styles.tabletBox} data-status="item">
-          <span data-status="item">{cardData?.title}</span>
+          <span className={styles.cardTitle} data-status="item">
+            {cardData?.title}
+          </span>
           <div className={styles.tabletContent} data-status="item">
             <ul className={styles.tags} data-status="item">
               {cardData?.tags?.map((tag, index) => (

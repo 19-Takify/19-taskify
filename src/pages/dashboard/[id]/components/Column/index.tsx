@@ -269,7 +269,7 @@ function Column({
       title: '김치',
       description: '대한민국 최고 반찬',
       dueDate: '2024-04-27 18:00',
-      tags: ['총각 김치', '배추김치'],
+      tags: ['총각김치다', '배추김치'],
     });
 
     resetDashboardPage();
@@ -356,7 +356,9 @@ function Column({
                 <div className={styles.columnTitle}>
                   <div className={styles.columnName}>
                     <Circle color="#5534da" small />
-                    <strong>{columnData.columnTitle}</strong>
+                    <strong className={styles.columnText}>
+                      {columnData.columnTitle}
+                    </strong>
                     <div className={styles.countBox}>
                       <p>{columnData.totalCount}</p>
                     </div>
