@@ -116,12 +116,13 @@
   }
 
   @include tablet {
-    width: 20rem;
+    width: 18rem;
     height: 3.5rem;
     position: fixed;
     transform: translate(-50%, -50%);
     left: 50%;
-    bottom: 3%;
+    bottom: 0%;
+    font-size: 1.1rem;
   }
 
   @include mobile {
