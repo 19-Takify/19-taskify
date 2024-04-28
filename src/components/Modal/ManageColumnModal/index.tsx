@@ -10,7 +10,7 @@ import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import DeleteColumnModal from '../DeleteModal';
+import DeleteConfirmModal from '../DeleteModal';
 
 type ManageColumnModalProps = {
   columnData: ColumnType;
@@ -168,7 +168,7 @@ function ManageColumnModal({
         </Modal>
       )}
       {showModal.delete && (
-        <DeleteColumnModal
+        <DeleteConfirmModal
           showModal={showModal.delete}
           handleClose={() => setShowModal({ manage: true, delete: false })}
           message="정말 삭제하시겠습니까?"
