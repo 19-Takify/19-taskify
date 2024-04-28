@@ -24,7 +24,7 @@ function Login() {
           <Link href={PAGE_PATH.MAIN}>
             <Image
               src="/svgs/taskify-vertical-logo.svg"
-              alt="Taskify 로고"
+              alt="Taskify 로고 이미지"
               className={styles.logoImage}
               width={200}
               height={280}
