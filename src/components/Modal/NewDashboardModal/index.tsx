@@ -10,8 +10,6 @@ import setToast from '@/utils/setToast';
 import { DASHBOARD_COLORS } from '@/constants/colors';
 import { useRouter } from 'next/router';
 import axios from '@/apis/axios';
-import { useSetAtom } from 'jotai';
-import { selectDashboardAtom } from '@/store/dashboard';
 
 type NewDashboardModalProps = {
   showModal: boolean;
@@ -37,7 +35,6 @@ const schema = z.object({
 });
 
 function NewDashboardModal({ showModal, handleClose }: NewDashboardModalProps) {
-  const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const router = useRouter();
   const {
     register,
@@ -57,7 +54,6 @@ function NewDashboardModal({ showModal, handleClose }: NewDashboardModalProps) {
       const res = await axios.post('/dashboards', data);
       setToast('success', '대시보드가 생성되었습니다.');
       handleResetClose();
-      setSelectDashboard(res.data);
       router.push(`/dashboard/${res.data.id}`);
     } catch {
       setToast('error', '대시보드 생성에 실패했습니다.');
