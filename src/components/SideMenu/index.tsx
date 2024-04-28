@@ -13,6 +13,7 @@ import { TOAST_TEXT } from '@/constants/toastText';
 import { selectDashboardAtom } from '@/store/dashboard';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
+import NewDashboardModal from '../Modal/NewDashboardModal';
 
 type TDashboardList = {
   id: number;
@@ -34,9 +35,10 @@ function SideMenu() {
   const sideMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { id } = router.query;
+  const [isOpenNewDashboardModal, setIsOpenNewDashboardModal] = useState(false);
 
-  const handleCreateDashboard = async () => {
-    // 추후 대시보드 생성 모달 로직 추가
+  const handleCreateDashboard = () => {
+    setIsOpenNewDashboardModal(true);
   };
 
   useEffect(() => {
@@ -140,6 +142,10 @@ function SideMenu() {
           </div>
         </div>
       )}
+      <NewDashboardModal
+        showModal={isOpenNewDashboardModal}
+        handleClose={() => setIsOpenNewDashboardModal(false)}
+      />
     </div>
   );
 }

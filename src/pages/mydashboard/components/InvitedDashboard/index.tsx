@@ -55,7 +55,10 @@ function InvitedDashboard({
       <strong>초대받은 대시보드</strong>
       {initialInvitations.length ? (
         <div>
-          <SearchDashboard setInvitations={setInvitations} />
+          <SearchDashboard
+            initialInvitations={initialInvitations}
+            setInvitations={setInvitations}
+          />
           <ul>
             <li>
               <div className={`${styles.invitedBox} ${styles.title}`}>
