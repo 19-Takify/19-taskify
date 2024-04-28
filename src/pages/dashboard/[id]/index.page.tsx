@@ -10,10 +10,13 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { setContext } from '@/apis/axios';
 import { getMe } from '@/utils/auth';
 import { useRouter } from 'next/router';
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { useRouterLoading } from '@/hooks/useRouterLoading';
 import Loading from '@/components/Loading';
+import axios from '@/apis/axios';
+import setToast from '@/utils/setToast';
+import { TOAST_TEXT } from '@/constants/toastText';
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -44,12 +47,16 @@ export const getServerSideProps = async (
       });
       const columnCardData = await Promise.all(cardRequests);
 
+      const dashboardResponse = await axios(`dashboards/${id}`);
+      const currentDashboard = dashboardResponse.data;
+
       return {
         props: {
           dashboardId: Number(id),
           userId: userData.id,
           allData: columnCardData,
           user,
+          currentDashboard,
         },
       };
     }
@@ -115,18 +122,25 @@ type DashboardIdProps = {
   dashboardId: number;
   userId: number;
   allData: ColumnCardData[] | [];
+  currentDashboard: any;
 };
 
-function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
+function DashboardId({
+  dashboardId,
+  userId,
+  allData,
+  currentDashboard,
+}: DashboardIdProps) {
   const router = useRouter();
   const [data, setData] = useState<ColumnCardData[]>([]);
-  const selectDashboard = useAtomValue(selectDashboardAtom);
+  const [selectDashboard, setSelectDashboard] = useAtom(selectDashboardAtom);
   const isLoading = useRouterLoading();
   const url = useCurrentUrl();
 
   //페이지 이동시 데이터 받아오기 위해서 작성
   useEffect(() => {
     setData(allData);
+    setSelectDashboard(currentDashboard);
   }, [router.asPath]);
 
   if (isLoading) {

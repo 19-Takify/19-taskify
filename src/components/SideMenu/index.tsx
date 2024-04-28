@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from 'react';
 import { sideMenuAtom } from '../Layout/DashBoardLayout';
 import PageButton from '../Button/PageButton';
 import Link from 'next/link';
-import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { TOAST_TEXT } from '@/constants/toastText';
 import { selectDashboardAtom } from '@/store/dashboard';
@@ -28,7 +27,6 @@ type TDashboardList = {
 function SideMenu() {
   const httpClient = new HttpClient(instance);
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
-  const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [renderDelayed, setRenderDelayed] = useState(false);
   const [dashboardList, setDashboardList] = useState<TDashboardList[]>([]);
@@ -90,14 +88,8 @@ function SideMenu() {
     };
   }, [isOpen]);
 
-  const handleDashboardClick = async (id: number) => {
-    try {
-      const res = await axios.get(`dashboards/${id}`);
-      setSelectDashboard(res.data);
-      setIsOpen(false);
-    } catch (e) {
-      setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
-    }
+  const handleSidemenuClose = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -119,11 +111,11 @@ function SideMenu() {
                 <li
                   key={dashboard.id}
                   className={`${styles.dashboardList} ${id === String(dashboard.id) && styles.selected}`}
-                  onClick={() => handleDashboardClick(dashboard.id)}
                 >
                   <Link
                     className={styles.router}
                     href={`/dashboard/${dashboard.id}`}
+                    onClick={() => handleSidemenuClose()}
                   >
                     <Circle color={dashboard.color} small />
                     <p className={styles.title}>{dashboard.title}</p>

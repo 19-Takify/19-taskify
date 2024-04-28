@@ -14,6 +14,7 @@ type InviteDashboardModalProps = {
   showModal: boolean;
   handleClose: () => void;
   dashboardId: number;
+  syncFunc?: any;
 };
 
 type FormValues = {
@@ -36,6 +37,7 @@ function InviteDashBoardModal({
   showModal,
   handleClose,
   dashboardId,
+  syncFunc,
 }: InviteDashboardModalProps) {
   const httpClient = new HttpClient();
   const {
@@ -58,6 +60,9 @@ function InviteDashBoardModal({
       setToast('success', '대시보드 초대에 성공했습니다.');
 
       handleResetClose();
+      if (syncFunc) {
+        syncFunc();
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         const status = error.response?.status;

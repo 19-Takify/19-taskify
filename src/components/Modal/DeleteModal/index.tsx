@@ -5,12 +5,12 @@ import ModalButton from '@/components/Button/ModalButton';
 
 type DeleteModalProps = {
   showModal: boolean;
-  handleClose: () => void;
+  handleClose: (type?: any) => void;
   deleteColumn: () => void;
   message: string;
 };
 
-function DeleteColumnModal({
+function DeleteConfirmModal({
   showModal,
   handleClose,
   deleteColumn,
@@ -29,4 +29,4 @@ function DeleteColumnModal({
   );
 }
 
-export default DeleteColumnModal;
+export default DeleteConfirmModal;

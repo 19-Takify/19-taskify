@@ -81,7 +81,7 @@ function ToDoModal({
 
   const handleCommentSubmit = async () => {
     if (!textAreaRef.current?.value) {
-      setToast('error', '😰 댓글을 입력해 주세요.');
+      setToast('error', '댓글을 입력해 주세요.');
       return;
     }
 
@@ -94,46 +94,61 @@ function ToDoModal({
       });
       setIsEditing((prev) => !prev);
 
-      //입력 버튼 수행 후 입력 값 초기화
       if (textAreaRef.current) {
         textAreaRef.current.value = '';
       }
-    } catch {
-      setToast('error', '😰 댓글 작성에 실패하였습니다.');
+
+      textAreaRef.current?.focus();
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+      setToast('error', '댓글 작성에 실패하였습니다.');
     }
   };
 
   const handleOnDelete = async (commentId: number) => {
     try {
-      commentId && (await httpClient.delete(`/comments/${commentId}`));
+      await httpClient.delete(`/comments/${commentId}`);
       setIsEditing((prev) => !prev);
-    } catch {
-      setToast('error', '😰 댓글 삭제에 실패했습니다.');
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      setToast('error', '댓글 삭제에 실패했습니다.');
     }
   };
 
   const handleOnUpdate = async (commentId: number, text: string) => {
     try {
-      commentId &&
-        (await httpClient.put(`/comments/${commentId}`, {
-          content: text,
-        }));
+      await httpClient.put(`/comments/${commentId}`, {
+        content: text,
+      });
       setIsEditing((prev) => !prev);
-    } catch {
-      setToast('error', '😰 댓글 수정에 실패했습니다.');
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      setToast('error', '댓글 수정에 실패했습니다.');
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const comment: CommentList = await httpClient.get(
-        `/comments?cardId=${cardData?.id}`,
-      );
-      setCommentData(comment.comments);
+      try {
+        const comment: CommentList = await httpClient.get(
+          `/comments?cardId=${cardData?.id}`,
+        );
+        setCommentData(comment.comments);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+        setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+      }
     };
 
     fetchData();
   }, [isEditing]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleCommentSubmit();
+    }
+  };
 
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
@@ -186,7 +201,7 @@ function ToDoModal({
             <div className={styles.img}>
               {cardData?.imageUrl && (
                 <Image
-                  src="/svgs/example.svg"
+                  src={cardData.imageUrl}
                   alt="예시 사진"
                   layout="responsive"
                   width={300}
@@ -200,6 +215,7 @@ function ToDoModal({
                 placeholder="댓글 작성하기"
                 className={styles.input}
                 ref={textAreaRef}
+                onKeyDown={handleKeyDown}
               />
               <button
                 className={styles.submit}
