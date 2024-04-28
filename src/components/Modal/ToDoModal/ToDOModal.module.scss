@@ -76,6 +76,7 @@
   width: 100%;
   height: 6.8rem;
   resize: none;
+  outline-color: $color-gray-9fa6b2;
   @include mobile {
     height: 4.3rem;
     font-size: 0.8rem;

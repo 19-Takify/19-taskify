@@ -81,7 +81,7 @@ function ToDoModal({
 
   const handleCommentSubmit = async () => {
     if (!textAreaRef.current?.value) {
-      setToast('error', '😰 댓글을 입력해 주세요.');
+      setToast('error', '댓글을 입력해 주세요.');
       return;
     }
 
@@ -99,7 +99,7 @@ function ToDoModal({
         textAreaRef.current.value = '';
       }
     } catch {
-      setToast('error', '😰 댓글 작성에 실패하였습니다.');
+      setToast('error', '댓글 작성에 실패하였습니다.');
     }
   };
 
@@ -108,7 +108,7 @@ function ToDoModal({
       commentId && (await httpClient.delete(`/comments/${commentId}`));
       setIsEditing((prev) => !prev);
     } catch {
-      setToast('error', '😰 댓글 삭제에 실패했습니다.');
+      setToast('error', '댓글 삭제에 실패했습니다.');
     }
   };
 
@@ -120,7 +120,7 @@ function ToDoModal({
         }));
       setIsEditing((prev) => !prev);
     } catch {
-      setToast('error', '😰 댓글 수정에 실패했습니다.');
+      setToast('error', '댓글 수정에 실패했습니다.');
     }
   };
 
@@ -186,7 +186,7 @@ function ToDoModal({
             <div className={styles.img}>
               {cardData?.imageUrl && (
                 <Image
-                  src="/svgs/example.svg"
+                  src={cardData.imageUrl}
                   alt="예시 사진"
                   layout="responsive"
                   width={300}
