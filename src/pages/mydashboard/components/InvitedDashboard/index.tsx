@@ -2,9 +2,10 @@ import PageButton from '@/components/Button/PageButton';
 import styles from './InvitedDashboard.module.scss';
 import Image from 'next/image';
 import SearchDashboard from '../SearchDashboard';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
+import setToast from '@/utils/setToast';
 
 type Invitation = {
   id: number;
@@ -17,47 +18,82 @@ type Invitation = {
   updatedAt: string;
 };
 
+type DashboardList = {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+  userId: number;
+};
+
 type InvitedDashboardProps = {
-  initialInvitations: Invitation[];
   invitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
 };
 
 function InvitedDashboard({
-  initialInvitations,
   invitations,
   setInvitations,
 }: InvitedDashboardProps) {
+  const httpClient = new HttpClient(instance);
+  const [isSearch, setIsSearch] = useState(false);
+
   const handleConfirmClick = async (invitationId: number) => {
-    const httpClient = new HttpClient(instance);
-    await httpClient.put(`/invitations/${invitationId}`, {
-      inviteAccepted: true,
+    const dashboardData = await httpClient.get<{ dashboards: DashboardList[] }>(
+      '/dashboards?navigationMethod=infiniteScroll',
+    );
+    const findInvitation = invitations.find((invitation) => {
+      return invitation.id === invitationId;
     });
-    const updateData = (await httpClient.get('/invitations')) as {
-      invitations: Invitation[];
-    };
-    setInvitations(updateData.invitations);
+
+    const duplicatedDashboard = dashboardData.dashboards.some((dashboard) => {
+      return dashboard.id === findInvitation?.dashboard.id;
+    });
+
+    if (duplicatedDashboard) {
+      setToast('error', '이미 초대 받은 대시보드 입니다');
+      handleDenyClick(invitationId);
+      return;
+    }
+
+    try {
+      await httpClient.put(`/invitations/${invitationId}`, {
+        inviteAccepted: true,
+      });
+      const updateData = (await httpClient.get('/invitations')) as {
+        invitations: Invitation[];
+      };
+      setInvitations(updateData.invitations);
+      setToast('success', '초대 수락에 성공 했습니다.');
+    } catch {
+      setToast('error', '초대 수락에 실패 했습니다.');
+    }
   };
 
   const handleDenyClick = async (invitationId: number) => {
-    const httpClient = new HttpClient(instance);
-    await httpClient.put(`/invitations/${invitationId}`, {
-      inviteAccepted: false,
-    });
-    const updateData = (await httpClient.get('/invitations')) as {
-      invitations: Invitation[];
-    };
-    setInvitations(updateData.invitations);
+    try {
+      await httpClient.put(`/invitations/${invitationId}`, {
+        inviteAccepted: false,
+      });
+      const updateData = (await httpClient.get('/invitations')) as {
+        invitations: Invitation[];
+      };
+      setInvitations(updateData.invitations);
+    } catch {
+      setToast('error', '초대 거절에 실패 했습니다.');
+    }
   };
 
   return (
     <div className={styles.invitedDashboard}>
       <strong>초대받은 대시보드</strong>
-      {initialInvitations.length ? (
+      {invitations.length || isSearch ? (
         <div>
           <SearchDashboard
-            initialInvitations={initialInvitations}
             setInvitations={setInvitations}
+            setIsSearch={setIsSearch}
           />
           <ul>
             <li>

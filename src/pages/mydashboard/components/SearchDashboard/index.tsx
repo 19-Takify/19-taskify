@@ -22,13 +22,13 @@ type InvitationList = {
 };
 
 type SearchDashboardProps = {
-  initialInvitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
+  setIsSearch: Dispatch<SetStateAction<boolean>>;
 };
 
 function SearchDashboard({
-  initialInvitations,
   setInvitations,
+  setIsSearch,
 }: SearchDashboardProps) {
   const httpClient = new HttpClient(instance);
   const debouncing = debounce(async (value: string) => {
@@ -37,13 +37,17 @@ function SearchDashboard({
         `/invitations?title=${value}`,
       );
       setInvitations(searchInvitations.invitations);
+      setIsSearch(true);
       return;
     }
 
-    setInvitations(initialInvitations);
+    const searchInvitations =
+      await httpClient.get<InvitationList>(`/invitations`);
+    setInvitations(searchInvitations.invitations);
+    setIsSearch(false);
   }, 300);
 
-  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     debouncing(e.target.value);
   };
 
@@ -56,7 +60,11 @@ function SearchDashboard({
         width={24}
         height={24}
       />
-      <input placeholder="검색" onChange={(e) => handleSubmit(e)} />
+      <input
+        className={styles.searchInput}
+        placeholder="검색"
+        onChange={(e) => handleChange(e)}
+      />
     </div>
   );
 }
