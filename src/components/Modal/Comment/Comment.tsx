@@ -32,7 +32,9 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
-    setEditedContent(''); // 수정 취소 시 원래 내용으로 되돌리기 위해
+    if (isEditing) {
+      setEditedContent(''); // 수정 취소 시 원래 내용으로 되돌리기 위해
+    }
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
