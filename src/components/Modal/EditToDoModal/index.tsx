@@ -32,7 +32,7 @@ type CardList = {
   id: number;
   title: string;
   description?: string;
-  tags?: string[];
+  tags: string[];
   dueDate?: string;
   assignee?: Assignee;
   imageUrl?: string | null;
@@ -108,10 +108,9 @@ function EditToDoModal({
     resolver: zodResolver(schema),
     mode: 'all',
     defaultValues: {
-      title: cardContent.title,
-      description: cardContent.description,
-      tags: cardContent.tags,
-      dueDate: cardContent.dueDate,
+      title: cardContent?.title,
+      description: cardContent?.description,
+      dueDate: cardContent?.dueDate,
     },
   });
 
@@ -123,7 +122,9 @@ function EditToDoModal({
       e.preventDefault();
       const tagName = (e.target as HTMLInputElement).value;
       if (tagName !== '') {
-        setTagNameList((prevList) => [...prevList, tagName]);
+        if (tagNameList !== undefined) {
+          setTagNameList((prevList) => [...prevList, tagName]);
+        }
         (e.target as HTMLInputElement).value = '';
       }
     }
@@ -158,12 +159,12 @@ function EditToDoModal({
       (el) => el.userId === cardContent?.assignee?.id,
     );
     setAssignee(assignee);
-    //////dfssss
-    console.log(assignee);
-    console.log(columns);
+    // console.log(assignee);
+    // console.log(columns);
     const state = columns.find((el) => el.id === cardContent?.columnId);
     setCurrentState(state);
-    console.log(members);
+    // console.log(members);
+    setTagNameList(cardContent?.tags);
   }, [members, cardContent, columns]);
 
   useEffect(() => {
@@ -227,9 +228,9 @@ function EditToDoModal({
 
   return (
     <Modal showModal={showEditModal} handleClose={handleClose}>
-      <div>
-        <form onSubmit={handleSubmit(handleValidSubmit)}>
-          <h1>할 일 수정</h1>
+      <form onSubmit={handleSubmit(handleValidSubmit)}>
+        <h1 className={styles.title}>할 일 수정</h1>
+        <div className={styles.dropdowns}>
           <Dropdown
             usage="state"
             data={columns}
@@ -248,59 +249,61 @@ function EditToDoModal({
             register={register('assigneeUserId')}
             setValue={setValue}
           />
-          <Input
-            type="text"
-            label="제목"
-            hasLabel
-            required
-            register={register('title')}
-            errors={errors}
-          />
-          <label htmlFor="description">설명</label>
-          {/* 설명에 필수 표시 */}
-          <textarea id="description" {...register('description')} />
-          {hasErrorMessage && (
-            <p className={styles.errorMessage}>
-              {errors['description']?.message?.toString()}
-            </p>
-          )}
-          <DatePicker
-            control={control}
-            name="dueDate"
-            id="dueDate"
-            label="마감일"
-            hasLabel
-            placeholder="날짜를 선택해 주세요."
-          />
-          <Input
-            type="text"
-            label="태그"
-            hasLabel
-            register={register('tags')}
-            onKeyDown={handleKeyDown}
-          />
-          <div className={styles.tags}>
-            {tagNameList.map((tagName, i) => {
-              return (
-                <Tag key={i}>
-                  <button onClick={handleTagNameClick} type="button">
-                    {tagName}
-                  </button>
-                </Tag>
-              );
-            })}
-          </div>
-          <label>이미지</label>
-          <input
-            id="image"
-            type="file"
-            accept="image/*"
-            {...register('imageUrl')}
-          />
-          {cardContent.imageUrl ? (
+        </div>
+        <Input
+          type="text"
+          label="제목"
+          hasLabel
+          required
+          register={register('title')}
+          errors={errors}
+        />
+        <label htmlFor="description">설명</label>
+        <span className={styles.required}>*</span>
+        <textarea
+          className={styles.textarea}
+          id="description"
+          {...register('description')}
+        />
+        {hasErrorMessage && (
+          <p className={styles.errorMessage}>
+            {errors['description']?.message?.toString()}
+          </p>
+        )}
+        <DatePicker
+          control={control}
+          name="dueDate"
+          id="dueDate"
+          label="마감일"
+          hasLabel
+          placeholder="날짜를 선택해 주세요."
+          className={styles.datePicker}
+        />
+        <Input
+          type="text"
+          label="태그"
+          hasLabel
+          register={register('tags')}
+          onKeyDown={handleKeyDown}
+          className={styles.datePicker}
+        />
+        <div className={styles.tags}>
+          {tagNameList.map((tagName, i) => {
+            return (
+              <Tag key={i}>
+                <button onClick={handleTagNameClick} type="button">
+                  {tagName}
+                </button>
+              </Tag>
+            );
+          })}
+        </div>
+        <label className={styles.label}>이미지</label>
+        <label className={styles.fileInput} htmlFor="fileInput">
+          {cardContent?.imageUrl ? (
             <div className={styles.imagePreview}>
               <Image
-                src={cardContent.imageUrl}
+                src={cardContent?.imageUrl}
                 alt="카드 이미지 미리보기"
                 width={80}
                 height={80}
@@ -324,16 +327,27 @@ function EditToDoModal({
               />
             </div>
           )}
-
-          <ModalButton onClick={handleClose}>취소</ModalButton>
-          <ModalButton type="submit" disabled={!isValid || isSubmitting}>
+        </label>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          {...register('imageUrl')}
+        />
+        <div>
+          <ModalButton className={styles.modalButton} onClick={handleClose}>
+            취소
+          </ModalButton>
+          <ModalButton
+            className={styles.modalButton}
+            type="submit"
+            disabled={!isValid || isSubmitting}
+          >
             수정
           </ModalButton>
-          <button type="submit" disabled={!isValid || isSubmitting}>
-            수정
-          </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </Modal>
   );
 }
