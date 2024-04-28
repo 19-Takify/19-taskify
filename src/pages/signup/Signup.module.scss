@@ -1,12 +1,24 @@
+.background {
+  position: fixed;
+  background-color: $color-gray-fafafa;
+  height: 100vh;
+  inset: 0;
+}
+
 .container {
+  position: relative;
   display: flex;
   background-color: $color-gray-fafafa;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 8.25rem 0.75rem;
+  height: 100vh;
+  padding: 12.5rem 0.75rem;
   gap: 1.5rem;
+
+  @include tablet {
+    height: 100%;
+    padding: 2rem 0.75rem;
+  }
 }
 
 .header {
