@@ -59,6 +59,7 @@ type FormValues = {
   dueDate: string;
   tags: string[];
   imageUrl: string | null;
+  dashboardId: number;
 };
 
 type Member = {
@@ -96,8 +97,11 @@ function EditToDoModal({
     dueDate: z.any(),
     tags: z.any(),
     imageUrl: z.any(),
+    dashBoardId: z.any(),
   });
 
+  console.log('바람구름');
+  console.log(cardContent);
   const {
     register,
     formState: { errors, isValid, isSubmitting },
@@ -121,7 +125,14 @@ function EditToDoModal({
   const [tagNameList, setTagNameList] = useState<string[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
+  let title;
   const divison = '!@#$%^&*';
+  if (purpose === 'edit') {
+    title = '할 일 수정';
+  }
+  if (purpose === 'create') {
+    title = '할 일 생성';
+  }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -204,9 +215,21 @@ function EditToDoModal({
         data.imageUrl = null;
       }
       data.tags = tagNameList;
-      const response = await axios.put(`/cards/${cardContent?.id}`, data);
-      const result = response.data;
-      console.log(result);
+      data.dashboardId = dashBoardId;
+      console.log('purpose', purpose);
+      if (purpose === 'edit') {
+        const response = await axios.put(`/cards/${cardContent?.id}`, data);
+        const result = response.data;
+        console.log(result);
+        handleClose();
+      }
+      if (purpose === 'create') {
+        console.log('강아지');
+        const response = await axios.post('/cards', data);
+        const result = response.data;
+        console.log(result);
+        handleClose();
+      }
     } catch (error) {
       ///참고용
       // if (!isAxiosError(error)) {
@@ -237,7 +260,7 @@ function EditToDoModal({
   return (
     <Modal showModal={showEditModal} handleClose={handleClose}>
       <form onSubmit={handleSubmit(handleValidSubmit)}>
-        <h1 className={styles.title}>할 일 수정</h1>
+        <h1 className={styles.title}>{title}</h1>
         <div className={styles.dropdowns}>
           <Dropdown
             usage="state"
@@ -359,7 +382,7 @@ function EditToDoModal({
             type="submit"
             disabled={!isValid || isSubmitting}
           >
-            수정
+            {purpose === 'edit' ? '수정' : '생성'}
           </ModalButton>
         </div>
       </form>

@@ -16,6 +16,7 @@ import NewColumnModal from '@/components/Modal/NewColumnModal';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
+import axios from '@/apis/axios';
 
 type CardData = {
   id: number;
@@ -90,6 +91,8 @@ function Column({
   const httpClient = new HttpClient(instance);
   const selectDashboard = useAtomValue(selectDashboardAtom);
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [modalCardData, setModalCardData] = useState<CardData>({
     id: 0,
     title: '',
@@ -276,20 +279,51 @@ function Column({
     }
   };
 
-  const handleAddCardClick = async (columnId: number) => {
+  const handleCardCreateClick = async (
+    columnId: number,
+    dashBoardId: number,
+  ) => {
     //카드 생성 모달 나중에 구현
 
-    await httpClient.post(`/cards`, {
-      assigneeUserId: userId,
-      dashboardId: dashboardId,
-      columnId: columnId,
-      title: '김치',
-      description: '대한민국 최고 반찬',
-      dueDate: '2024-04-27 18:00',
-      tags: ['총각 김치', '배추김치'],
-    });
+    // await httpClient.post(`/cards`, {
+    //   assigneeUserId: userId,
+    //   dashboardId: dashboardId,
+    //   columnId: columnId,
+    //   title: '김치',
+    //   description: '대한민국 최고 반찬',
+    //   dueDate: '2024-04-27 18:00',
+    //   tags: ['총각 김치', '배추김치'],
+    // });
 
-    resetDashboardPage();
+    // resetDashboardPage();
+    let member = { profileImageUrl: '', nickname: '', userId: 0 };
+    try {
+      const response = await axios.get(`/members?dashboardId=${dashBoardId}`);
+      member = response.data.members[0];
+    } catch (error) {}
+
+    setModalCardData({
+      id: 0,
+      title: '',
+      description: '',
+      tags: [],
+      dueDate: '',
+      assignee: {
+        profileImageUrl: member.profileImageUrl,
+        nickname: member.nickname,
+        id: member.userId,
+      },
+      imageUrl: '',
+      teamId: '',
+      columnId: columnId,
+      createdAt: '',
+      updatedAt: '',
+    });
+    setShowCreateModal(true);
+  };
+
+  const handleCreateModalClose = () => {
+    setShowCreateModal(false);
   };
 
   const handleDeleteCardClick = async () => {
@@ -328,8 +362,7 @@ function Column({
 
   const sentinelRef = useObserver(handleInfiniteScroll);
 
-  const [showEditModal, setShowEditModal] = useState(false);
-  const handleCloseButtonClick = () => {
+  const handleEditToDoModalclose = () => {
     setShowEditModal(false);
     setShowModal(true);
   };
@@ -398,7 +431,12 @@ function Column({
                   />
                 </div>
                 <PageButton
-                  onClick={() => handleAddCardClick(columnData.columnId)}
+                  onClick={() =>
+                    handleCardCreateClick(
+                      columnData.columnId,
+                      selectDashboard.id,
+                    )
+                  }
                 >
                   카드
                 </PageButton>
@@ -502,10 +540,19 @@ function Column({
       {showEditModal && (
         <EditToDoModal
           showEditModal={showEditModal}
-          handleClose={handleCloseButtonClick}
+          handleClose={handleEditToDoModalclose}
           cardContent={modalCardData}
           dashBoardId={dashboardId}
           purpose="edit"
+        />
+      )}
+      {showCreateModal && (
+        <EditToDoModal
+          showEditModal={showCreateModal}
+          handleClose={handleCreateModalClose}
+          cardContent={modalCardData}
+          dashBoardId={dashboardId}
+          purpose="create"
         />
       )}
     </>
