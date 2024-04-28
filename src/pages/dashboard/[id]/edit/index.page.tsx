@@ -4,7 +4,7 @@ import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardMa
 import DashboardEdit from '@/pages/dashboard/[id]/edit/components/DashboardEdit';
 import Meta from '@/components/Meta';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import axios, { setContext } from '@/apis/axios';

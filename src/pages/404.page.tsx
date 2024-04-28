@@ -19,7 +19,7 @@ function Custom404() {
           4<span className={styles.textEffect}>0</span>4 Not Found
         </h2>
         <h2 className={styles.text}>존재하지 않는 페이지 입니다.</h2>
-        <Link href={PAGE_PATH.MY_DASHBOARD} className={styles.button}>
+        <Link href={PAGE_PATH.MAIN} className={styles.button}>
           메인 페이지로 이동
         </Link>
       </section>
