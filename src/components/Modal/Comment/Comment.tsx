@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './Comment.module.scss';
 import ProfileIcon from '@/components/Profile/ProfileIcon';
 import useUser from '@/hooks/useUser';
@@ -29,10 +29,17 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(commentData?.content);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [tempContent, setTempContent] = useState('');
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
-    setEditedContent(''); // 수정 취소 시 원래 내용으로 되돌리기 위해
+    if (isEditing) {
+      setEditedContent(tempContent);
+      setTempContent('');
+    } else {
+      setTempContent(editedContent);
+    }
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -43,6 +50,23 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
     onUpdate(commentData?.id, editedContent);
     setIsEditing(!isEditing);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSaveEdit();
+    }
+  };
+
+  useEffect(() => {
+    if (isEditing && textAreaRef.current) {
+      textAreaRef.current.focus();
+      textAreaRef.current.setSelectionRange(
+        textAreaRef.current.value.length,
+        textAreaRef.current.value.length,
+      );
+    }
+  }, [isEditing]);
 
   return (
     <div>
@@ -59,9 +83,11 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
         <div className={styles.commentBox}>
           {isEditing ? (
             <textarea
+              ref={textAreaRef}
               value={editedContent}
               onChange={handleEditChange}
               className={styles.editTextArea}
+              onKeyDown={handleKeyDown}
             />
           ) : (
             <div className={styles.commentText}>{commentData?.content}</div>

@@ -4,7 +4,7 @@ import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardMa
 import DashboardEdit from '@/pages/dashboard/[id]/edit/components/DashboardEdit';
 import Meta from '@/components/Meta';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import axios, { setContext } from '@/apis/axios';
@@ -13,27 +13,37 @@ import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
 import { TInviteData, TMembersData } from './type/editType';
+import Loading from '@/components/Loading';
+import { useRouterLoading } from '@/hooks/useRouterLoading';
+import DeleteConfirmModal from '@/components/Modal/DeleteModal';
+import { useRouter } from 'next/router';
+import { PAGE_PATH } from '@/constants/pageUrl';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
-  const checkResponse = await axios.get(`dashboards/${context.query.id}`);
+  try {
+    const checkResponse = await axios.get(`dashboards/${context.query.id}`);
 
-  const membersResponse = await axios.get(
-    `members?page=1&size=1000&dashboardId=${context.query.id}`,
-  );
-  const membersData = membersResponse.data.members;
-
-  let inviteData = '';
-  if (checkResponse.data.createdByMe) {
-    const inviteResponse = await axios.get(
-      `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+    const membersResponse = await axios.get(
+      `members?page=1&size=1000&dashboardId=${context.query.id}`,
     );
-    inviteData = inviteResponse.data.invitations;
-  }
+    const membersData = membersResponse.data.members;
 
-  return {
-    props: { inviteData, membersData },
-  };
+    let inviteData = '';
+    if (checkResponse.data.createdByMe) {
+      const inviteResponse = await axios.get(
+        `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+      );
+      inviteData = inviteResponse.data.invitations;
+    }
+    return {
+      props: { inviteData, membersData },
+    };
+  } catch (error) {
+    return {
+      props: { inviteData: [], membersData: [] },
+    };
+  }
 }
 
 type TEditProps = {
@@ -42,30 +52,45 @@ type TEditProps = {
 };
 
 function Edit({ inviteData, membersData }: TEditProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const selectDashboard = useAtomValue(selectDashboardAtom);
+  const url = useCurrentUrl();
+  const isLoading = useRouterLoading();
+  const router = useRouter();
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   const handleDeleteDashboard = async () => {
-    // 컨펌 모달 추가 예정
     try {
       await axios.delete(`/dashboards/${selectDashboard.id}`);
       setToast(TOAST_TEXT.success, '대시보드가 삭제되었습니다!');
+      router.push(PAGE_PATH.MY_DASHBOARD);
     } catch (e: any) {
-      setToast('error', e.response.data.message);
+      setToast(TOAST_TEXT.error, e.response.data.message);
+    } finally {
+      handleModalClose();
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <Meta title="Taskify | 대시보드 수정" url={useCurrentUrl()} />
+      <Meta title="Taskify | 대시보드 수정" url={url} />
       <div className={styles.wrap}>
         <div className={styles.box}>
           <div className={styles.buttonBox}>
             <BackButton />
             {selectDashboard.createdByMe && (
-              <button
-                className={styles.deleteBtn}
-                onClick={handleDeleteDashboard}
-              >
+              <button className={styles.deleteBtn} onClick={handleModalOpen}>
                 대시보드 삭제하기
               </button>
             )}
@@ -77,6 +102,14 @@ function Edit({ inviteData, membersData }: TEditProps) {
           )}
         </div>
       </div>
+      {isModalOpen && (
+        <DeleteConfirmModal
+          showModal={isModalOpen}
+          handleClose={() => handleModalClose()}
+          deleteColumn={() => handleDeleteDashboard()}
+          message="정말 삭제하시겠습니까?"
+        />
+      )}
     </>
   );
 }

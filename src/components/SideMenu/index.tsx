@@ -7,12 +7,12 @@ import { useEffect, useRef, useState } from 'react';
 import { sideMenuAtom } from '../Layout/DashBoardLayout';
 import PageButton from '../Button/PageButton';
 import Link from 'next/link';
-import axios from '@/apis/axios';
 import setToast from '@/utils/setToast';
 import { TOAST_TEXT } from '@/constants/toastText';
 import { selectDashboardAtom } from '@/store/dashboard';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
+import NewDashboardModal from '../Modal/NewDashboardModal';
 
 type TDashboardList = {
   id: number;
@@ -24,19 +24,19 @@ type TDashboardList = {
   userId: number;
 };
 
-function SideMenu({}) {
+function SideMenu() {
   const httpClient = new HttpClient(instance);
   const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
-  const setSelectDashboard = useSetAtom(selectDashboardAtom);
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [renderDelayed, setRenderDelayed] = useState(false);
   const [dashboardList, setDashboardList] = useState<TDashboardList[]>([]);
   const sideMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { id } = router.query;
+  const [isOpenNewDashboardModal, setIsOpenNewDashboardModal] = useState(false);
 
-  const handleCreateDashboard = async () => {
-    // 추후 대시보드 생성 모달 로직 추가
+  const handleCreateDashboard = () => {
+    setIsOpenNewDashboardModal(true);
   };
 
   useEffect(() => {
@@ -88,13 +88,8 @@ function SideMenu({}) {
     };
   }, [isOpen]);
 
-  const handleDashboardClick = async (id: number) => {
-    try {
-      const res = await axios.get(`dashboards/${id}`);
-      setSelectDashboard(res.data);
-    } catch (e) {
-      setToast(TOAST_TEXT.error, '잠시 후 다시 시도해 주세요.');
-    }
+  const handleSidemenuClose = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -116,11 +111,11 @@ function SideMenu({}) {
                 <li
                   key={dashboard.id}
                   className={`${styles.dashboardList} ${id === String(dashboard.id) && styles.selected}`}
-                  onClick={() => handleDashboardClick(dashboard.id)}
                 >
                   <Link
                     className={styles.router}
                     href={`/dashboard/${dashboard.id}`}
+                    onClick={() => handleSidemenuClose()}
                   >
                     <Circle color={dashboard.color} small />
                     <p className={styles.title}>{dashboard.title}</p>
@@ -139,6 +134,10 @@ function SideMenu({}) {
           </div>
         </div>
       )}
+      <NewDashboardModal
+        showModal={isOpenNewDashboardModal}
+        handleClose={() => setIsOpenNewDashboardModal(false)}
+      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import Card from '@/components/Card';
@@ -10,6 +10,11 @@ import ToDoModal from '@/components/Modal/ToDoModal';
 import Image from 'next/image';
 import { useObserver } from '@/hooks/useObserver';
 import setToast from '@/utils/setToast';
+import ManageColumnModal from '@/components/Modal/ManageColumnModal';
+import NewColumnModal from '@/components/Modal/NewColumnModal';
+import { useAtomValue } from 'jotai';
+import { selectDashboardAtom } from '@/store/dashboard';
+import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 
 type CardData = {
   id: number;
@@ -29,7 +34,7 @@ type CardData = {
   updatedAt: string;
 };
 
-type ColumnCardData = {
+export type ColumnCardData = {
   columnId: number;
   columnTitle: string;
   cursorId: number;
@@ -55,17 +60,24 @@ type ColumnCardData = {
   ];
 };
 
-type LocateCard = {
-  cardId: number | null;
-  startColumnId: number | null;
-  endColumnId: number | null;
-};
-
 type ColumnProps<T> = {
   dashboardId: number;
   userId: number;
   data: T;
   setData: React.Dispatch<T>;
+};
+
+type ColumnData = {
+  result: string;
+  data: [
+    {
+      id: number;
+      title: string;
+      teamId: string;
+      createdAt: string;
+      updatedAt: string;
+    },
+  ];
 };
 
 function Column({
@@ -75,16 +87,135 @@ function Column({
   setData,
 }: ColumnProps<ColumnCardData[]>) {
   const httpClient = new HttpClient(instance);
+  const selectDashboard = useAtomValue(selectDashboardAtom);
   const [showModal, setShowModal] = useState(false);
   const [modalCardData, setModalCardData] = useState<CardData>();
-  const [locateCard, setLocateCard] = useState<LocateCard>({
-    cardId: null,
-    startColumnId: null,
-    endColumnId: null,
+  const [resetData, setResetData] = useState(false);
+  const [isOpenColumnModal, setIsOpenColumnModal] = useState({
+    new: false,
+    manage: false,
   });
+  const [enabled, setEnabled] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState({
+    prev: false,
+    next: false,
+  });
+  const cardContainer = useRef<any>(null);
+  const xDown = useRef<any>(null);
+  const xUp = useRef<any>(null);
+  const isTablet = useIsDesiredSize(744);
+
+  const handleScroll = () => {
+    const maxScrollLeft =
+      cardContainer.current.scrollWidth - cardContainer.current.clientWidth;
+    const isStart = cardContainer.current.scrollLeft === 0;
+    const isEnd = cardContainer.current.scrollLeft >= maxScrollLeft - 100;
+
+    if (isStart) {
+      setButtonVisible({
+        prev: false,
+        next: true,
+      });
+      return;
+    }
+
+    if (isEnd) {
+      setButtonVisible({
+        prev: true,
+        next: false,
+      });
+      return;
+    }
+
+    setButtonVisible({
+      prev: true,
+      next: true,
+    });
+  };
+
+  const handlePrevCard = () => {
+    cardContainer.current.scrollBy({
+      left: -720,
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleNextCard = () => {
+    cardContainer.current.scrollBy({
+      left: 720,
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleSwipeAction = (xDiff: any) => {
+    if (xDiff > 0) {
+      //우측 이동
+      handleNextCard();
+      return;
+    }
+    // 좌측 이동
+    handlePrevCard();
+  };
+
+  const handleMove = () => {
+    if (!xDown.current) {
+      return;
+    }
+    const xDiff = xDown.current - xUp.current;
+    if (xDiff !== 0) {
+      handleSwipeAction(xDiff);
+    }
+    // 좌표 초기화
+    xDown.current = null;
+    xUp.current = null;
+  };
+
+  // 마우스 누를 때 동작
+  const handleMouseDown = (e: any) => {
+    const target = e.target as HTMLElement;
+
+    if (target.dataset.status === 'item') {
+      return;
+    }
+
+    xDown.current = e.clientX;
+    document.body.style.userSelect = 'none';
+  };
+
+  // 마우스 뗄 때 동작
+  const handleMouseUp = (e: any) => {
+    xUp.current = e.clientX;
+    handleMove();
+    document.body.style.userSelect = '';
+  };
+
+  useEffect(() => {
+    const animation = requestAnimationFrame(() => setEnabled(true));
+
+    return () => {
+      cancelAnimationFrame(animation);
+      setEnabled(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (cardContainer.current) {
+      cardContainer.current.addEventListener('scroll', handleScroll);
+      if (
+        cardContainer.current.scrollWidth > cardContainer.current.clientWidth
+      ) {
+        setButtonVisible({
+          prev: false,
+          next: true,
+        });
+      }
+    }
+  }, [enabled]);
 
   //무한 스크롤 용도
-  const [startIndex, setStartIndex] = useState(0);
+  const [startIndex, setStartIndex] = useState(10);
   const totalCount = Math.max(...data.map((item) => item.totalCount));
 
   const handleDragEnd = async (result: any) => {
@@ -118,11 +249,14 @@ function Column({
 
     setData(newData);
 
-    setLocateCard({
-      cardId: Number(result.draggableId),
-      startColumnId: Number(result.source.droppableId),
-      endColumnId: Number(result.destination.droppableId),
-    });
+    //드롭시 카드 컬럼 위치 수정
+    try {
+      await httpClient.put(`/cards/${Number(result.draggableId)}`, {
+        columnId: Number(result.destination.droppableId),
+      });
+    } catch {
+      setToast('error', '😰 카드 옮기기에 실패했습니다.');
+    }
   };
 
   const handleAddCardClick = async (columnId: number) => {
@@ -138,36 +272,15 @@ function Column({
       tags: ['총각 김치', '배추김치'],
     });
 
-    const dataRequests = data.map(async (column: any) => {
-      const columnCardData = await httpClient.get<ColumnCardData>(
-        `/cards?columnId=${column.columnId}`,
-      );
-      columnCardData.columnId = column.columnId;
-      columnCardData.columnTitle = column.columnTitle;
-      return columnCardData;
-    });
-    const columnCardData = await Promise.all(dataRequests);
-
-    setData(columnCardData);
+    resetDashboardPage();
   };
 
   const handleDeleteCardClick = async () => {
     handleCloseModal();
-
     try {
       await httpClient.delete(`/cards/${modalCardData?.id}`);
-
-      const dataRequests = data.map(async (column: any) => {
-        const columnCardData = await httpClient.get<ColumnCardData>(
-          `/cards?columnId=${column.columnId}`,
-        );
-        columnCardData.columnId = column.columnId;
-        columnCardData.columnTitle = column.columnTitle;
-        return columnCardData;
-      });
-      const columnCardData = await Promise.all(dataRequests);
-
-      setData(columnCardData);
+      setToast('success', `${modalCardData?.title} 카드 삭제에 성공했습니다.`);
+      resetDashboardPage();
     } catch {
       setToast('error', '😰 카드 삭제에 실패했습니다.');
     }
@@ -182,125 +295,162 @@ function Column({
     setShowModal(false);
   };
 
+  const resetDashboardPage = () => {
+    setResetData((prev) => !prev);
+  };
+
   const handleInfiniteScroll = async () => {
     //데이터 다 불러오면 무한 스크롤 방지
     if (totalCount < startIndex) return;
 
     const nextIndex = startIndex + 10;
-    const dataRequests = data.map(async (column: any) => {
-      const columnCardData = await httpClient.get<ColumnCardData>(
-        `/cards?size=${nextIndex}&columnId=${column.columnId}`,
-      );
-      columnCardData.columnId = column.columnId;
-      columnCardData.columnTitle = column.columnTitle;
-      return columnCardData;
-    });
-    const columnCardData = await Promise.all(dataRequests);
-    setData(columnCardData);
-
     setStartIndex(nextIndex);
+
+    resetDashboardPage();
   };
 
   const sentinelRef = useObserver(handleInfiniteScroll);
 
-  //드롭시 카드 컬럼 위치 수정
+  //데이터 다시 불러오기
   useEffect(() => {
     const fetchData = async () => {
-      if (locateCard.cardId) {
-        try {
-          await httpClient.put(`/cards/${locateCard.cardId}`, {
-            columnId: locateCard.endColumnId,
-          });
-        } catch {
-          return;
-        }
-      }
+      const columnData = await httpClient.get<ColumnData>(
+        `/columns?dashboardId=${dashboardId}`,
+      );
+      const cardRequests = columnData.data.map(async (column: any) => {
+        const columnCardData = await httpClient.get<ColumnCardData>(
+          `/cards?size=${startIndex}&columnId=${column.id}`,
+        );
+        columnCardData.columnId = column.id;
+        columnCardData.columnTitle = column.title;
+        return columnCardData;
+      });
+      const columnCardData = await Promise.all(cardRequests);
+
+      setData(columnCardData);
     };
 
     fetchData();
-  }, [locateCard]);
+  }, [resetData]);
+
+  if (!enabled) {
+    return null;
+  }
 
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <ul className={styles.columns}>
+        <ul
+          className={styles.columns}
+          ref={cardContainer}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          data-status="dnd"
+        >
           {data.map((columnData) => (
-            <Droppable
+            <li
               key={columnData.columnId.toString()}
-              droppableId={columnData.columnId.toString()}
+              className={styles.columnList}
             >
-              {(provided) => (
-                <li
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className={styles.columnList}
-                >
-                  <div className={styles.columnBox}>
-                    <div className={styles.columnTitle}>
-                      <div className={styles.columnName}>
-                        <Circle color="#5534da" small />
-                        <strong>{columnData.columnTitle}</strong>
-                        <div className={styles.countBox}>
-                          <p>{columnData.totalCount}</p>
-                        </div>
-                      </div>
-                      <Image
-                        src="/svgs/setting.svg"
-                        alt="컬럼 설정 이미지"
-                        width={24}
-                        height={24}
-                      />
+              <div className={styles.columnBox}>
+                <div className={styles.columnTitle}>
+                  <div className={styles.columnName}>
+                    <Circle color="#5534da" small />
+                    <strong>{columnData.columnTitle}</strong>
+                    <div className={styles.countBox}>
+                      <p>{columnData.totalCount}</p>
                     </div>
-                    <PageButton
-                      onClick={() => handleAddCardClick(columnData.columnId)}
-                    >
-                      카드
-                    </PageButton>
-                    <Droppable droppableId={columnData.columnId.toString()}>
-                      {(provided) => (
-                        <div
-                          className={styles.cardList}
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {columnData.cards.map((cardData, index) => (
-                            <Draggable
-                              key={cardData.id.toString()}
-                              draggableId={cardData.id.toString()}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  onClick={() => handleCardClick(cardData)}
-                                >
-                                  <Card cardData={cardData} />
-                                  {index === columnData.cards.length - 1 && (
-                                    <div ref={sentinelRef}></div>
-                                  )}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
                   </div>
-                  {provided.placeholder}
-                </li>
-              )}
-            </Droppable>
+                  <ManageColumnModal
+                    columnData={{
+                      id: columnData.columnId,
+                      title: columnData.columnTitle,
+                      dashboardId: selectDashboard.id,
+                    }}
+                    resetDashboardPage={resetDashboardPage}
+                  />
+                </div>
+                <PageButton
+                  onClick={() => handleAddCardClick(columnData.columnId)}
+                >
+                  카드
+                </PageButton>
+                <Droppable droppableId={columnData.columnId.toString()}>
+                  {(provided) => (
+                    <div
+                      className={styles.cardList}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {columnData.cards.map((cardData, index) => (
+                        <Draggable
+                          key={cardData.id.toString()}
+                          draggableId={cardData.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() => handleCardClick(cardData)}
+                            >
+                              <Card cardData={cardData} />
+                              {index === columnData.cards.length - 1 && (
+                                <div ref={sentinelRef}></div>
+                              )}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </li>
           ))}
           {/*컬럼 갯수가 10개 넘어가면 추가 X*/}
           {data.length < 10 && (
             <li className={styles.addColumn}>
-              <PageButton>새로운 컬럼 추가하기</PageButton>
+              <PageButton
+                onClick={() =>
+                  setIsOpenColumnModal((prev) => ({ ...prev, new: true }))
+                }
+              >
+                새로운 컬럼 추가하기
+              </PageButton>
             </li>
           )}
+          {buttonVisible.prev && !isTablet && (
+            <button
+              type="button"
+              className={styles.prevBtn}
+              onClick={handlePrevCard}
+            >
+              <Image
+                width="20"
+                height="20"
+                src="/svgs/prev-button.svg"
+                alt="이전 버튼"
+              />
+            </button>
+          )}
         </ul>
+        {buttonVisible.next && !isTablet && (
+          <button
+            type="button"
+            onClick={handleNextCard}
+            className={styles.nextBtn}
+          >
+            <Image
+              width="20"
+              height="20"
+              src="/svgs/next-button.svg"
+              alt="다음 버튼"
+            />
+          </button>
+        )}
       </DragDropContext>
       {showModal && (
         <ToDoModal
@@ -311,6 +461,15 @@ function Column({
           dashboardId={dashboardId}
         />
       )}
+      <NewColumnModal
+        showModal={isOpenColumnModal.new}
+        handleClose={() =>
+          setIsOpenColumnModal((prev) => ({ ...prev, new: false }))
+        }
+        dashboardId={selectDashboard.id}
+        setData={setData}
+        resetDashboardPage={resetDashboardPage}
+      />
     </>
   );
 }

@@ -5,19 +5,21 @@ import ModalButton from '@/components/Button/ModalButton';
 
 type DeleteModalProps = {
   showModal: boolean;
-  handleClose: () => void;
+  handleClose: (type?: any) => void;
   deleteColumn: () => void;
+  message: string;
 };
 
-function DeleteColumnModal({
+function DeleteConfirmModal({
   showModal,
   handleClose,
   deleteColumn,
+  message,
 }: DeleteModalProps) {
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
       <div className={styles.textbox}>
-        <div className={styles.text}>칼럼의 모든 카드가 삭제됩니다.</div>
+        <div className={styles.text}>{message}</div>
         <div className={styles.buttonBox}>
           <ModalButton onClick={handleClose}>취소</ModalButton>
           <ModalButton onClick={deleteColumn}>삭제</ModalButton>
@@ -27,4 +29,4 @@ function DeleteColumnModal({
   );
 }
 
-export default DeleteColumnModal;
+export default DeleteConfirmModal;

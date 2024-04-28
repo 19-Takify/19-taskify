@@ -10,8 +10,65 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { setContext } from '@/apis/axios';
 import { getMe } from '@/utils/auth';
 import { useRouter } from 'next/router';
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
+import { useRouterLoading } from '@/hooks/useRouterLoading';
+import Loading from '@/components/Loading';
+import axios from '@/apis/axios';
+import setToast from '@/utils/setToast';
+import { TOAST_TEXT } from '@/constants/toastText';
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const httpClient = new HttpClient(instance);
+  const id = context.params?.id;
+  const user = await getMe();
+
+  // beautiful-dnd 서버 초기화
+  resetServerContext();
+
+  setContext(context);
+
+  try {
+    const userData = await httpClient.get<UserData>('/users/me');
+
+    if (id) {
+      const columnData = await httpClient.get<ColumnData>(
+        `/columns?dashboardId=${id}`,
+      );
+      const cardRequests = columnData.data.map(async (column: any) => {
+        const columnCardData = await httpClient.get<ColumnCardData>(
+          `/cards?size=10&columnId=${column.id}`,
+        );
+        columnCardData.columnId = column.id;
+        columnCardData.columnTitle = column.title;
+        return columnCardData;
+      });
+      const columnCardData = await Promise.all(cardRequests);
+
+      const dashboardResponse = await axios(`dashboards/${id}`);
+      const currentDashboard = dashboardResponse.data;
+
+      return {
+        props: {
+          dashboardId: Number(id),
+          userId: userData.id,
+          allData: columnCardData,
+          user,
+          currentDashboard,
+        },
+      };
+    }
+  } catch (error) {
+    return {
+      props: {
+        allData: [],
+        user,
+      },
+    };
+  }
+};
 
 type UserData = {
   id: number;
@@ -65,31 +122,43 @@ type DashboardIdProps = {
   dashboardId: number;
   userId: number;
   allData: ColumnCardData[] | [];
+  currentDashboard: any;
 };
 
-function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
+function DashboardId({
+  dashboardId,
+  userId,
+  allData,
+  currentDashboard,
+}: DashboardIdProps) {
   const router = useRouter();
   const [data, setData] = useState<ColumnCardData[]>([]);
+  const [selectDashboard, setSelectDashboard] = useAtom(selectDashboardAtom);
+  const isLoading = useRouterLoading();
+  const url = useCurrentUrl();
 
   //페이지 이동시 데이터 받아오기 위해서 작성
   useEffect(() => {
     setData(allData);
+    setSelectDashboard(currentDashboard);
   }, [router.asPath]);
 
-  const selectDashboard = useAtomValue(selectDashboardAtom);
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div>
-      <Meta
-        title={`Taskify | ${selectDashboard.title}`}
-        url={useCurrentUrl()}
-      />
-      <Column
-        dashboardId={dashboardId}
-        userId={userId}
-        data={data}
-        setData={setData}
-      />
-    </div>
+    <>
+      <Meta title={`Taskify | ${selectDashboard.title}`} url={url} />
+      <div>
+        <Column
+          dashboardId={dashboardId}
+          userId={userId}
+          data={data}
+          setData={setData}
+        />
+      </div>
+    </>
   );
 }
 
@@ -99,54 +168,6 @@ DashboardId.getLayout = function getLayout(page: ReactElement) {
       <DashBoardLayout>{page}</DashBoardLayout>
     </>
   );
-};
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const httpClient = new HttpClient(instance);
-  const id = context.params?.id;
-  const user = await getMe();
-
-  // beautiful-dnd 서버 초기화
-  resetServerContext();
-
-  setContext(context);
-
-  try {
-    const userData = await httpClient.get<UserData>('/users/me');
-
-    if (id) {
-      const columnData = await httpClient.get<ColumnData>(
-        `/columns?dashboardId=${id}`,
-      );
-      const cardRequests = columnData.data.map(async (column: any) => {
-        const columnCardData = await httpClient.get<ColumnCardData>(
-          `/cards?size=10&columnId=${column.id}`,
-        );
-        columnCardData.columnId = column.id;
-        columnCardData.columnTitle = column.title;
-        return columnCardData;
-      });
-      const columnCardData = await Promise.all(cardRequests);
-
-      return {
-        props: {
-          dashboardId: Number(id),
-          userId: userData.id,
-          allData: columnCardData,
-          user,
-        },
-      };
-    }
-  } catch (error) {
-    return {
-      props: {
-        allData: [],
-        user,
-      },
-    };
-  }
 };
 
 export default DashboardId;

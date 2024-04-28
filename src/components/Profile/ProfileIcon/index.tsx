@@ -15,7 +15,10 @@ type ProfileIconProps = {
 
 function ProfileIcon({ children, profile, small = false }: ProfileIconProps) {
   return (
-    <div className={`${styles.profileIcon} ${small && styles.small}`}>
+    <div
+      className={`${styles.profileIcon} ${small && styles.small}`}
+      data-status="item"
+    >
       {profile?.profileImageUrl && (
         <Image
           className={styles.profileIconImage}
@@ -23,6 +26,7 @@ function ProfileIcon({ children, profile, small = false }: ProfileIconProps) {
           alt={`${profile.nickname} 프로필 이미지`}
           width={24}
           height={24}
+          data-status="item"
         />
       )}
       {children}
