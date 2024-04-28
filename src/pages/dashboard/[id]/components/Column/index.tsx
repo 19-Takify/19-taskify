@@ -1,5 +1,5 @@
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import Card from '@/components/Card';
@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { useObserver } from '@/hooks/useObserver';
 import setToast from '@/utils/setToast';
 import EditToDoModal from '@/components/Modal/EditToDoModal';
+import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 
 type CardData = {
   id: number;
@@ -83,6 +84,116 @@ function Column({
     startColumnId: null,
     endColumnId: null,
   });
+  const [enabled, setEnabled] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState({
+    prev: false,
+    next: true,
+  });
+  const cardContainer = useRef<any>(null);
+  const xDown = useRef<any>(null);
+  const xUp = useRef<any>(null);
+  const isTablet = useIsDesiredSize(744);
+
+  const handleScroll = () => {
+    const maxScrollLeft =
+      cardContainer.current.scrollWidth - cardContainer.current.clientWidth;
+    const isStart = cardContainer.current.scrollLeft === 0;
+    const isEnd = cardContainer.current.scrollLeft >= maxScrollLeft - 100;
+
+    if (isStart) {
+      setButtonVisible({
+        prev: false,
+        next: true,
+      });
+      return;
+    }
+
+    if (isEnd) {
+      setButtonVisible({
+        prev: true,
+        next: false,
+      });
+      return;
+    }
+
+    setButtonVisible({
+      prev: true,
+      next: true,
+    });
+  };
+
+  const handlePrevCard = () => {
+    cardContainer.current.scrollBy({
+      left: -720,
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleNextCard = () => {
+    cardContainer.current.scrollBy({
+      left: 720,
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleSwipeAction = (xDiff: any) => {
+    if (xDiff > 0) {
+      //우측 이동
+      handleNextCard();
+      return;
+    }
+    // 좌측 이동
+    handlePrevCard();
+  };
+
+  const handleMove = () => {
+    if (!xDown.current) {
+      return;
+    }
+    const xDiff = xDown.current - xUp.current;
+    if (xDiff !== 0) {
+      handleSwipeAction(xDiff);
+    }
+    // 좌표 초기화
+    xDown.current = null;
+    xUp.current = null;
+  };
+
+  // 마우스 누를 때 동작
+  const handleMouseDown = (e: any) => {
+    const target = e.target as HTMLElement;
+
+    if (target.dataset.status === 'item') {
+      return;
+    }
+
+    xDown.current = e.clientX;
+    document.body.style.userSelect = 'none';
+  };
+
+  // 마우스 뗄 때 동작
+  const handleMouseUp = (e: any) => {
+    xUp.current = e.clientX;
+    handleMove();
+    document.body.style.userSelect = '';
+  };
+
+  useEffect(() => {
+    const animation = requestAnimationFrame(() => setEnabled(true));
+
+    return () => {
+      cancelAnimationFrame(animation);
+      setEnabled(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (cardContainer.current) {
+      cardContainer.current.addEventListener('scroll', handleScroll);
+    }
+  }, [enabled]);
 
   //무한 스크롤 용도
   const [startIndex, setStartIndex] = useState(0);
@@ -154,7 +265,6 @@ function Column({
 
   const handleDeleteCardClick = async () => {
     handleCloseModal();
-
     try {
       await httpClient.delete(`/cards/${modalCardData?.id}`);
 
@@ -231,79 +341,80 @@ function Column({
     fetchData();
   }, [locateCard]);
 
+  if (!enabled) {
+    return null;
+  }
+
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <ul className={styles.columns}>
+        <ul
+          className={styles.columns}
+          ref={cardContainer}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          data-status="dnd"
+        >
           {data.map((columnData) => (
-            <Droppable
+            <li
               key={columnData.columnId.toString()}
-              droppableId={columnData.columnId.toString()}
+              className={styles.columnList}
             >
-              {(provided) => (
-                <li
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className={styles.columnList}
-                >
-                  <div className={styles.columnBox}>
-                    <div className={styles.columnTitle}>
-                      <div className={styles.columnName}>
-                        <Circle color="#5534da" small />
-                        <strong>{columnData.columnTitle}</strong>
-                        <div className={styles.countBox}>
-                          <p>{columnData.totalCount}</p>
-                        </div>
-                      </div>
-                      <Image
-                        src="/svgs/setting.svg"
-                        alt="컬럼 설정 이미지"
-                        width={24}
-                        height={24}
-                      />
+              <div className={styles.columnBox}>
+                <div className={styles.columnTitle}>
+                  <div className={styles.columnName}>
+                    <Circle color="#5534da" small />
+                    <strong>{columnData.columnTitle}</strong>
+                    <div className={styles.countBox}>
+                      <p>{columnData.totalCount}</p>
                     </div>
-                    <PageButton
-                      onClick={() => handleAddCardClick(columnData.columnId)}
-                    >
-                      카드
-                    </PageButton>
-                    <Droppable droppableId={columnData.columnId.toString()}>
-                      {(provided) => (
-                        <div
-                          className={styles.cardList}
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {columnData.cards.map((cardData, index) => (
-                            <Draggable
-                              key={cardData.id.toString()}
-                              draggableId={cardData.id.toString()}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  onClick={() => handleCardClick(cardData)}
-                                >
-                                  <Card cardData={cardData} />
-                                  {index === columnData.cards.length - 1 && (
-                                    <div ref={sentinelRef}></div>
-                                  )}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
                   </div>
-                  {provided.placeholder}
-                </li>
-              )}
-            </Droppable>
+                  <Image
+                    src="/svgs/setting.svg"
+                    alt="컬럼 설정 이미지"
+                    width={24}
+                    height={24}
+                  />
+                </div>
+                <PageButton
+                  onClick={() => handleAddCardClick(columnData.columnId)}
+                >
+                  카드
+                </PageButton>
+                <Droppable droppableId={columnData.columnId.toString()}>
+                  {(provided) => (
+                    <div
+                      className={styles.cardList}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {columnData.cards.map((cardData, index) => (
+                        <Draggable
+                          key={cardData.id.toString()}
+                          draggableId={cardData.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() => handleCardClick(cardData)}
+                            >
+                              <Card cardData={cardData} />
+                              {index === columnData.cards.length - 1 && (
+                                <div ref={sentinelRef}></div>
+                              )}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </li>
           ))}
           {/*컬럼 갯수가 10개 넘어가면 추가 X*/}
           {data.length < 10 && (
@@ -311,7 +422,35 @@ function Column({
               <PageButton>새로운 컬럼 추가하기</PageButton>
             </li>
           )}
+          {buttonVisible.prev && !isTablet && (
+            <button
+              type="button"
+              className={styles.prevBtn}
+              onClick={handlePrevCard}
+            >
+              <Image
+                width="20"
+                height="20"
+                src="/svgs/prev-button.svg"
+                alt="이전 버튼"
+              />
+            </button>
+          )}
         </ul>
+        {buttonVisible.next && !isTablet && (
+          <button
+            type="button"
+            onClick={handleNextCard}
+            className={styles.nextBtn}
+          >
+            <Image
+              width="20"
+              height="20"
+              src="/svgs/next-button.svg"
+              alt="다음 버튼"
+            />
+          </button>
+        )}
       </DragDropContext>
       {showModal && (
         <ToDoModal

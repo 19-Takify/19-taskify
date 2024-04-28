@@ -1,9 +1,10 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
+import instance from './axios';
 
 class HttpClient {
   private client: AxiosInstance;
 
-  constructor(client: AxiosInstance) {
+  constructor(client: AxiosInstance = instance) {
     this.client = client;
   }
 

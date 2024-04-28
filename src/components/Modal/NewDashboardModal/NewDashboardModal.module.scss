@@ -1,0 +1,31 @@
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  width: 36rem;
+}
+
+.modalButton {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  appearance: none;
+  cursor: pointer;
+
+  &:checked {
+    border: 0.25rem solid tomato;
+  }
+}
