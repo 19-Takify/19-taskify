@@ -4,7 +4,7 @@ import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardMa
 import DashboardEdit from '@/pages/dashboard/[id]/edit/components/DashboardEdit';
 import Meta from '@/components/Meta';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import axios, { setContext } from '@/apis/axios';
@@ -13,27 +13,34 @@ import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
 import { TInviteData, TMembersData } from './type/editType';
+import Loading from '@/components/Loading';
+import { useRouterLoading } from '@/hooks/useRouterLoading';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
-  const checkResponse = await axios.get(`dashboards/${context.query.id}`);
+  try {
+    const checkResponse = await axios.get(`dashboards/${context.query.id}`);
 
-  const membersResponse = await axios.get(
-    `members?page=1&size=1000&dashboardId=${context.query.id}`,
-  );
-  const membersData = membersResponse.data.members;
-
-  let inviteData = '';
-  if (checkResponse.data.createdByMe) {
-    const inviteResponse = await axios.get(
-      `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+    const membersResponse = await axios.get(
+      `members?page=1&size=1000&dashboardId=${context.query.id}`,
     );
-    inviteData = inviteResponse.data.invitations;
-  }
+    const membersData = membersResponse.data.members;
 
-  return {
-    props: { inviteData, membersData },
-  };
+    let inviteData = '';
+    if (checkResponse.data.createdByMe) {
+      const inviteResponse = await axios.get(
+        `dashboards/${context.query.id}/invitations?page=1&size=1000`,
+      );
+      inviteData = inviteResponse.data.invitations;
+    }
+    return {
+      props: { inviteData, membersData },
+    };
+  } catch (error) {
+    return {
+      props: { inviteData: [], membersData: [] },
+    };
+  }
 }
 
 type TEditProps = {
@@ -43,6 +50,8 @@ type TEditProps = {
 
 function Edit({ inviteData, membersData }: TEditProps) {
   const selectDashboard = useAtomValue(selectDashboardAtom);
+  const url = useCurrentUrl();
+  const isLoading = useRouterLoading();
 
   const handleDeleteDashboard = async () => {
     // 컨펌 모달 추가 예정
@@ -50,13 +59,17 @@ function Edit({ inviteData, membersData }: TEditProps) {
       await axios.delete(`/dashboards/${selectDashboard.id}`);
       setToast(TOAST_TEXT.success, '대시보드가 삭제되었습니다!');
     } catch (e: any) {
-      setToast('error', e.response.data.message);
+      setToast(TOAST_TEXT.error, e.response.data.message);
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <Meta title="Taskify | 대시보드 수정" url={useCurrentUrl()} />
+      <Meta title="Taskify | 대시보드 수정" url={url} />
       <div className={styles.wrap}>
         <div className={styles.box}>
           <div className={styles.buttonBox}>

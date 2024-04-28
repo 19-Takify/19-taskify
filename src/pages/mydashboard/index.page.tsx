@@ -7,6 +7,8 @@ import { GetServerSidePropsContext } from 'next';
 import instance from '@/apis/axios';
 import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
+import Loading from '@/components/Loading';
+import { useRouterLoading } from '@/hooks/useRouterLoading';
 
 type Invitation = {
   id: number;
@@ -25,10 +27,16 @@ type MyDashboardProps = {
 
 function MyDashboard({ invitations }: MyDashboardProps) {
   const [invitation, setInvitation] = useState<Invitation[]>(invitations);
+  const url = useCurrentUrl();
+  const isLoading = useRouterLoading();
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
-      <Meta title="Taskify | 내 대시보드" url={useCurrentUrl()} />
+      <Meta title="Taskify | 내 대시보드" url={url} />
       <div className={styles.myDashboardPage}>
         <div className={styles.invitedDashboard}>
           <InvitedDashboard

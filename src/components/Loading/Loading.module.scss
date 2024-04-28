@@ -7,10 +7,12 @@
 }
 
 .wrap {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.05);
-  position: relative;
+  background-color: $color-gray-eeeeee;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
 }
 
 .content {
