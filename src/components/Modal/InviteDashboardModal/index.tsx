@@ -16,15 +16,12 @@ type InviteDashboardModalProps = {
   dashboardId: number;
 };
 
-type InvitationsType = {
-  invitee: {
-    email: string;
-  };
-};
-
 type InvitationInfoType = {
-  invitations: InvitationsType[];
-  totalCount: number;
+  invitations: {
+    invitee: {
+      email: string;
+    };
+  }[];
 };
 
 type FormValues = {
