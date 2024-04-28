@@ -12,7 +12,6 @@ import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/auth';
 import { selectDashboardAtom } from '@/store/dashboard';
 import InviteDashBoardModal from '@/components/Modal/InviteDashboardModal';
-import useUser from '@/hooks/useUser';
 
 function DashBoardHeader() {
   const [isOver, setIsover] = useState(false);

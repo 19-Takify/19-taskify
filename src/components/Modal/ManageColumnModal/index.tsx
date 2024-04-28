@@ -13,6 +13,7 @@ import { useState } from 'react';
 
 type ManageColumnModalProps = {
   columnData: ColumnType;
+  resetDashboardPage: () => void;
 };
 
 type FormValues = {
@@ -37,7 +38,10 @@ const schema = z.object({
     .min(1, { message: VALID_ERROR_MESSAGE.DASHBOARD.EMPTY }),
 });
 
-function ManageColumnModal({ columnData }: ManageColumnModalProps) {
+function ManageColumnModal({
+  columnData,
+  resetDashboardPage,
+}: ManageColumnModalProps) {
   const httpClient = new HttpClient();
   const initialFormValues = {
     title: columnData.title,
@@ -70,7 +74,7 @@ function ManageColumnModal({ columnData }: ManageColumnModalProps) {
         ...data,
       });
       setToast('success', '컬럼 이름이 변경되었습니다.');
-
+      resetDashboardPage();
       handleResetClose();
     } catch {
       setToast('error', '컬럼 이름 변경에 실패했습니다.');
@@ -81,6 +85,7 @@ function ManageColumnModal({ columnData }: ManageColumnModalProps) {
     try {
       await httpClient.delete(`/columns/${columnData.id}`);
       setToast('success', '컬럼 삭제에 성공되었습니다.');
+      resetDashboardPage();
       handleResetClose();
     } catch {
       setToast('error', '컬럼 삭제에 실패했습니다.');

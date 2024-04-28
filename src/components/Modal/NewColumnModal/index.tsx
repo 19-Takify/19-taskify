@@ -13,6 +13,8 @@ type NewColumnModalProps = {
   showModal: boolean;
   handleClose: () => void;
   dashboardId: number;
+  setData: React.Dispatch<ColumnCardData[]>;
+  resetDashboardPage: () => void;
 };
 
 type FormValues = {
@@ -32,6 +34,32 @@ type ColumnList = {
   data: ColumnType[];
 };
 
+type ColumnCardData = {
+  columnId: number;
+  columnTitle: string;
+  cursorId: number;
+  totalCount: number;
+  cards: [
+    {
+      id: number;
+      title: string;
+      description: string;
+      tags: string[];
+      dueDate: string;
+      assignee: {
+        profileImageUrl: string;
+        nickname: string;
+        id: number;
+      };
+      imageUrl: string;
+      teamId: string;
+      columnId: number;
+      createdAt: string;
+      updatedAt: string;
+    },
+  ];
+};
+
 const initialFormValues = {
   title: '',
 };
@@ -47,6 +75,8 @@ function NewColumnModal({
   showModal,
   handleClose,
   dashboardId,
+  setData,
+  resetDashboardPage,
 }: NewColumnModalProps) {
   const httpClient = new HttpClient();
   const {
@@ -63,7 +93,7 @@ function NewColumnModal({
     },
   });
 
-  const handleColumnUpdate = async (data: FormValues) => {
+  const handleColumnCreate = async (data: FormValues) => {
     try {
       const isValid = await handleValidColumn(data);
       if (!isValid) {
@@ -71,9 +101,13 @@ function NewColumnModal({
         return;
       }
 
-      await httpClient.post('/columns', { ...data, dashboardId: dashboardId });
-      setToast('success', '컬럼이 생성되었습니다.');
+      const res = await httpClient.post('/columns', {
+        ...data,
+        dashboardId: dashboardId,
+      });
 
+      setToast('success', '컬럼이 생성되었습니다.');
+      resetDashboardPage();
       handleResetClose();
     } catch {
       setToast('error', '컬럼 생성에 실패했습니다.');
@@ -103,7 +137,7 @@ function NewColumnModal({
     <Modal showModal={showModal} handleClose={handleResetClose}>
       <form
         className={styles.modalForm}
-        onSubmit={handleSubmit(handleColumnUpdate)}
+        onSubmit={handleSubmit(handleColumnCreate)}
       >
         <strong className={styles.modalTitle}>새 컬럼 생성</strong>
         <Input

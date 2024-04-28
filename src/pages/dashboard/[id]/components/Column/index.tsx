@@ -33,7 +33,7 @@ type CardData = {
   updatedAt: string;
 };
 
-type ColumnCardData = {
+export type ColumnCardData = {
   columnId: number;
   columnTitle: string;
   cursorId: number;
@@ -59,17 +59,24 @@ type ColumnCardData = {
   ];
 };
 
-type LocateCard = {
-  cardId: number | null;
-  startColumnId: number | null;
-  endColumnId: number | null;
-};
-
 type ColumnProps<T> = {
   dashboardId: number;
   userId: number;
   data: T;
   setData: React.Dispatch<T>;
+};
+
+type ColumnData = {
+  result: string;
+  data: [
+    {
+      id: number;
+      title: string;
+      teamId: string;
+      createdAt: string;
+      updatedAt: string;
+    },
+  ];
 };
 
 function Column({
@@ -82,18 +89,14 @@ function Column({
   const selectDashboard = useAtomValue(selectDashboardAtom);
   const [showModal, setShowModal] = useState(false);
   const [modalCardData, setModalCardData] = useState<CardData>();
-  const [locateCard, setLocateCard] = useState<LocateCard>({
-    cardId: null,
-    startColumnId: null,
-    endColumnId: null,
-  });
+  const [resetData, setResetData] = useState(false);
   const [isOpenColumnModal, setIsOpenColumnModal] = useState({
     new: false,
     manage: false,
   });
 
   //무한 스크롤 용도
-  const [startIndex, setStartIndex] = useState(0);
+  const [startIndex, setStartIndex] = useState(10);
   const totalCount = Math.max(...data.map((item) => item.totalCount));
 
   const handleDragEnd = async (result: any) => {
@@ -127,11 +130,14 @@ function Column({
 
     setData(newData);
 
-    setLocateCard({
-      cardId: Number(result.draggableId),
-      startColumnId: Number(result.source.droppableId),
-      endColumnId: Number(result.destination.droppableId),
-    });
+    //드롭시 카드 컬럼 위치 수정
+    try {
+      await httpClient.put(`/cards/${Number(result.draggableId)}`, {
+        columnId: Number(result.destination.droppableId),
+      });
+    } catch {
+      setToast('error', '😰 카드 옮기기에 실패했습니다.');
+    }
   };
 
   const handleAddCardClick = async (columnId: number) => {
@@ -147,17 +153,7 @@ function Column({
       tags: ['총각 김치', '배추김치'],
     });
 
-    const dataRequests = data.map(async (column: any) => {
-      const columnCardData = await httpClient.get<ColumnCardData>(
-        `/cards?columnId=${column.columnId}`,
-      );
-      columnCardData.columnId = column.columnId;
-      columnCardData.columnTitle = column.columnTitle;
-      return columnCardData;
-    });
-    const columnCardData = await Promise.all(dataRequests);
-
-    setData(columnCardData);
+    resetDashboardPage();
   };
 
   const handleDeleteCardClick = async () => {
@@ -165,18 +161,7 @@ function Column({
 
     try {
       await httpClient.delete(`/cards/${modalCardData?.id}`);
-
-      const dataRequests = data.map(async (column: any) => {
-        const columnCardData = await httpClient.get<ColumnCardData>(
-          `/cards?columnId=${column.columnId}`,
-        );
-        columnCardData.columnId = column.columnId;
-        columnCardData.columnTitle = column.columnTitle;
-        return columnCardData;
-      });
-      const columnCardData = await Promise.all(dataRequests);
-
-      setData(columnCardData);
+      resetDashboardPage();
     } catch {
       setToast('error', '😰 카드 삭제에 실패했습니다.');
     }
@@ -191,43 +176,43 @@ function Column({
     setShowModal(false);
   };
 
+  const resetDashboardPage = () => {
+    setResetData((prev) => !prev);
+  };
+
   const handleInfiniteScroll = async () => {
     //데이터 다 불러오면 무한 스크롤 방지
     if (totalCount < startIndex) return;
 
     const nextIndex = startIndex + 10;
-    const dataRequests = data.map(async (column: any) => {
-      const columnCardData = await httpClient.get<ColumnCardData>(
-        `/cards?size=${nextIndex}&columnId=${column.columnId}`,
-      );
-      columnCardData.columnId = column.columnId;
-      columnCardData.columnTitle = column.columnTitle;
-      return columnCardData;
-    });
-    const columnCardData = await Promise.all(dataRequests);
-    setData(columnCardData);
-
     setStartIndex(nextIndex);
+
+    resetDashboardPage();
   };
 
   const sentinelRef = useObserver(handleInfiniteScroll);
 
-  //드롭시 카드 컬럼 위치 수정
+  //데이터 다시 불러오기
   useEffect(() => {
     const fetchData = async () => {
-      if (locateCard.cardId) {
-        try {
-          await httpClient.put(`/cards/${locateCard.cardId}`, {
-            columnId: locateCard.endColumnId,
-          });
-        } catch {
-          return;
-        }
-      }
+      const columnData = await httpClient.get<ColumnData>(
+        `/columns?dashboardId=${dashboardId}`,
+      );
+      const cardRequests = columnData.data.map(async (column: any) => {
+        const columnCardData = await httpClient.get<ColumnCardData>(
+          `/cards?size=${startIndex}&columnId=${column.id}`,
+        );
+        columnCardData.columnId = column.id;
+        columnCardData.columnTitle = column.title;
+        return columnCardData;
+      });
+      const columnCardData = await Promise.all(cardRequests);
+
+      setData(columnCardData);
     };
 
     fetchData();
-  }, [locateCard]);
+  }, [resetData]);
 
   return (
     <>
@@ -259,6 +244,7 @@ function Column({
                           title: columnData.columnTitle,
                           dashboardId: selectDashboard.id,
                         }}
+                        resetDashboardPage={resetDashboardPage}
                       />
                     </div>
                     <PageButton
@@ -333,6 +319,8 @@ function Column({
           setIsOpenColumnModal((prev) => ({ ...prev, new: false }))
         }
         dashboardId={selectDashboard.id}
+        setData={setData}
+        resetDashboardPage={resetDashboardPage}
       />
     </>
   );
