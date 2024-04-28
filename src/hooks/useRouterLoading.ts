@@ -18,9 +18,9 @@ export const useRouterLoading = () => {
     Router.events.on('routeChangeError', endLoading); // 경로 이동 시 에러가 발생되면 실행
 
     return () => {
-      Router.events.on('routeChangeStart', startLoading);
-      Router.events.on('routeChangeComplete', endLoading);
-      Router.events.on('routeChangeError', endLoading);
+      Router.events.off('routeChangeStart', startLoading);
+      Router.events.off('routeChangeComplete', endLoading);
+      Router.events.off('routeChangeError', endLoading);
     };
   }, []);
 
