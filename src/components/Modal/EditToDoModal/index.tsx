@@ -127,7 +127,9 @@ function EditToDoModal({
     defaultValues: {
       title: cardContent?.title,
       description: cardContent?.description,
-      dueDate: new Date(cardContent?.dueDate || ''),
+      dueDate: cardContent?.dueDate
+        ? new Date(cardContent?.dueDate)
+        : new Date(),
     },
   });
 
