@@ -1,5 +1,5 @@
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import InvitedDashboard from './components/InvitedDashboard';
 import styles from './myDashboard.module.scss';
 import HttpClient from '@/apis/httpClient';
@@ -26,9 +26,13 @@ type MyDashboardProps = {
 };
 
 function MyDashboard({ invitations }: MyDashboardProps) {
-  const [invitation, setInvitation] = useState<Invitation[]>(invitations);
+  const [invitation, setInvitation] = useState<Invitation[]>([]);
   const url = useCurrentUrl();
   const isLoading = useRouterLoading();
+
+  useEffect(() => {
+    setInvitation(invitations);
+  }, [invitations]);
 
   if (isLoading) {
     return <Loading />;
@@ -40,7 +44,6 @@ function MyDashboard({ invitations }: MyDashboardProps) {
       <div className={styles.myDashboardPage}>
         <div className={styles.invitedDashboard}>
           <InvitedDashboard
-            initialInvitations={invitations}
             invitations={invitation}
             setInvitations={setInvitation}
           />

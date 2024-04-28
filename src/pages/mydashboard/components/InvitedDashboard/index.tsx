@@ -2,7 +2,7 @@ import PageButton from '@/components/Button/PageButton';
 import styles from './InvitedDashboard.module.scss';
 import Image from 'next/image';
 import SearchDashboard from '../SearchDashboard';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 
@@ -18,16 +18,16 @@ type Invitation = {
 };
 
 type InvitedDashboardProps = {
-  initialInvitations: Invitation[];
   invitations: Invitation[];
   setInvitations: Dispatch<SetStateAction<Invitation[]>>;
 };
 
 function InvitedDashboard({
-  initialInvitations,
   invitations,
   setInvitations,
 }: InvitedDashboardProps) {
+  const [isSearch, setIsSearch] = useState(false);
+
   const handleConfirmClick = async (invitationId: number) => {
     const httpClient = new HttpClient(instance);
     await httpClient.put(`/invitations/${invitationId}`, {
@@ -53,11 +53,11 @@ function InvitedDashboard({
   return (
     <div className={styles.invitedDashboard}>
       <strong>초대받은 대시보드</strong>
-      {initialInvitations.length ? (
+      {invitations.length || isSearch ? (
         <div>
           <SearchDashboard
-            initialInvitations={initialInvitations}
             setInvitations={setInvitations}
+            setIsSearch={setIsSearch}
           />
           <ul>
             <li>
