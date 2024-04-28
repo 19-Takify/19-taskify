@@ -265,7 +265,10 @@ function EditToDoModal({
     name: 'uploadedFile',
     control,
   });
-  const [filePreview] = useFilePreview(watchedUploadedFile);
+  const [filePreview] = useFilePreview(
+    watchedUploadedFile,
+    cardContent.imageUrl,
+  );
   console.log(filePreview);
   return (
     <Modal showModal={showEditModal} handleClose={handleClose}>
@@ -348,10 +351,10 @@ function EditToDoModal({
         </div>
         <label className={styles.label}>이미지</label>
         <label className={styles.fileInput} htmlFor="fileInput">
-          {cardContent?.imageUrl ? (
+          {filePreview ? (
             <div className={styles.imagePreview}>
               <Image
-                src={cardContent?.imageUrl}
+                src={filePreview}
                 alt="카드 이미지 미리보기"
                 width={80}
                 height={80}
