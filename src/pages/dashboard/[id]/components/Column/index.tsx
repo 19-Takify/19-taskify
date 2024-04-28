@@ -294,7 +294,6 @@ function Column({
     //   dueDate: '2024-04-27 18:00',
     //   tags: ['총각 김치', '배추김치'],
     // });
-
     // resetDashboardPage();
     let member = { profileImageUrl: '', nickname: '', userId: 0 };
     try {
@@ -543,6 +542,7 @@ function Column({
           handleClose={handleEditToDoModalclose}
           cardContent={modalCardData}
           dashBoardId={dashboardId}
+          resetDashboardPage={resetDashboardPage}
           purpose="edit"
         />
       )}
@@ -552,6 +552,7 @@ function Column({
           handleClose={handleCreateModalClose}
           cardContent={modalCardData}
           dashBoardId={dashboardId}
+          resetDashboardPage={resetDashboardPage}
           purpose="create"
         />
       )}

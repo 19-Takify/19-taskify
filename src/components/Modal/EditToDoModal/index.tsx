@@ -26,6 +26,9 @@ import pen from '@/svgs/pen.svg';
 import add from '@/svgs/add.svg';
 import { TAG_COLORS } from '@/components/ColorPicker';
 import useFilePreview from '@/hooks/useFilePreview';
+import setToast from '@/utils/setToast';
+import { isAxiosError } from 'axios';
+import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 
 type Assignee = {
   profileImageUrl: string;
@@ -52,6 +55,7 @@ type ModalProps = {
   cardContent: CardList;
   dashBoardId: number;
   purpose: string;
+  resetDashboardPage: () => void;
 };
 
 type FormValues = {
@@ -92,6 +96,7 @@ function EditToDoModal({
   cardContent,
   dashBoardId,
   purpose,
+  resetDashboardPage,
 }: ModalProps) {
   const schema = z.object({
     columnId: z.any(),
@@ -99,7 +104,9 @@ function EditToDoModal({
     title: z.string().min(1, { message: '제목은 필수입니다.' }),
     description: z.string().min(1, { message: '설명은 필수입니다.' }),
     dueDate: z.any(),
-    tags: z.any(),
+    tags: z
+      .string()
+      .max(15, { message: '태그 이름은 15자 이하로 입력해 주세요.' }),
     imageUrl: z.any(),
     uploadedFile: z.any(),
     dashBoardId: z.any(),
@@ -143,13 +150,15 @@ function EditToDoModal({
     if (e.key === 'Enter') {
       e.preventDefault();
       const tagName = (e.target as HTMLInputElement).value;
-      if (tagName !== '') {
-        setTagNameList((prevList) => [
-          ...prevList,
-          `${tagName}!@#$%^&*${selectedColor}`,
-        ]);
+      if (tagName.length <= 8) {
+        if (tagName !== '') {
+          setTagNameList((prevList) => [
+            ...prevList,
+            `${tagName}!@#$%^&*${selectedColor}`,
+          ]);
 
-        (e.target as HTMLInputElement).value = '';
+          (e.target as HTMLInputElement).value = '';
+        }
       }
     }
   };
@@ -164,13 +173,47 @@ function EditToDoModal({
       try {
         const response = await axios.get(`/members?dashboardId=${dashBoardId}`);
         setMembers(response.data.members);
-      } catch (error) {}
+      } catch (error) {
+        if (!isAxiosError(error)) {
+          // `AxiosError`가 아닌 경우
+          setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+          return;
+        }
+        // `AxiosError`인 경우 에러 처리
+        if (!error.response) {
+          setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
+          return;
+        }
+        const status = error.response?.status;
+        switch (status) {
+          case 404:
+            setToast('error', '대시보드의 멤버가 아닙니다.');
+            return;
+        }
+      }
     };
     const getColumns = async () => {
       try {
         const response = await axios.get(`/columns?dashboardId=${dashBoardId}`);
         setColumns(response.data.data);
-      } catch (error) {}
+      } catch (error) {
+        if (!isAxiosError(error)) {
+          // `AxiosError`가 아닌 경우
+          setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+          return;
+        }
+        // `AxiosError`인 경우 에러 처리
+        if (!error.response) {
+          setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
+          return;
+        }
+        const status = error.response?.status;
+        switch (status) {
+          case 404:
+            setToast('error', '대시보드가 존재하지 않습니다.');
+            return;
+        }
+      }
     };
 
     getMembers();
@@ -223,41 +266,35 @@ function EditToDoModal({
       data.dashboardId = dashBoardId;
       console.log('purpose', purpose);
       if (purpose === 'edit') {
-        const response = await axios.put(`/cards/${cardContent?.id}`, data);
-        const result = response.data;
-        console.log(result);
+        await axios.put(`/cards/${cardContent?.id}`, data);
         handleClose();
+        resetDashboardPage();
       }
       if (purpose === 'create') {
-        console.log('강아지');
-        const response = await axios.post('/cards', data);
-        const result = response.data;
-        console.log(result);
+        await axios.post('/cards', data);
         handleClose();
+        resetDashboardPage();
       }
     } catch (error) {
-      ///참고용
-      // if (!isAxiosError(error)) {
-      //   // `AxiosError`가 아닌 경우
-      //   setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
-      //   return;
-      // }
-      // // `AxiosError`인 경우 에러 처리
-      // if (!error.response) {
-      //   setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
-      //   return;
-      // }
-      // const status = error.response?.status;
-      // switch (status) {
-      //   case 400:
-      //     setError('password', {
-      //       message: SERVER_ERROR_MESSAGE.PASSWORD.NOT_MATCH,
-      //     });
-      //     return;
-      //   case 404:
-      //     setError('email', { message: SERVER_ERROR_MESSAGE.USER.NOT_FOUND });
-      //     return;
-      // }
+      if (!isAxiosError(error)) {
+        // `AxiosError`가 아닌 경우
+        setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+        return;
+      }
+      // `AxiosError`인 경우 에러 처리
+      if (!error.response) {
+        setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
+        return;
+      }
+      const status = error.response?.status;
+      switch (status) {
+        case 400:
+          setToast('error', '데이터가 형식에 맞지 않습니다.');
+          return;
+        case 404:
+          setToast('error', '카드 정보가 유효하지 않습니다.');
+          return;
+      }
     }
   };
   const hasErrorMessage = errors && errors['description']?.message;
@@ -339,6 +376,7 @@ function EditToDoModal({
           className={styles.datePicker}
           selectedColor={selectedColor}
           setSelectedColor={setSelectedColor}
+          errors={errors}
         />
         <div className={styles.tags}>
           {tagNameList.map((tagName, i) => {

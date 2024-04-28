@@ -31,6 +31,7 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
   return (
     <>
       <button
+        type="button"
         className={styles.colorPicker}
         style={{ backgroundColor: selectedColor }}
         onClick={handleColorPickerClick}
@@ -40,6 +41,7 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
           {TAG_COLORS.map((color, i) => {
             return (
               <button
+                type="button"
                 className={styles.color}
                 style={{ backgroundColor: color }}
                 key={i}
