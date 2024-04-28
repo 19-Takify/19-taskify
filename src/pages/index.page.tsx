@@ -53,7 +53,7 @@ export default function Home() {
               placeholder="blur"
               blurDataURL="/images/main-section.webp"
               priority
-              style={{ height: 'auto' }}
+              loading="eager"
             />
           </figure>
           <h1 className={styles.mainTitle}>

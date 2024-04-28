@@ -10,10 +10,11 @@ function Loading() {
       <main className={styles.wrap}>
         <section className={styles.content}>
           <Image
+            style={{ width: 'auto', height: 'auto' }}
             className={styles.logo}
             src="/svgs/big-logo.svg"
-            width="195"
-            height="220"
+            width={195}
+            height={220}
             alt="로고 이미지"
             priority
           />

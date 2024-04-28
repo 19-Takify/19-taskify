@@ -153,4 +153,8 @@
       font-size: 0.9rem;
     }
   }
+
+  @include mobile {
+    top: 3.75rem;
+  }
 }
