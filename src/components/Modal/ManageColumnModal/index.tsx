@@ -10,6 +10,7 @@ import ModalButton from '@/components/Button/ModalButton';
 import setToast from '@/utils/setToast';
 import Image from 'next/image';
 import { useState } from 'react';
+import DeleteColumnModal from '../DeleteModal';
 
 type ManageColumnModalProps = {
   columnData: ColumnType;
@@ -60,7 +61,10 @@ function ManageColumnModal({
     },
   });
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({
+    manage: false,
+    delete: false,
+  });
 
   const handleColumnUpdate = async (data: FormValues) => {
     try {
@@ -108,12 +112,18 @@ function ManageColumnModal({
 
   const handleResetClose = () => {
     reset();
-    setShowModal(false);
+    setShowModal({
+      manage: false,
+      delete: false,
+    });
   };
 
   return (
     <>
-      <button type="button" onClick={() => setShowModal(true)}>
+      <button
+        type="button"
+        onClick={() => setShowModal({ manage: true, delete: false })}
+      >
         <Image
           src="/svgs/setting.svg"
           alt="컬럼 설정 이미지"
@@ -121,8 +131,8 @@ function ManageColumnModal({
           height={24}
         />
       </button>
-      {showModal && (
-        <Modal showModal={showModal} handleClose={handleResetClose}>
+      {showModal.manage && (
+        <Modal showModal={showModal.manage} handleClose={handleResetClose}>
           <form
             className={styles.modalForm}
             onSubmit={handleSubmit(handleColumnUpdate)}
@@ -141,7 +151,7 @@ function ManageColumnModal({
               <button
                 type="button"
                 className={styles.columnDelete}
-                onClick={handleColumnDelete}
+                onClick={() => setShowModal({ manage: false, delete: true })}
               >
                 삭제하기
               </button>
@@ -156,6 +166,14 @@ function ManageColumnModal({
             </div>
           </form>
         </Modal>
+      )}
+      {showModal.delete && (
+        <DeleteColumnModal
+          showModal={showModal.delete}
+          handleClose={() => setShowModal({ manage: true, delete: false })}
+          message="정말 삭제하시겠습니까?"
+          deleteColumn={handleColumnDelete}
+        />
       )}
     </>
   );
