@@ -14,6 +14,8 @@ import DeleteConfirmModal from '../DeleteModal';
 
 type ManageColumnModalProps = {
   columnData: ColumnType;
+  handleOpen: () => void;
+  handleClose: () => void;
   resetDashboardPage: () => void;
 };
 
@@ -41,6 +43,8 @@ const schema = z.object({
 
 function ManageColumnModal({
   columnData,
+  handleOpen,
+  handleClose,
   resetDashboardPage,
 }: ManageColumnModalProps) {
   const httpClient = new HttpClient();
@@ -122,7 +126,10 @@ function ManageColumnModal({
     <>
       <button
         type="button"
-        onClick={() => setShowModal({ manage: true, delete: false })}
+        onClick={() => {
+          setShowModal({ manage: true, delete: false });
+          handleOpen();
+        }}
       >
         <Image
           src="/svgs/setting.svg"
@@ -151,7 +158,10 @@ function ManageColumnModal({
               <button
                 type="button"
                 className={styles.columnDelete}
-                onClick={() => setShowModal({ manage: false, delete: true })}
+                onClick={() => {
+                  setShowModal({ manage: false, delete: true });
+                  handleClose();
+                }}
               >
                 삭제하기
               </button>
@@ -170,7 +180,10 @@ function ManageColumnModal({
       {showModal.delete && (
         <DeleteConfirmModal
           showModal={showModal.delete}
-          handleClose={() => setShowModal({ manage: true, delete: false })}
+          handleClose={() => {
+            setShowModal({ manage: true, delete: false });
+            handleClose();
+          }}
           message="정말 삭제하시겠습니까?"
           deleteColumn={handleColumnDelete}
         />

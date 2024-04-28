@@ -4,7 +4,7 @@
   min-height: calc(100vh - 4.3rem);
   width: auto;
   scrollbar-width: none;
-  overflow-x: auto;
+  //overflow-x: auto;
 
   @include tablet {
     flex-direction: column;

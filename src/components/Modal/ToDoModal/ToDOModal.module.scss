@@ -30,6 +30,35 @@
     margin: 0;
   }
 }
+
+.columnName {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  max-width: 26rem;
+  border-radius: 1rem;
+  @include shortText;
+}
+
+.columnTitle {
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
+  background: rgba(85, 52, 218, 0.08);
+  font-size: 1rem;
+  color: $color-violet-5534da;
+}
+
+.tagsList {
+  width: 26rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .contentBox {
   display: flex;
   flex-direction: row-reverse;

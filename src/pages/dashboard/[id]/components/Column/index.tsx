@@ -90,6 +90,7 @@ function Column({
   const selectDashboard = useAtomValue(selectDashboardAtom);
   const [showModal, setShowModal] = useState(false);
   const [modalCardData, setModalCardData] = useState<CardData>();
+  const [columnTitle, setColumnTitle] = useState('');
   const [resetData, setResetData] = useState(false);
   const [isOpenColumnModal, setIsOpenColumnModal] = useState({
     new: false,
@@ -269,7 +270,18 @@ function Column({
       title: '김치',
       description: '대한민국 최고 반찬',
       dueDate: '2024-04-27 18:00',
-      tags: ['총각김치다', '배추김치'],
+      tags: [
+        '총각 김치',
+        '김치',
+        '총각 김치',
+        '김치',
+        '총각 김치',
+        '김치',
+        '총각 김치',
+        '김치',
+        '총각 김치',
+        '김치',
+      ],
     });
 
     resetDashboardPage();
@@ -286,9 +298,10 @@ function Column({
     }
   };
 
-  const handleCardClick = (cardData: CardData) => {
+  const handleCardClick = (cardData: CardData, columnTitle: string) => {
     setShowModal(true);
     setModalCardData(cardData);
+    setColumnTitle(columnTitle);
   };
 
   const handleCloseModal = () => {
@@ -337,6 +350,8 @@ function Column({
     return null;
   }
 
+  console.log(isOpenColumnModal.manage || isOpenColumnModal.new || showModal);
+
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -346,6 +361,11 @@ function Column({
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           data-status="dnd"
+          style={
+            isOpenColumnModal.manage || isOpenColumnModal.new || showModal
+              ? { overflow: 'hidden' }
+              : { overflowX: 'auto' }
+          }
         >
           {data.map((columnData) => (
             <li
@@ -369,6 +389,18 @@ function Column({
                       title: columnData.columnTitle,
                       dashboardId: selectDashboard.id,
                     }}
+                    handleOpen={() => {
+                      setIsOpenColumnModal((prev) => ({
+                        ...prev,
+                        manage: true,
+                      }));
+                    }}
+                    handleClose={() =>
+                      setIsOpenColumnModal((prev) => ({
+                        ...prev,
+                        manage: false,
+                      }))
+                    }
                     resetDashboardPage={resetDashboardPage}
                   />
                 </div>
@@ -395,7 +427,12 @@ function Column({
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              onClick={() => handleCardClick(cardData)}
+                              onClick={() =>
+                                handleCardClick(
+                                  cardData,
+                                  columnData.columnTitle,
+                                )
+                              }
                             >
                               <Card cardData={cardData} />
                               {index === columnData.cards.length - 1 && (
@@ -459,6 +496,7 @@ function Column({
           showModal={showModal}
           handleClose={handleCloseModal}
           cardData={modalCardData}
+          columnTitle={columnTitle}
           handleDeleteCardClick={handleDeleteCardClick}
           dashboardId={dashboardId}
         />

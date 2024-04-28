@@ -27,6 +27,17 @@ type CardProps = {
   cardData: CardList;
 };
 
+const TAG_COLORS = [
+  '#E99695',
+  '#F9D0C4',
+  '#FEF2C0',
+  '#C2E0C6',
+  '#BFDADC',
+  '#C5DEF5',
+  '#BFD4F2',
+  '#D4C5F9',
+];
+
 function Card({ cardData }: CardProps) {
   return (
     <div className={styles.cardBox} data-status="item">
@@ -46,9 +57,10 @@ function Card({ cardData }: CardProps) {
           </span>
           <div className={styles.tabletContent} data-status="item">
             <ul className={styles.tags} data-status="item">
-              {cardData?.tags?.map((tag, index) => (
-                <li key={index} data-status="item">
-                  <Tag>{tag}</Tag>
+              {cardData?.tags?.slice(0, 2).map((tag, index) => (
+                <li className={styles.tagsList} key={index} data-status="item">
+                  {/* 문자열 다섯 자리까지만 출력 */}
+                  <Tag color={TAG_COLORS[index]}>{tag.slice(0, 5)}</Tag>
                 </li>
               ))}
             </ul>
