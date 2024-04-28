@@ -11,6 +11,7 @@ import { UserType } from '@/types/auth';
 import { getMeForServer } from '@/utils/auth';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
 import { getCookieWithCookies } from '@/utils/cookie';
+import Head from 'next/head';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -35,6 +36,9 @@ export default function MyApp({
 
   return (
     <>
+      <Head>
+        <title>Taskify</title>
+      </Head>
       <ToastContainer pauseOnFocusLoss={false} />
       {getLayout(<Component {...pageProps} />)}
     </>

@@ -1,5 +1,6 @@
 .myDashboardPage {
   height: 100vh;
+  height: calc(100vh - 4.3rem);
   background: $color-gray-fafafa;
 }
 

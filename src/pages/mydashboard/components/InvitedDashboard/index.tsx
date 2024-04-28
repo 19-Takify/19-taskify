@@ -94,6 +94,7 @@ function InvitedDashboard({
             alt="초대 받지 못한 메시지 이미지"
             width={100}
             height={100}
+            priority
           />
           <p>아직 초대받은 대시보드가 없어요</p>
         </div>
