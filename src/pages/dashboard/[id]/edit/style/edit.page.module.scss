@@ -3,6 +3,10 @@
   min-height: calc(100vh - 4.3rem);
   padding: 1rem 0 2.5rem 1rem;
 
+  @include tablet {
+    padding: 0.5rem 0 2.5rem 1rem;
+  }
+
   .box {
     width: 38.75rem;
     display: flex;
@@ -13,6 +17,7 @@
     @include tablet {
       width: auto;
       margin-right: 1rem;
+      gap: 0.5rem;
     }
 
     .buttonBox {
@@ -39,6 +44,7 @@
 
         @include tablet {
           width: 12rem;
+          height: 3rem;
           font-size: 0.9rem;
         }
       }
