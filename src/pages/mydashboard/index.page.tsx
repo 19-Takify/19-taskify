@@ -9,6 +9,7 @@ import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import Loading from '@/components/Loading';
 import { useRouterLoading } from '@/hooks/useRouterLoading';
+import BackButton from '@/components/Button/BackButton';
 
 type Invitation = {
   id: number;
@@ -42,6 +43,9 @@ function MyDashboard({ invitations }: MyDashboardProps) {
     <>
       <Meta title="Taskify | 내 대시보드" url={url} />
       <div className={styles.myDashboardPage}>
+        <div className={styles.backButton}>
+          <BackButton />
+        </div>
         <div className={styles.invitedDashboard}>
           <InvitedDashboard
             invitations={invitation}
