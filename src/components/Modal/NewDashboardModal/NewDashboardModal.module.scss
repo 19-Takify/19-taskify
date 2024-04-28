@@ -19,14 +19,18 @@
 }
 
 .circle {
+  position: relative;
   border-radius: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   appearance: none;
   cursor: pointer;
 
   &:checked::before,
   &:hover::before {
     content: url('/svgs/check-white.svg');
+    position: absolute;
+    top: 2px;
+    left: 2px;
   }
 }
