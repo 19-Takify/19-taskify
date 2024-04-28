@@ -45,7 +45,7 @@ export const isDashboardAccessible = async (
 ) => {
   try {
     const response = await fetch(
-      `{process.env.NEXT_PUBLIC_BASE_URL}/dashboards/${dashboardId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/dashboards/${dashboardId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
