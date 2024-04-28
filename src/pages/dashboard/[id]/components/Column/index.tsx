@@ -17,6 +17,8 @@ import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import axios from '@/apis/axios';
+import { isAxiosError } from 'axios';
+import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 
 type CardData = {
   id: number;
@@ -283,23 +285,28 @@ function Column({
     columnId: number,
     dashBoardId: number,
   ) => {
-    //카드 생성 모달 나중에 구현
-
-    // await httpClient.post(`/cards`, {
-    //   assigneeUserId: userId,
-    //   dashboardId: dashboardId,
-    //   columnId: columnId,
-    //   title: '김치',
-    //   description: '대한민국 최고 반찬',
-    //   dueDate: '2024-04-27 18:00',
-    //   tags: ['총각 김치', '배추김치'],
-    // });
-    // resetDashboardPage();
     let member = { profileImageUrl: '', nickname: '', userId: 0 };
     try {
       const response = await axios.get(`/members?dashboardId=${dashBoardId}`);
       member = response.data.members[0];
-    } catch (error) {}
+    } catch (error) {
+      if (!isAxiosError(error)) {
+        // `AxiosError`가 아닌 경우
+        setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+        return;
+      }
+      // `AxiosError`인 경우 에러 처리
+      if (!error.response) {
+        setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
+        return;
+      }
+      const status = error.response?.status;
+      switch (status) {
+        case 404:
+          setToast('error', '대시보드의 멤버가 아닙니다.');
+          return;
+      }
+    }
 
     setModalCardData({
       id: 0,

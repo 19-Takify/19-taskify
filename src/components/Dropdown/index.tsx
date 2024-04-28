@@ -73,13 +73,13 @@ function Dropdown({
   //안 해주면 isSelectData의 초기값이 initialData의 초기값으로 설정이 된다.
   useEffect(() => {
     const id = initialData?.id;
-    setIsSelectData({
-      isClick: false,
-      id: initialData?.id ?? 1,
-      title: initialData?.title ?? '',
-      nickname: initialData?.nickname ?? '',
-      profileImageUrl: initialData?.profileImageUrl ?? '',
-    });
+    //   setIsSelectData({
+    //     isClick: false,
+    //     id: initialData?.id ?? 1,
+    //     title: initialData?.title ?? '',
+    //     nickname: initialData?.nickname ?? '',
+    //     profileImageUrl: initialData?.profileImageUrl ?? '',
+    //   });
     setValue(register.name, id);
   }, [initialData, register.name, setValue]);
 
