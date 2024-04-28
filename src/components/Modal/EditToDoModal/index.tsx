@@ -63,7 +63,7 @@ type FormValues = {
   assigneeUserId: number;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate: Date;
   tags: string[];
   uploadedFile: FileList;
   imageUrl: string | null;
@@ -103,7 +103,7 @@ function EditToDoModal({
     assigneeUserId: z.any(),
     title: z.string().min(1, { message: '제목은 필수입니다.' }),
     description: z.string().min(1, { message: '설명은 필수입니다.' }),
-    dueDate: z.any(),
+    dueDate: z.date(),
     tags: z
       .string()
       .max(15, { message: '태그 이름은 15자 이하로 입력해 주세요.' }),
@@ -127,7 +127,7 @@ function EditToDoModal({
     defaultValues: {
       title: cardContent?.title,
       description: cardContent?.description,
-      dueDate: cardContent?.dueDate,
+      dueDate: new Date(cardContent?.dueDate || ''),
     },
   });
 
@@ -245,7 +245,6 @@ function EditToDoModal({
       // data.columnId = 22433;
       const timestamp = new Date(data.dueDate).getTime();
       const date = formatDate(timestamp);
-      data.dueDate = date;
       // data.imageUrl = data.imageUrl[0];
       if (data.uploadedFile !== null && data.uploadedFile.length !== 0) {
         const imageFile = data.uploadedFile[0];
@@ -266,7 +265,10 @@ function EditToDoModal({
       data.dashboardId = dashBoardId;
       console.log('purpose', purpose);
       if (purpose === 'edit') {
-        await axios.put(`/cards/${cardContent?.id}`, data);
+        await axios.put(`/cards/${cardContent?.id}`, {
+          ...data,
+          dueDate: date,
+        });
         handleClose();
         resetDashboardPage();
       }
