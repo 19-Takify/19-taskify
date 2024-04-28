@@ -105,7 +105,7 @@ function DashboardManager({ usage, data }: TDashboardManagerProps) {
           placeholder={
             isInvite
               ? '초대한 유저의 이메일을 입력해 주세요.'
-              : '대시보드 구성원의 닉네임을 입력해 주세요.'
+              : '구성원의 닉네임을 입력해 주세요.'
           }
           value={searchValue}
           onChange={handleInputChange}
