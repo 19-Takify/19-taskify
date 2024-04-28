@@ -12,6 +12,8 @@ import { getMe } from '@/utils/auth';
 import { useRouter } from 'next/router';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
+import { useRouterLoading } from '@/hooks/useRouterLoading';
+import Loading from '@/components/Loading';
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -118,19 +120,22 @@ type DashboardIdProps = {
 function DashboardId({ dashboardId, userId, allData }: DashboardIdProps) {
   const router = useRouter();
   const [data, setData] = useState<ColumnCardData[]>([]);
+  const selectDashboard = useAtomValue(selectDashboardAtom);
+  const isLoading = useRouterLoading();
+  const url = useCurrentUrl();
 
   //페이지 이동시 데이터 받아오기 위해서 작성
   useEffect(() => {
     setData(allData);
   }, [router.asPath]);
 
-  const selectDashboard = useAtomValue(selectDashboardAtom);
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <Meta
-        title={`Taskify | ${selectDashboard.title}`}
-        url={useCurrentUrl()}
-      />
+      <Meta title={`Taskify | ${selectDashboard.title}`} url={url} />
       <div>
         <Column
           dashboardId={dashboardId}

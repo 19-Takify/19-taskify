@@ -86,7 +86,7 @@ function Column({
   const [enabled, setEnabled] = useState(false);
   const [buttonVisible, setButtonVisible] = useState({
     prev: false,
-    next: true,
+    next: false,
   });
   const cardContainer = useRef<any>(null);
   const xDown = useRef<any>(null);
@@ -191,6 +191,14 @@ function Column({
   useEffect(() => {
     if (cardContainer.current) {
       cardContainer.current.addEventListener('scroll', handleScroll);
+      if (
+        cardContainer.current.scrollWidth > cardContainer.current.clientWidth
+      ) {
+        setButtonVisible({
+          prev: false,
+          next: true,
+        });
+      }
     }
   }, [enabled]);
 

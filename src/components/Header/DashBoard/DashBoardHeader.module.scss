@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 1.5rem;
-  max-width: 120rem;
+  width: 100%;
   min-width: 18.75rem;
   position: sticky;
   z-index: 999;
@@ -111,7 +111,8 @@
 
 .name {
   color: $color-black-333236;
-  width: 3.5rem;
+  width: auto;
+  max-width: 4rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -124,8 +125,8 @@
 .popOver {
   position: absolute;
   background-color: $color-white-ffffff;
-  width: 8rem;
-  right: 2rem;
+  width: 7.5rem;
+  right: 1rem;
   top: 4.3rem;
   border: 0.0625rem solid $color-gray-d9d9d9;
   border-radius: 0.5rem;
@@ -134,7 +135,7 @@
   .list {
     text-align: center;
     cursor: pointer;
-    width: 7.875rem;
+    width: 7.5rem;
     height: 3.25rem;
     &:nth-of-type(1) {
       border-bottom: 0.0625rem solid $color-gray-d9d9d9;
@@ -151,5 +152,9 @@
       line-height: 3.25rem;
       font-size: 0.9rem;
     }
+  }
+
+  @include mobile {
+    top: 3.75rem;
   }
 }
