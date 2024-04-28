@@ -78,7 +78,23 @@ function Column({
 }: ColumnProps<ColumnCardData[]>) {
   const httpClient = new HttpClient(instance);
   const [showModal, setShowModal] = useState(false);
-  const [modalCardData, setModalCardData] = useState<CardData>();
+  const [modalCardData, setModalCardData] = useState<CardData>({
+    id: 0,
+    title: '',
+    description: '',
+    tags: [],
+    dueDate: '',
+    assignee: {
+      profileImageUrl: '',
+      nickname: '',
+      id: 0,
+    },
+    imageUrl: '',
+    teamId: '',
+    columnId: 0,
+    createdAt: '',
+    updatedAt: '',
+  });
   const [locateCard, setLocateCard] = useState<LocateCard>({
     cardId: null,
     startColumnId: null,
