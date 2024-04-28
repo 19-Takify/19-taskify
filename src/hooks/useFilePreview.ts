@@ -4,7 +4,7 @@ export default function useFilePreview(
   file: FileList,
   selectedImageUrl: string | null | undefined,
 ) {
-  const [imgSrc, setImgSrc] = useState<string>(selectedImageUrl || '');
+  const [imgSrc, setImgSrc] = useState(selectedImageUrl || '');
 
   useEffect(() => {
     if (file && file[0]) {
@@ -17,5 +17,5 @@ export default function useFilePreview(
     //imgSrc를 dependency list에 넣으면 무한루프가 생김
   }, [file]);
 
-  return [imgSrc];
+  return { imgSrc, setImgSrc };
 }

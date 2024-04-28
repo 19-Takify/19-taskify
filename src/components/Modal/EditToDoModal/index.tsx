@@ -5,6 +5,7 @@ import React, {
   KeyboardEvent,
   MouseEvent,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import Modal from '../Modal';
@@ -265,11 +266,16 @@ function EditToDoModal({
     name: 'uploadedFile',
     control,
   });
-  const [filePreview] = useFilePreview(
+  const { imgSrc: filePreview, setImgSrc: setFilePreview } = useFilePreview(
     watchedUploadedFile,
     cardContent.imageUrl,
   );
-  console.log(filePreview);
+
+  const handleImageFileDelete = () => {
+    setValue('imageUrl', '');
+    setFilePreview('');
+  };
+
   return (
     <Modal showModal={showEditModal} handleClose={handleClose}>
       <form onSubmit={handleSubmit(handleValidSubmit)}>
@@ -350,6 +356,9 @@ function EditToDoModal({
           })}
         </div>
         <label className={styles.label}>이미지</label>
+        <button type="button" onClick={handleImageFileDelete}>
+          삭제
+        </button>
         <label className={styles.fileInput} htmlFor="fileInput">
           {filePreview ? (
             <div className={styles.imagePreview}>
