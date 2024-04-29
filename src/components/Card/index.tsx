@@ -39,6 +39,7 @@ const TAG_COLORS = [
 ];
 
 function Card({ cardData }: CardProps) {
+  const division = '!@#$%^&*';
   return (
     <div className={styles.cardBox} data-status="item">
       {cardData?.imageUrl && (
@@ -60,12 +61,20 @@ function Card({ cardData }: CardProps) {
           </span>
           <div className={styles.tabletContent} data-status="item">
             <ul className={styles.tags} data-status="item">
-              {cardData?.tags?.slice(0, 2).map((tag, index) => (
-                <li className={styles.tagsList} key={index} data-status="item">
-                  {/* 문자열 다섯 자리까지만 출력 */}
-                  <Tag color={TAG_COLORS[index]}>{tag.slice(0, 5)}</Tag>
-                </li>
-              ))}
+              {cardData?.tags?.slice(0, 2).map((tag, index) => {
+                const color = tag.split(division)[1];
+                const tagContent = tag.split(division)[0];
+                return (
+                  <li
+                    className={styles.tagsList}
+                    key={index}
+                    data-status="item"
+                  >
+                    {/* 문자열 다섯 자리까지만 출력 */}
+                    <Tag color={color}>{tagContent.slice(0, 5)}</Tag>
+                  </li>
+                );
+              })}
             </ul>
             <div className={styles.bottom} data-status="item">
               <div className={styles.date} data-status="item">
