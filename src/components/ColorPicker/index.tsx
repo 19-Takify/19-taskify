@@ -28,7 +28,7 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
   };
 
   useEffect(() => {
-    function handleClickOutside(event: any): void {
+    const handleClickOutside = (event: any): void => {
       if (
         colorRef.current &&
         !colorRef.current.contains(event.target as Node)
@@ -36,13 +36,13 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
         setIsOpen(false);
       }
       return;
-    }
+    };
 
-    function handleKeyDown(event: any) {
+    const handleKeyDown = (event: any) => {
       if (event.key === 'Enter') {
         setIsOpen(false);
       }
-    }
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKeyDown);
@@ -70,7 +70,7 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
                 style={{ backgroundColor: color }}
                 key={i}
                 onClick={(e) => handleColorButtonClick(e, color)}
-              ></button>
+              />
             );
           })}
         </div>
