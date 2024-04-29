@@ -167,95 +167,102 @@ function ToDoModal({
 
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
-      <div className={styles.btnBox}>
-        <div className={styles.btns}>
-          <button onClick={handleDropdownOpen} className={styles.btnx}>
-            <Image
-              src="/svgs/kebab.svg"
-              alt="케밥 버튼"
-              width={28}
-              height={28}
-            />
-          </button>
-          {isDropdown && (
-            <ModalPopOver
-              showDropdown={isDropdown}
-              handleDropdownClose={handleDropdownClose}
-              handleDeleteCardClick={handleDeleteCardClick}
-            />
-          )}
-          <button onClick={handleClose} className={styles.btnx}>
-            <Image src="/svgs/close.svg" alt="닫기" width={28} height={28} />
-          </button>
+      <div className={styles.todoBox}>
+        <div className={styles.btnBox}>
+          <div className={styles.btns}>
+            <button onClick={handleDropdownOpen} className={styles.btnx}>
+              <Image
+                src="/svgs/kebab.svg"
+                alt="케밥 버튼"
+                width={28}
+                height={28}
+              />
+            </button>
+            {isDropdown && (
+              <ModalPopOver
+                showDropdown={isDropdown}
+                handleDropdownClose={handleDropdownClose}
+                handleDeleteCardClick={handleDeleteCardClick}
+              />
+            )}
+            <button onClick={handleClose} className={styles.btnx}>
+              <Image src="/svgs/close.svg" alt="닫기" width={28} height={28} />
+            </button>
+          </div>
+          <div className={styles.name}>새로운 일정 관리 Taskify</div>
         </div>
-        <div className={styles.name}>새로운 일정 관리 Taskify</div>
-      </div>
-      <div className={styles.contentBox}>
-        <div className={styles.managerBox}>
-          <div className={styles.nameBox}>
-            <div className={styles.manager}>담당자</div>
-            <div className={styles.managerProfile}>
-              <ProfileIcon profile={cardData?.assignee} small />
+        <div className={styles.contentBox}>
+          <div className={styles.managerBox}>
+            <div className={styles.nameBox}>
+              <div className={styles.manager}>담당자</div>
+              <div className={styles.managerProfile}>
+                <ProfileIcon profile={cardData?.assignee} small />
+                <div className={styles.managerName}>
+                  {cardData?.assignee?.nickname || '담당자 없음'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className={`${styles.manager} ${styles.doneDate}`}>
+                마감일
+              </div>
               <div className={styles.managerName}>
-                {cardData?.assignee?.nickname || '담당자 없음'}
+                {cardData?.dueDate || '마감일 없음'}
               </div>
             </div>
           </div>
           <div>
-            <div className={`${styles.manager} ${styles.doneDate}`}>마감일</div>
-            <div className={styles.managerName}>
-              {cardData?.dueDate || '마감일 없음'}
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className={styles.content}>
-            <div className={styles.columnName}>
-              <div className={styles.columnTitle}>{`• ${columnTitle}`}</div>
-            </div>
-            <ul className={styles.tagsList}>
-              {cardData?.tags?.map((tag, index) => (
-                <li key={index} data-status="item">
-                  <Tag color={TAG_COLORS[index % TAG_COLORS.length]}>{tag}</Tag>
-                </li>
-              ))}
-            </ul>
-            <div className={styles.text}>
-              {cardData?.description || '설명이 없습니다.'}
-            </div>
-            <div className={styles.img}>
-              {cardData?.imageUrl && (
-                <Image
-                  src={cardData.imageUrl}
-                  alt="카드 사진"
-                  layout="responsive"
-                  width={300}
-                  height={300}
+            <div className={styles.content}>
+              <div className={styles.columnName}>
+                <div className={styles.columnTitle}>{`• ${columnTitle}`}</div>
+              </div>
+              <ul className={styles.tagsList}>
+                {cardData?.tags?.map((tag, index) => (
+                  <li key={index} data-status="item">
+                    <Tag color={TAG_COLORS[index % TAG_COLORS.length]}>
+                      {tag}
+                    </Tag>
+                  </li>
+                ))}
+              </ul>
+              <div className={styles.text}>
+                {cardData?.description || '설명이 없습니다.'}
+              </div>
+              <div className={styles.img}>
+                {cardData?.imageUrl && (
+                  <Image
+                    className={styles.cardImage}
+                    src={cardData.imageUrl}
+                    alt="카드 사진"
+                    layout="fixed"
+                    width={416}
+                    height={295}
+                  />
+                )}
+              </div>
+              <div>댓글</div>
+              <div className={styles.textarea}>
+                <textarea
+                  placeholder="댓글 작성하기"
+                  className={styles.input}
+                  ref={textAreaRef}
+                  onKeyDown={handleKeyDown}
                 />
-              )}
+                <button
+                  className={styles.submit}
+                  onClick={handleCommentSubmit}
+                  type="submit"
+                >
+                  입력
+                </button>
+              </div>
             </div>
-            <div>댓글</div>
-            <div className={styles.textarea}>
-              <textarea
-                placeholder="댓글 작성하기"
-                className={styles.input}
-                ref={textAreaRef}
-                onKeyDown={handleKeyDown}
-              />
-              <button
-                className={styles.submit}
-                onClick={handleCommentSubmit}
-                type="submit"
-              >
-                입력
-              </button>
-            </div>
+            <CommentsList
+              commentDataArray={commentData}
+              onDelete={handleOnDelete}
+              onUpdate={handleOnUpdate}
+            />
           </div>
-          <CommentsList
-            commentDataArray={commentData}
-            onDelete={handleOnDelete}
-            onUpdate={handleOnUpdate}
-          />
         </div>
       </div>
     </Modal>

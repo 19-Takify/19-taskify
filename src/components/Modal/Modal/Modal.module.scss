@@ -19,6 +19,7 @@
   max-height: 40rem;
   //크기 넘치면 스크롤 ...
   overflow-y: auto;
+  overflow-x: hidden;
   &::-webkit-scrollbar {
     width: 0.8125rem;
   }
