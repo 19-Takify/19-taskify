@@ -89,6 +89,7 @@ function ToDoModal({
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CommentData[]>([]);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const division = '!@#$%^&*';
 
   const handleDropdownOpen = () => {
     setIsDropdown(true);
@@ -237,13 +238,15 @@ function ToDoModal({
                 <div className={styles.columnTitle}>{`• ${columnTitle}`}</div>
               </div>
               <ul className={styles.tagsList}>
-                {cardData?.tags?.map((tag, index) => (
-                  <li key={index} data-status="item">
-                    <Tag color={TAG_COLORS[index % TAG_COLORS.length]}>
-                      {tag}
-                    </Tag>
-                  </li>
-                ))}
+                {cardData?.tags?.map((tag, index) => {
+                  const color = tag.split(division)[1];
+                  const tagContent = tag.split(division)[0];
+                  return (
+                    <li key={index} data-status="item">
+                      <Tag color={color}>{tagContent}</Tag>
+                    </li>
+                  );
+                })}
               </ul>
               <div className={styles.text}>
                 {cardData?.description || '설명이 없습니다.'}
