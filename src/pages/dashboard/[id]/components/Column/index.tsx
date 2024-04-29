@@ -573,7 +573,8 @@ function Column({
       {showEditModal && (
         <EditToDoModal
           showEditModal={showEditModal}
-          handleClose={handleEditToDoModalclose}
+          handleClose={() => setShowEditModal(false)}
+          handleCancel={handleEditToDoModalclose}
           cardContent={modalCardData}
           dashBoardId={dashboardId}
           resetDashboardPage={resetDashboardPage}
@@ -584,6 +585,7 @@ function Column({
         <EditToDoModal
           showEditModal={showCreateModal}
           handleClose={handleCreateModalClose}
+          handleCancel={handleCreateModalClose}
           cardContent={modalCardData}
           dashBoardId={dashboardId}
           resetDashboardPage={resetDashboardPage}

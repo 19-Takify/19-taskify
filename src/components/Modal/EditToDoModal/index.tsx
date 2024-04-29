@@ -43,6 +43,7 @@ type CardList = {
 type ModalProps = {
   showEditModal: boolean;
   handleClose: () => void;
+  handleCancel: () => void;
   cardContent: CardList;
   dashBoardId: number;
   purpose: string;
@@ -84,6 +85,7 @@ type Column = {
 function EditToDoModal({
   showEditModal,
   handleClose,
+  handleCancel,
   cardContent,
   dashBoardId,
   purpose,
@@ -465,7 +467,7 @@ function EditToDoModal({
           {...register('uploadedFile')}
         />
         <div className={styles.buttons}>
-          <ModalButton className={styles.modalButton} onClick={handleClose}>
+          <ModalButton className={styles.modalButton} onClick={handleCancel}>
             취소
           </ModalButton>
           <ModalButton
