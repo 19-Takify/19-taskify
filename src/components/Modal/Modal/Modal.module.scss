@@ -16,6 +16,26 @@
   background-color: $color-white-ffffff;
   padding: 1.5rem;
   border-radius: 0.5rem;
+  max-height: 40rem;
+  //크기 넘치면 스크롤 ...
+  overflow-y: auto;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 0.8125rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-white-ffffff;
+    border: 0.125rem solid $color-gray-d9d9d9;
+    border-radius: 0.3125rem;
+    min-height: 3.75rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10rem;
+    background: $color-gray-eeeeee;
+  }
+
   @include tablet {
     padding: 1.5rem 1.3rem 1.7rem;
   }

@@ -14,6 +14,8 @@ import DeleteConfirmModal from '../DeleteModal';
 
 type ManageColumnModalProps = {
   columnData: ColumnType;
+  handleOpen: () => void;
+  handleClose: () => void;
   resetDashboardPage: () => void;
 };
 
@@ -41,6 +43,8 @@ const schema = z.object({
 
 function ManageColumnModal({
   columnData,
+  handleOpen,
+  handleClose,
   resetDashboardPage,
 }: ManageColumnModalProps) {
   const httpClient = new HttpClient();
@@ -116,13 +120,17 @@ function ManageColumnModal({
       manage: false,
       delete: false,
     });
+    handleClose();
   };
 
   return (
     <>
       <button
         type="button"
-        onClick={() => setShowModal({ manage: true, delete: false })}
+        onClick={() => {
+          setShowModal({ manage: true, delete: false });
+          handleOpen();
+        }}
       >
         <Image
           src="/svgs/setting.svg"
