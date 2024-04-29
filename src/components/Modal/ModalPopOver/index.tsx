@@ -1,7 +1,6 @@
-import React, { Dispatch, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, useRef } from 'react';
 import styles from './ModalDropdown.module.scss';
 import useCloseModal from '@/hooks/useModalClose';
-import EditToDoModal from '../EditToDoModal';
 import { SetStateAction } from 'jotai';
 
 type Assignee = {

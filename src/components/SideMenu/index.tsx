@@ -1,5 +1,5 @@
 import Circle from '@/components/Circle';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,7 +9,6 @@ import PageButton from '../Button/PageButton';
 import Link from 'next/link';
 import setToast from '@/utils/setToast';
 import { TOAST_TEXT } from '@/constants/toastText';
-import { selectDashboardAtom } from '@/store/dashboard';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import NewDashboardModal from '../Modal/NewDashboardModal';

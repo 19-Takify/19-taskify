@@ -1,26 +1,16 @@
-import React, {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  KeyboardEvent,
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { KeyboardEvent, MouseEvent, useEffect, useState } from 'react';
 import Modal from '../Modal';
 import ModalButton from '@/components/Button/ModalButton';
 import Dropdown from '@/components/Dropdown';
-import { FieldValues, SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { string, z } from 'zod';
+import { z } from 'zod';
 import Input from '@/components/Inputs/Input';
 import DatePicker from '@/components/Inputs/DatePicker';
 import axios from '@/apis/axios';
 import Tag from '@/components/Tag';
 import styles from './EditToDoModal.module.scss';
 import { formatDate } from '@/utils/dateCalculator';
-import { SetStateAction } from 'jotai';
 import Image from 'next/image';
 import pen from '@/svgs/pen.svg';
 import add from '@/svgs/add.svg';
@@ -236,7 +226,7 @@ function EditToDoModal({
 
     getMembers();
     getColumns();
-  }, []);
+  }, [dashBoardId]);
   const [assignee, setAssignee] = useState<Member | undefined>();
   const [currentState, setCurrentState] = useState<Column | undefined>();
   useEffect(() => {

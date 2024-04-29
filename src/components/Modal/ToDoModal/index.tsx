@@ -11,7 +11,6 @@ import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 import { SetStateAction } from 'jotai';
 import Tag from '@/components/Tag';
-import Circle from '@/components/Circle';
 
 type Assignee = {
   profileImageUrl: string;

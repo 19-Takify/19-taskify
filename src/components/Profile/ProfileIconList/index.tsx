@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
 import ProfileIcon from '../ProfileIcon';
 import styles from './ProfileIconList.module.scss';

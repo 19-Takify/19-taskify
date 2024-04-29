@@ -15,8 +15,6 @@ import { selectDashboardAtom } from '@/store/dashboard';
 import { useRouterLoading } from '@/hooks/useRouterLoading';
 import Loading from '@/components/Loading';
 import axios from '@/apis/axios';
-import setToast from '@/utils/setToast';
-import { TOAST_TEXT } from '@/constants/toastText';
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
