@@ -50,7 +50,7 @@ function Card({ cardData }: CardProps) {
             alt="카드 배경 이미지"
             width={276}
             height={160}
-            priority
+            loading="lazy"
           />
         </div>
       )}
