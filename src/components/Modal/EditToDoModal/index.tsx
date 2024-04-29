@@ -141,6 +141,8 @@ function EditToDoModal({
   const [columns, setColumns] = useState<Column[]>([]);
   //기존 담당자
   const [assignee, setAssignee] = useState<Member | undefined>();
+  //기존 상태
+  const [currentState, setCurrentState] = useState<Column | undefined>();
   const hasErrorMessage = errors && errors['description']?.message;
   const watchedUploadedFile = useWatch({
     name: 'uploadedFile',
@@ -188,6 +190,7 @@ function EditToDoModal({
       return;
     }
     setTagNameList((prevList) => [...prevList, mergedTag]);
+    console.log(tagNameList);
     (e.target as HTMLInputElement).value = '';
   };
 
@@ -261,6 +264,8 @@ function EditToDoModal({
       (el) => el.userId === cardContent?.assignee?.id,
     );
     setAssignee(assignee);
+    const state = columns.find((el) => el.id === cardContent?.columnId);
+    setCurrentState(state);
     setTagNameList(cardContent?.tags);
   }, [members, cardContent, columns]);
 
@@ -342,13 +347,28 @@ function EditToDoModal({
         <div className={styles.dropdowns}>
           <div className={styles.dropdown}>
             <label className={styles.label}>상태</label>
-            <Dropdown
-              usage="state"
-              data={columns}
-              initialData={{ title: columnTitle, id: columnId }}
-              register={register('columnId')}
-              setValue={setValue}
-            />
+            {purpose === 'create' ? (
+              <Dropdown
+                usage="state"
+                data={columns}
+                //이 값으로 하지 않으면 초기 state값이 없음
+                initialData={{
+                  title: currentState?.title,
+                  id: currentState?.id,
+                }}
+                register={register('columnId')}
+                setValue={setValue}
+              />
+            ) : (
+              <Dropdown
+                usage="state"
+                data={columns}
+                //이 값으로 하지 않으면 카드를 옮겼을 때 state 초기값에 반영되지 않음
+                initialData={{ title: columnTitle, id: columnId }}
+                register={register('columnId')}
+                setValue={setValue}
+              />
+            )}
           </div>
           <div className={styles.dropdown}>
             <label className={styles.label}>담당자</label>
