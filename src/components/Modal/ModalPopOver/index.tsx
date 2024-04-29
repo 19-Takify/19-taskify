@@ -14,8 +14,10 @@ function ModalPopOver({
   handleDeleteCardClick,
 }: ModalDropdownProps) {
   const modalRef: any = useRef();
+
   useCloseModal(showDropdown, handleDropdownClose, modalRef);
 
+  /*
   useEffect(() => {
     if (showDropdown) {
       document.body.style.cssText = 'overflow: hidden;';
@@ -24,6 +26,7 @@ function ModalPopOver({
       };
     }
   }, [showDropdown]);
+  */
 
   return (
     <div className={styles.dropdownBox}>

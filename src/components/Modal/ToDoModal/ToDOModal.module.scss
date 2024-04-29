@@ -1,3 +1,7 @@
+.todoBox {
+  //max-width: 36rem;
+}
+
 .btnBox {
   display: flex;
   flex-direction: row-reverse;
@@ -30,18 +34,49 @@
     margin: 0;
   }
 }
+
+.columnName {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  max-width: 24rem;
+  border-radius: 1rem;
+  @include shortText;
+}
+
+.columnTitle {
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
+  background: rgba(85, 52, 218, 0.08);
+  font-size: 1rem;
+  color: $color-violet-5534da;
+}
+
+.tagsList {
+  max-width: 26rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .contentBox {
   display: flex;
   flex-direction: row-reverse;
   gap: 1.3rem;
-  @include mobile {
+  width: 100%;
+  @include tablet {
     flex-direction: column;
   }
 }
 .content {
   width: 26rem;
-  @include mobile {
-    width: 18rem;
+  @include tablet {
+    max-width: 26rem;
+    width: 100%;
   }
 }
 .text {
@@ -53,12 +88,19 @@
   @include mobile {
     font-size: 0.8rem;
   }
+  word-wrap: break-word;
 }
 .img {
   width: 100%;
   margin-bottom: 1rem;
   display: block;
 }
+
+.cardImage {
+  width: 26rem;
+  height: 15.25rem;
+}
+
 .textarea {
   display: flex;
   flex-direction: column;
@@ -102,14 +144,17 @@
 }
 
 .managerBox {
+  display: flex;
+  flex-direction: column;
   border: 0.1rem solid $color-gray-d9d9d9;
   border-radius: 0.5rem;
-  width: 12.5rem;
+  width: 100%;
   height: 9.6rem;
   padding: 1rem;
 
-  @include mobile {
-    width: 18rem;
+  @include tablet {
+    flex-direction: row;
+    justify-content: space-between;
     height: 4.5rem;
     display: flex;
   }

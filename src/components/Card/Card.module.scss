@@ -18,10 +18,12 @@
   }
 }
 
-.cardBox span {
+.cardTitle {
   color: $color-black-333236;
   font-size: 1rem;
   font-weight: 500;
+  max-width: 15rem;
+  @include shortText;
 }
 
 .cardImage {
