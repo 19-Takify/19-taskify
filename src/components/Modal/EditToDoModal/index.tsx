@@ -60,6 +60,7 @@ type FormValues = {
   uploadedFile: FileList;
   imageUrl: string | null;
   dashboardId: number;
+  currentImage: string | null;
 };
 
 type Member = {
@@ -124,6 +125,7 @@ function EditToDoModal({
       dueDate: cardContent?.dueDate
         ? new Date(cardContent?.dueDate)
         : new Date(),
+      currentImage: cardContent?.imageUrl,
     },
   });
 
@@ -280,7 +282,7 @@ function EditToDoModal({
         const resultb = responseb.data;
         data.imageUrl = resultb.imageUrl;
       } else {
-        data.imageUrl = null;
+        data.imageUrl = data.currentImage;
       }
       data.tags = tagNameList;
       data.dashboardId = dashBoardId;
