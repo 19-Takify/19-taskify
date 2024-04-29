@@ -131,6 +131,20 @@ function EditToDoModal({
   const [tagNameList, setTagNameList] = useState<string[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
+  //기존 담당자
+  const [assignee, setAssignee] = useState<Member | undefined>();
+  //기존 상태
+  const [currentState, setCurrentState] = useState<Column | undefined>();
+  const hasErrorMessage = errors && errors['description']?.message;
+  const watchedUploadedFile = useWatch({
+    name: 'uploadedFile',
+    control,
+  });
+  //올린 파일을 url로 반환해주는 훅
+  const { imgSrc: filePreview, setImgSrc: setFilePreview } = useFilePreview(
+    watchedUploadedFile,
+    cardContent.imageUrl,
+  );
   let title;
   const divison = '!@#$%^&*';
   if (purpose === 'edit') {
@@ -139,6 +153,8 @@ function EditToDoModal({
   if (purpose === 'create') {
     title = '할 일 생성';
   }
+
+  //태그를 입력하고 Enter를 눌렀을 때 동작하는 핸들러
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -157,8 +173,8 @@ function EditToDoModal({
       return;
     }
     if (bytes > 30) return;
-    const mergedTag = `${tagName}${divison}${selectedColor}`;
 
+    const mergedTag = `${tagName}${divison}${selectedColor}`;
     const isDuplicate = tagNameList.some((tag) => tag === mergedTag);
 
     if (isDuplicate) {
@@ -168,6 +184,8 @@ function EditToDoModal({
     setTagNameList((prevList) => [...prevList, mergedTag]);
     (e.target as HTMLInputElement).value = '';
   };
+
+  //태그를 클릭했을 때 삭제하는 핸들러
   const handleTagNameClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const tagName = (e.target as HTMLButtonElement).textContent || '';
@@ -175,8 +193,9 @@ function EditToDoModal({
     const mergedTag = `${tagName}${divison}${color}`;
     setTagNameList((prevList) => prevList.filter((tag) => tag !== mergedTag));
   };
-  //태그네임이 중복됐을 때?
+
   useEffect(() => {
+    //멤버 목록 가져오기
     const getMembers = async () => {
       try {
         const response = await axios.get(`/members?dashboardId=${dashBoardId}`);
@@ -200,6 +219,8 @@ function EditToDoModal({
         }
       }
     };
+
+    //컬럼 목록 가져오기
     const getColumns = async () => {
       try {
         const response = await axios.get(`/columns?dashboardId=${dashBoardId}`);
@@ -227,8 +248,8 @@ function EditToDoModal({
     getMembers();
     getColumns();
   }, [dashBoardId]);
-  const [assignee, setAssignee] = useState<Member | undefined>();
-  const [currentState, setCurrentState] = useState<Column | undefined>();
+
+  //기존에 선택되어 있던 담당자, 상태를 표시하기 위한 훅
   useEffect(() => {
     const assignee = members.find(
       (el) => el.userId === cardContent?.assignee?.id,
@@ -239,17 +260,16 @@ function EditToDoModal({
     setTagNameList(cardContent?.tags);
   }, [members, cardContent, columns]);
 
+  //수정/생성 버튼을 눌렀을 때 실행되는 핸들러
   const handleValidSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      // data.assigneeUserId = 3079;
-      // data.columnId = 22433;
       const timestamp = new Date(data.dueDate).getTime();
       const date = formatDate(timestamp);
-      // data.imageUrl = data.imageUrl[0];
       if (data.uploadedFile !== null && data.uploadedFile.length !== 0) {
         const imageFile = data.uploadedFile[0];
         const imgdata = new FormData();
         imgdata.append('image', imageFile);
+        //이미지 url을 받아오기 위한 요청
         const responseb = await axios.post(
           `/columns/22433/card-image`,
           imgdata,
@@ -261,6 +281,7 @@ function EditToDoModal({
       }
       data.tags = tagNameList;
       data.dashboardId = dashBoardId;
+      //할 일 수정
       if (purpose === 'edit') {
         await axios.put(`/cards/${cardContent?.id}`, {
           ...data,
@@ -269,6 +290,7 @@ function EditToDoModal({
         handleClose();
         resetDashboardPage();
       }
+      //할 일 생성
       if (purpose === 'create') {
         await axios.post('/cards', data);
         handleClose();
@@ -296,16 +318,6 @@ function EditToDoModal({
       }
     }
   };
-  const hasErrorMessage = errors && errors['description']?.message;
-
-  const watchedUploadedFile = useWatch({
-    name: 'uploadedFile',
-    control,
-  });
-  const { imgSrc: filePreview, setImgSrc: setFilePreview } = useFilePreview(
-    watchedUploadedFile,
-    cardContent.imageUrl,
-  );
 
   const handleImageFileDelete = () => {
     setValue('imageUrl', '');

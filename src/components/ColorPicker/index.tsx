@@ -14,7 +14,11 @@ type ColorPicker = {
   setSelectedColor: Dispatch<SetStateAction<string>>;
 };
 
+//태그 인풋 색깔 선택하기 기능
 function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
+  const [isOpen, setIsOpen] = useState(false);
+  const colorRef = useRef<HTMLDivElement>(null);
+
   const handleColorPickerClick = () => {
     setIsOpen && setIsOpen(!isOpen);
   };
@@ -23,9 +27,6 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
     setSelectedColor(color);
     setIsOpen && setIsOpen(false);
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-  const colorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: any): void {
