@@ -29,6 +29,7 @@ import setToast from '@/utils/setToast';
 import { isAxiosError } from 'axios';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 import { TAG_COLORS } from '@/constants/colors';
+import { getBytes } from '@/utils/stringUtils';
 
 type Assignee = {
   profileImageUrl: string;
@@ -107,7 +108,9 @@ function EditToDoModal({
     tags: z
       .string()
       .trim()
-      .max(15, { message: '태그 이름은 15자 이하로 입력해 주세요.' }),
+      .refine((val) => getBytes(val) < 30, {
+        message: '30Bytes 이하로 입력해 주세요.',
+      }),
     imageUrl: z.any(),
     uploadedFile: z.any(),
     dashBoardId: z.any(),
@@ -148,27 +151,34 @@ function EditToDoModal({
   if (purpose === 'create') {
     title = '할 일 생성';
   }
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const tagName = (e.target as HTMLInputElement).value?.trim();
-      if (tagName.length < 1) {
-        setError('tags', { message: '태그 이름을 입력해 주세요.' });
-        return;
-      }
-      if (tagName.length > 15) return;
-      const mergedTag = `${tagName}${divison}${selectedColor}`;
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const tagName = (e.target as HTMLInputElement).value?.trim();
 
-      const isDuplicate = tagNameList.some((tag) => tag === mergedTag);
-
-      if (isDuplicate) {
-        setError('tags', { message: '이미 등록된 태그입니다.' });
-        return;
-      }
-      setTagNameList((prevList) => [...prevList, mergedTag]);
-      (e.target as HTMLInputElement).value = '';
+    if (tagNameList.length >= 5) {
+      setError('tags', { message: '태그는 5개를 넘을 수 없습니다.' });
+      e.currentTarget.value = '';
+      return;
     }
+
+    const bytes = getBytes(tagName);
+
+    if (bytes < 1) {
+      setError('tags', { message: '태그 이름을 입력해 주세요.' });
+      return;
+    }
+    if (bytes > 30) return;
+    const mergedTag = `${tagName}${divison}${selectedColor}`;
+
+    const isDuplicate = tagNameList.some((tag) => tag === mergedTag);
+
+    if (isDuplicate) {
+      setError('tags', { message: '이미 등록된 태그입니다.' });
+      return;
+    }
+    setTagNameList((prevList) => [...prevList, mergedTag]);
+    (e.target as HTMLInputElement).value = '';
   };
   const handleTagNameClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
