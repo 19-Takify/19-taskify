@@ -100,7 +100,10 @@ function EditToDoModal({
     columnId: z.any(),
     assigneeUserId: z.any(),
     title: z.string().min(1, { message: '제목은 필수입니다.' }),
-    description: z.string().min(1, { message: '설명은 필수입니다.' }),
+    description: z
+      .string()
+      .min(1, { message: '설명은 필수입니다.' })
+      .max(200, { message: '200자 이하로 입력해 주세요.' }),
     dueDate: z.date(),
     tags: z
       .string()
@@ -190,7 +193,6 @@ function EditToDoModal({
       return;
     }
     setTagNameList((prevList) => [...prevList, mergedTag]);
-    console.log(tagNameList);
     (e.target as HTMLInputElement).value = '';
   };
 
@@ -279,12 +281,12 @@ function EditToDoModal({
         const imgdata = new FormData();
         imgdata.append('image', imageFile);
         //이미지 url을 받아오기 위한 요청
-        const responseb = await axios.post(
-          `/columns/22433/card-image`,
+        const imageResponse = await axios.post(
+          `/columns/${columnId}/card-image`,
           imgdata,
         );
-        const resultb = responseb.data;
-        data.imageUrl = resultb.imageUrl;
+        const result = imageResponse.data;
+        data.imageUrl = result.imageUrl;
       } else {
         data.imageUrl = data.currentImage;
       }
@@ -427,7 +429,11 @@ function EditToDoModal({
             hasLabel
             tag
             register={register('tags')}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(e) => {
+              if (!e.nativeEvent.isComposing) {
+                handleKeyDown(e);
+              }
+            }}
             className={styles.tagInput}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
