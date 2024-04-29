@@ -209,7 +209,7 @@ function ToDoModal({
               <Image src="/svgs/close.svg" alt="닫기" width={28} height={28} />
             </button>
           </div>
-          <div className={styles.name}>새로운 일정 관리 Taskify</div>
+          <div className={styles.name}>{cardData?.title}</div>
         </div>
         <div className={styles.contentBox}>
           <div className={styles.managerBox}>
