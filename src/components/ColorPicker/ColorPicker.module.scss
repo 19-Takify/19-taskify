@@ -12,9 +12,7 @@
   top: 3rem;
   left: 1rem;
   display: grid;
-  grid-template:
-    2rem 2rem/
-    2rem 2rem 2rem 2rem;
+  grid-template: repeat(2, 1fr) / repeat(4, 1fr);
   gap: 0.25rem;
   padding: 0.5rem;
   border-radius: 0.5rem;

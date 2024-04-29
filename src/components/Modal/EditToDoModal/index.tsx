@@ -450,10 +450,12 @@ function EditToDoModal({
             })}
           </div>
         </div>
-        <label className={styles.label}>이미지</label>
-        <button type="button" onClick={handleImageFileDelete}>
-          삭제
-        </button>
+        <div>
+          <label className={styles.label}>이미지</label>
+          <button type="button" onClick={handleImageFileDelete}>
+            삭제
+          </button>
+        </div>
         <label className={styles.fileInput} htmlFor="fileInput">
           {filePreview ? (
             <div className={styles.imagePreview}>

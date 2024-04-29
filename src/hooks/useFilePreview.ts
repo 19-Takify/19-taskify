@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export default function useFilePreview(
   file: FileList,
-  selectedImageUrl: string | null | undefined,
+  selectedImageUrl?: string | null,
 ) {
   const [imgSrc, setImgSrc] = useState(selectedImageUrl || '');
 

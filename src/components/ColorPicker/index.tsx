@@ -23,7 +23,6 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
     setIsOpen && setIsOpen(!isOpen);
   };
   const handleColorButtonClick = (e: MouseEvent, color: string) => {
-    e.preventDefault();
     setSelectedColor(color);
     setIsOpen && setIsOpen(false);
   };
