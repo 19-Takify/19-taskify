@@ -120,6 +120,7 @@ function ManageColumnModal({
       manage: false,
       delete: false,
     });
+    handleClose();
   };
 
   return (
@@ -158,10 +159,7 @@ function ManageColumnModal({
               <button
                 type="button"
                 className={styles.columnDelete}
-                onClick={() => {
-                  setShowModal({ manage: false, delete: true });
-                  handleClose();
-                }}
+                onClick={() => setShowModal({ manage: false, delete: true })}
               >
                 삭제하기
               </button>
@@ -180,10 +178,7 @@ function ManageColumnModal({
       {showModal.delete && (
         <DeleteConfirmModal
           showModal={showModal.delete}
-          handleClose={() => {
-            setShowModal({ manage: true, delete: false });
-            handleClose();
-          }}
+          handleClose={() => setShowModal({ manage: true, delete: false })}
           message="정말 삭제하시겠습니까?"
           deleteColumn={handleColumnDelete}
         />
