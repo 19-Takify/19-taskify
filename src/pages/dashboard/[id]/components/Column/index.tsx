@@ -327,6 +327,7 @@ function Column({
       createdAt: '',
       updatedAt: '',
     });
+    setColumnId(columnId);
     setShowCreateModal(true);
   };
 
