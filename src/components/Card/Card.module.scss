@@ -26,6 +26,23 @@
   @include shortText;
 }
 
+.image {
+  width: 100%;
+  display: block;
+
+  @include tablet {
+    max-width: 5.5rem;
+    height: 3.25rem;
+    width: 100%;
+  }
+
+  @include mobile {
+    max-width: 16.25rem;
+    height: 9.5rem;
+    width: 100%;
+  }
+}
+
 .cardImage {
   width: 17rem;
   height: 10rem;
