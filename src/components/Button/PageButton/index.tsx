@@ -43,8 +43,9 @@ function PageButton({ children, ...rest }: PageButtonSignProps) {
     <button
       className={`${styles[PAGE_BUTTON_TYPE[typeCheck]?.style] ?? styles.default}`}
       {...rest}
+      data-status="item"
     >
-      <div className={styles.buttonText}>
+      <div className={styles.buttonText} data-status="item">
         {PAGE_BUTTON_TYPE[typeCheck]?.text ?? children}
         {PAGE_BUTTON_TYPE[typeCheck]?.image ? (
           <Image

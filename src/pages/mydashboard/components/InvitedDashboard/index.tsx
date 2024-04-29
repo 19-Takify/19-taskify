@@ -132,7 +132,10 @@ function InvitedDashboard({
             height={100}
             priority
           />
-          <p>아직 초대받은 대시보드가 없어요</p>
+          <p className={styles.text}>
+            <span>아직 초대받은</span>
+            <span> 대시보드가 없어요</span>
+          </p>
         </div>
       )}
     </div>

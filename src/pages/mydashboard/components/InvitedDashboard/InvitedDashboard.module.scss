@@ -62,3 +62,12 @@
   color: $color-gray-9fa6b2;
   font-size: 1.25rem;
 }
+
+.text {
+  @media (max-width: 400px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

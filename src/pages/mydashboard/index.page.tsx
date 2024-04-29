@@ -7,9 +7,9 @@ import { GetServerSidePropsContext } from 'next';
 import instance, { setContext } from '@/apis/axios';
 import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
-import Loading from '@/components/Loading';
-import { useRouterLoading } from '@/hooks/useRouterLoading';
 import BackButton from '@/components/Button/BackButton';
+import PageButton from '@/components/Button/PageButton';
+import NewDashboardModal from '@/components/Modal/NewDashboardModal';
 
 type Invitation = {
   id: number;
@@ -28,31 +28,41 @@ type MyDashboardProps = {
 
 function MyDashboard({ invitations }: MyDashboardProps) {
   const [invitation, setInvitation] = useState<Invitation[]>([]);
-  const url = useCurrentUrl();
-  const isLoading = useRouterLoading();
+  const [isOpenNewDashboardModal, setIsOpenNewDashboardModal] = useState(false);
 
   useEffect(() => {
     setInvitation(invitations);
   }, [invitations]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const handleCreateDashboard = () => {
+    setIsOpenNewDashboardModal(true);
+  };
 
   return (
     <>
-      <Meta title="Taskify | 내 대시보드" url={url} />
+      <Meta title="Taskify | 내 대시보드" url={useCurrentUrl()} />
       <div className={styles.myDashboardPage}>
-        <div className={styles.backButton}>
-          <BackButton />
-        </div>
-        <div className={styles.invitedDashboard}>
-          <InvitedDashboard
-            invitations={invitation}
-            setInvitations={setInvitation}
-          />
+        <div className={styles.wrap}>
+          <div className={styles.buttonBox}>
+            <BackButton />
+            <div className={styles.btn}>
+              <PageButton onClick={handleCreateDashboard}>
+                새로운 대시보드
+              </PageButton>
+            </div>
+          </div>
+          <div className={styles.invitedDashboard}>
+            <InvitedDashboard
+              invitations={invitation}
+              setInvitations={setInvitation}
+            />
+          </div>
         </div>
       </div>
+      <NewDashboardModal
+        showModal={isOpenNewDashboardModal}
+        handleClose={() => setIsOpenNewDashboardModal(false)}
+      />
     </>
   );
 }

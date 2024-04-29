@@ -12,8 +12,6 @@ import { getMe } from '@/utils/auth';
 import { useRouter } from 'next/router';
 import { useAtom } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
-import { useRouterLoading } from '@/hooks/useRouterLoading';
-import Loading from '@/components/Loading';
 import axios from '@/apis/axios';
 
 export const getServerSideProps = async (
@@ -132,8 +130,6 @@ function DashboardId({
   const router = useRouter();
   const [data, setData] = useState<ColumnCardData[]>([]);
   const [selectDashboard, setSelectDashboard] = useAtom(selectDashboardAtom);
-  const isLoading = useRouterLoading();
-  const url = useCurrentUrl();
 
   //페이지 이동시 데이터 받아오기 위해서 작성
   useEffect(() => {
@@ -141,13 +137,12 @@ function DashboardId({
     setSelectDashboard(currentDashboard);
   }, [router.asPath]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <Meta title={`Taskify | ${selectDashboard.title}`} url={url} />
+      <Meta
+        title={`Taskify | ${selectDashboard.title}`}
+        url={useCurrentUrl()}
+      />
       <div>
         <Column
           dashboardId={dashboardId}
