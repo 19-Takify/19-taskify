@@ -1,4 +1,6 @@
 import Head from 'next/head';
+import kakaoOg from '@/images/og-kakao.png';
+import twitterOg from '@/images/og-twitter.png';
 
 type HeadProps = {
   title?: string;
@@ -34,7 +36,7 @@ function Meta({ title, url = '' }: HeadProps) {
         property="og:url"
         content={`https://team19-main.vercel.app${url}`}
       />
-      <meta property="og:image" content="카카오 OG 이미지 추가 예정" />
+      <meta property="og:image" content={kakaoOg.src} />
       <meta property="og:image:alt" content="Taskify 로고 이미지" />
       <meta property="og:locale" content="ko_KR" />
 
@@ -49,7 +51,7 @@ function Meta({ title, url = '' }: HeadProps) {
         property="twitter:site"
         content={`https://team19-main.vercel.app${url}`}
       />
-      <meta name="twitter:image" content="트위터 OG 이미지 추가 예정" />
+      <meta name="twitter:image" content={twitterOg.src} />
       <meta property="twitter:image:alt" content="Taskify 로고 이미지" />
     </Head>
   );

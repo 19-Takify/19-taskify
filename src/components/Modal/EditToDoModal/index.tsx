@@ -100,7 +100,10 @@ function EditToDoModal({
     columnId: z.any(),
     assigneeUserId: z.any(),
     title: z.string().min(1, { message: '제목은 필수입니다.' }),
-    description: z.string().min(1, { message: '설명은 필수입니다.' }),
+    description: z
+      .string()
+      .min(1, { message: '설명은 필수입니다.' })
+      .max(200, { message: '200자 이하로 입력해 주세요.' }),
     dueDate: z.date(),
     tags: z
       .string()
@@ -284,8 +287,6 @@ function EditToDoModal({
         );
         const result = imageResponse.data;
         data.imageUrl = result.imageUrl;
-      } else {
-        data.imageUrl = data.currentImage;
       }
       data.tags = tagNameList;
       data.dashboardId = dashBoardId;
@@ -331,8 +332,9 @@ function EditToDoModal({
   };
 
   const handleImageFileDelete = () => {
-    setValue('imageUrl', '');
+    setValue('imageUrl', null);
     setFilePreview('');
+    resetDashboardPage();
   };
 
   return (

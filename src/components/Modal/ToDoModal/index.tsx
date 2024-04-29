@@ -11,6 +11,7 @@ import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 import { SetStateAction } from 'jotai';
 import Tag from '@/components/Tag';
+import { DIVISION } from '@/constants/division';
 
 type Assignee = {
   profileImageUrl: string;
@@ -209,7 +210,7 @@ function ToDoModal({
               <Image src="/svgs/close.svg" alt="닫기" width={28} height={28} />
             </button>
           </div>
-          <div className={styles.name}>새로운 일정 관리 Taskify</div>
+          <div className={styles.name}>{cardData?.title}</div>
         </div>
         <div className={styles.contentBox}>
           <div className={styles.managerBox}>
@@ -237,13 +238,15 @@ function ToDoModal({
                 <div className={styles.columnTitle}>{`• ${columnTitle}`}</div>
               </div>
               <ul className={styles.tagsList}>
-                {cardData?.tags?.map((tag, index) => (
-                  <li key={index} data-status="item">
-                    <Tag color={TAG_COLORS[index % TAG_COLORS.length]}>
-                      {tag}
-                    </Tag>
-                  </li>
-                ))}
+                {cardData?.tags?.map((tag, index) => {
+                  const color = tag.split(DIVISION)[1];
+                  const tagContent = tag.split(DIVISION)[0];
+                  return (
+                    <li key={index} data-status="item">
+                      <Tag color={color}>{tagContent}</Tag>
+                    </li>
+                  );
+                })}
               </ul>
               <div className={styles.text}>
                 {cardData?.description || '설명이 없습니다.'}
