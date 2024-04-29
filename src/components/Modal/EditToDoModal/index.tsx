@@ -336,28 +336,38 @@ function EditToDoModal({
   };
 
   return (
-    <Modal showModal={showEditModal} handleClose={handleClose}>
-      <form onSubmit={handleSubmit(handleValidSubmit)}>
+    <Modal
+      className={styles.editToDoModal}
+      showModal={showEditModal}
+      handleClose={handleClose}
+    >
+      <form onSubmit={handleSubmit(handleValidSubmit)} className={styles.form}>
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.dropdowns}>
-          <Dropdown
-            usage="state"
-            data={columns}
-            initialData={{ title: currentState?.title, id: currentState?.id }}
-            register={register('columnId')}
-            setValue={setValue}
-          />
-          <Dropdown
-            usage="manager"
-            data={members}
-            initialData={{
-              nickname: assignee?.nickname,
-              profileImageUrl: assignee?.profileImageUrl || undefined,
-              id: assignee?.userId,
-            }}
-            register={register('assigneeUserId')}
-            setValue={setValue}
-          />
+          <div className={styles.dropdown}>
+            <label className={styles.label}>상태</label>
+            <Dropdown
+              usage="state"
+              data={columns}
+              initialData={{ title: currentState?.title, id: currentState?.id }}
+              register={register('columnId')}
+              setValue={setValue}
+            />
+          </div>
+          <div className={styles.dropdown}>
+            <label className={styles.label}>담당자</label>
+            <Dropdown
+              usage="manager"
+              data={members}
+              initialData={{
+                nickname: assignee?.nickname,
+                profileImageUrl: assignee?.profileImageUrl || undefined,
+                id: assignee?.userId,
+              }}
+              register={register('assigneeUserId')}
+              setValue={setValue}
+            />
+          </div>
         </div>
         <Input
           type="text"
@@ -367,18 +377,24 @@ function EditToDoModal({
           register={register('title')}
           errors={errors}
         />
-        <label htmlFor="description">설명</label>
-        <span className={styles.required}>*</span>
-        <textarea
-          className={styles.textarea}
-          id="description"
-          {...register('description')}
-        />
-        {hasErrorMessage && (
-          <p className={styles.errorMessage}>
-            {errors['description']?.message?.toString()}
-          </p>
-        )}
+        <div className={styles.description}>
+          <div className={styles.requiredLabel}>
+            <label className={styles.label} htmlFor="description">
+              설명
+            </label>
+            <span className={styles.required}>*</span>
+          </div>
+          <textarea
+            className={`${styles.textarea} ${errors['description'] ? styles.error : ''}`}
+            id="description"
+            {...register('description')}
+          />
+          {hasErrorMessage && (
+            <p className={styles.errorMessage}>
+              {errors['description']?.message?.toString()}
+            </p>
+          )}
+        </div>
         <DatePicker
           control={control}
           name="dueDate"
@@ -388,33 +404,35 @@ function EditToDoModal({
           placeholder="날짜를 선택해 주세요."
           className={styles.datePicker}
         />
-        <Input
-          type="text"
-          label="태그"
-          hasLabel
-          tag
-          register={register('tags')}
-          onKeyDown={handleKeyDown}
-          className={styles.datePicker}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-          errors={errors}
-        />
-        <div className={styles.tags}>
-          {tagNameList.map((tagName, i) => {
-            return (
-              <Tag key={i} color={tagName.split(divison)[1]}>
-                <button
-                  onClick={handleTagNameClick}
-                  type="button"
-                  style={{ backgroundColor: tagName.split(divison)[1] }}
-                  data-color={tagName.split(divison)[1]}
-                >
-                  {tagName.split(divison)[0]}
-                </button>
-              </Tag>
-            );
-          })}
+        <div className={styles.tagArea}>
+          <Input
+            type="text"
+            label="태그"
+            hasLabel
+            tag
+            register={register('tags')}
+            onKeyDown={handleKeyDown}
+            className={styles.tagInput}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+            errors={errors}
+          />
+          <div className={styles.tags}>
+            {tagNameList.map((tagName, i) => {
+              return (
+                <Tag key={i} color={tagName.split(divison)[1]}>
+                  <button
+                    onClick={handleTagNameClick}
+                    type="button"
+                    style={{ backgroundColor: tagName.split(divison)[1] }}
+                    data-color={tagName.split(divison)[1]}
+                  >
+                    {tagName.split(divison)[0]}
+                  </button>
+                </Tag>
+              );
+            })}
+          </div>
         </div>
         <label className={styles.label}>이미지</label>
         <button type="button" onClick={handleImageFileDelete}>
@@ -428,6 +446,7 @@ function EditToDoModal({
                 alt="카드 이미지 미리보기"
                 width={80}
                 height={80}
+                className={styles.filePreview}
               />
               <Image
                 className={styles.imageIcon}
@@ -456,7 +475,7 @@ function EditToDoModal({
           style={{ display: 'none' }}
           {...register('uploadedFile')}
         />
-        <div>
+        <div className={styles.buttons}>
           <ModalButton className={styles.modalButton} onClick={handleClose}>
             취소
           </ModalButton>

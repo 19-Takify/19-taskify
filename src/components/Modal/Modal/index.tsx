@@ -4,12 +4,13 @@ import useCloseModal from '@/hooks/useModalClose';
 import { useEffect, useRef } from 'react';
 
 type ModalProps = {
+  className?: string;
   showModal: boolean;
   handleClose: () => void;
   children: React.ReactNode;
 };
 
-function Modal({ showModal, handleClose, children }: ModalProps) {
+function Modal({ className, showModal, handleClose, children }: ModalProps) {
   const modalRef: any = useRef();
   useCloseModal(showModal, handleClose, modalRef);
 
@@ -26,7 +27,7 @@ function Modal({ showModal, handleClose, children }: ModalProps) {
     showModal && (
       <Portal>
         <div className={styles.background}>
-          <div className={styles.modalBox} ref={modalRef}>
+          <div className={`${styles.modalBox} ${className}`} ref={modalRef}>
             {children}
           </div>
         </div>
