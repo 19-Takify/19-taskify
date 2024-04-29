@@ -234,9 +234,8 @@ function ToDoModal({
                     className={styles.cardImage}
                     src={cardData.imageUrl}
                     alt="카드 사진"
-                    layout="fixed"
                     width={416}
-                    height={295}
+                    height={296}
                   />
                 )}
               </div>
