@@ -184,6 +184,7 @@ function EditToDoModal({
       return;
     }
     setTagNameList((prevList) => [...prevList, mergedTag]);
+    console.log(tagNameList);
     (e.target as HTMLInputElement).value = '';
   };
 
@@ -294,7 +295,10 @@ function EditToDoModal({
       }
       //할 일 생성
       if (purpose === 'create') {
-        await axios.post('/cards', data);
+        await axios.post('/cards', {
+          ...data,
+          dueDate: date,
+        });
         handleClose();
         resetDashboardPage();
       }
