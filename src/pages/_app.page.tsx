@@ -12,6 +12,8 @@ import { getMeForServer } from '@/utils/auth';
 import { AUTH_TOKEN_COOKIE_NAME } from '@/constants/auth';
 import { getCookieWithCookies } from '@/utils/cookie';
 import Head from 'next/head';
+import { useRouterLoading } from '@/hooks/useRouterLoading';
+import Loading from '@/components/Loading';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -29,9 +31,14 @@ export default function MyApp({
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const setUser = useSetAtom(userAtom);
+  const isLoading = useRouterLoading();
 
   if (user?.email) {
     setUser(user);
+  }
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (

@@ -13,8 +13,6 @@ import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import { TOAST_TEXT } from '@/constants/toastText';
 import { TInviteData, TMembersData } from './type/editType';
-import Loading from '@/components/Loading';
-import { useRouterLoading } from '@/hooks/useRouterLoading';
 import DeleteConfirmModal from '@/components/Modal/DeleteModal';
 import { useRouter } from 'next/router';
 import { PAGE_PATH } from '@/constants/pageUrl';
@@ -54,8 +52,6 @@ type TEditProps = {
 function Edit({ inviteData, membersData }: TEditProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectDashboard = useAtomValue(selectDashboardAtom);
-  const url = useCurrentUrl();
-  const isLoading = useRouterLoading();
   const router = useRouter();
 
   const handleModalOpen = () => {
@@ -78,13 +74,9 @@ function Edit({ inviteData, membersData }: TEditProps) {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <Meta title="Taskify | 대시보드 수정" url={url} />
+      <Meta title="Taskify | 대시보드 수정" url={useCurrentUrl()} />
       <div className={styles.wrap}>
         <div className={styles.box}>
           <div className={styles.buttonBox}>

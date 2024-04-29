@@ -5,20 +5,11 @@ import { PAGE_PATH } from '@/constants/pageUrl';
 import LoginForm from './components/LoginForm';
 import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
-import Loading from '@/components/Loading';
-import { useRouterLoading } from '@/hooks/useRouterLoading';
 
 function Login() {
-  const url = useCurrentUrl();
-  const isLoading = useRouterLoading();
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <Meta title="Taskify | 로그인" url={url} />
+      <Meta title="Taskify | 로그인" url={useCurrentUrl()} />
       <div className={styles.background} />
       <div className={styles.container}>
         <header className={styles.header}>
