@@ -336,6 +336,7 @@ function EditToDoModal({
   const handleImageFileDelete = () => {
     setValue('imageUrl', '');
     setFilePreview('');
+    resetDashboardPage();
   };
 
   return (
