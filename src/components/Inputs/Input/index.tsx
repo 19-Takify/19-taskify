@@ -1,5 +1,5 @@
 import styles from './Input.module.scss';
-import { useState, InputHTMLAttributes } from 'react';
+import { useState, InputHTMLAttributes, Dispatch } from 'react';
 import Image from 'next/image';
 import {
   FieldErrors,
@@ -8,6 +8,8 @@ import {
 } from 'react-hook-form';
 import eyeOnImg from '@/svgs/eye-on.svg';
 import eyeOffImg from '@/svgs/eye-off.svg';
+import ColorPicker from '@/components/ColorPicker';
+import { SetStateAction } from 'jotai';
 
 type IconType = {
   src: string;
@@ -26,6 +28,9 @@ type InputProps = {
   required?: boolean;
   register: UseFormRegisterReturn;
   errors?: FieldErrors<FieldValues>;
+  tag?: boolean;
+  selectedColor?: string;
+  setSelectedColor?: Dispatch<SetStateAction<string>>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 /** 
@@ -38,6 +43,7 @@ type InputProps = {
 /* @param required - 라벨 옆에 *(필수 표시) 붙일 건지 안 붙일 건지 ex) true
 /* @param register - useForm register 함수의 반환값 ex)register={register('password')}
 /* @param errors - useForm을 사용할 때 설정해 준 errors ex)errors={errors}
+/* @param tag -태그 인풋인지 아닌지 ex)false
 */
 function Input({
   className,
@@ -49,6 +55,9 @@ function Input({
   required = false,
   register,
   errors,
+  tag = false,
+  selectedColor,
+  setSelectedColor,
   ...rest
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -76,6 +85,12 @@ function Input({
             height={icon.height}
             src={icon.src}
             alt={icon.alt}
+          />
+        )}
+        {tag && selectedColor && setSelectedColor && (
+          <ColorPicker
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
           />
         )}
         <input

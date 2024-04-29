@@ -20,12 +20,12 @@ const MODAL_BUTTON_TYPE: ModalButtonType<string> = {
   default: { style: 'default' },
 };
 
-function ModalButton({ children, ...rest }: ModalButtonSignProps) {
+function ModalButton({ children, className, ...rest }: ModalButtonSignProps) {
   const typeCheck = children ?? 'default';
 
   return (
     <button
-      className={`${styles[MODAL_BUTTON_TYPE[typeCheck]?.style] ?? styles.default}`}
+      className={`${styles[MODAL_BUTTON_TYPE[typeCheck]?.style] ?? styles.default} ${className}`}
       {...rest}
     >
       <div className={styles.buttonText}>

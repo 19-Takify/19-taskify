@@ -10,11 +10,15 @@ import ToDoModal from '@/components/Modal/ToDoModal';
 import Image from 'next/image';
 import { useObserver } from '@/hooks/useObserver';
 import setToast from '@/utils/setToast';
+import EditToDoModal from '@/components/Modal/EditToDoModal';
 import ManageColumnModal from '@/components/Modal/ManageColumnModal';
 import NewColumnModal from '@/components/Modal/NewColumnModal';
 import { useAtomValue } from 'jotai';
 import { selectDashboardAtom } from '@/store/dashboard';
 import useIsDesiredSize from '@/hooks/useIsDesiredSize';
+import axios from '@/apis/axios';
+import { isAxiosError } from 'axios';
+import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 
 type CardData = {
   id: number;
@@ -89,8 +93,27 @@ function Column({
   const httpClient = new HttpClient(instance);
   const selectDashboard = useAtomValue(selectDashboardAtom);
   const [showModal, setShowModal] = useState(false);
-  const [modalCardData, setModalCardData] = useState<CardData>();
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [columnTitle, setColumnTitle] = useState('');
+  const [columnId, setColumnId] = useState(0);
+  const [modalCardData, setModalCardData] = useState<CardData>({
+    id: 0,
+    title: '',
+    description: '',
+    tags: [],
+    dueDate: '',
+    assignee: {
+      profileImageUrl: '',
+      nickname: '',
+      id: 0,
+    },
+    imageUrl: '',
+    teamId: '',
+    columnId: 0,
+    createdAt: '',
+    updatedAt: '',
+  });
   const [resetData, setResetData] = useState(false);
   const [isOpenColumnModal, setIsOpenColumnModal] = useState({
     new: false,
@@ -260,31 +283,55 @@ function Column({
     }
   };
 
-  const handleAddCardClick = async (columnId: number) => {
-    //카드 생성 모달 나중에 구현
+  const handleCardCreateClick = async (
+    columnId: number,
+    dashBoardId: number,
+  ) => {
+    let member = { profileImageUrl: '', nickname: '', userId: 0 };
+    try {
+      const response = await axios.get(`/members?dashboardId=${dashBoardId}`);
+      member = response.data.members[0];
+    } catch (error) {
+      if (!isAxiosError(error)) {
+        // `AxiosError`가 아닌 경우
+        setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+        return;
+      }
+      // `AxiosError`인 경우 에러 처리
+      if (!error.response) {
+        setToast('error', FETCH_ERROR_MESSAGE.REQUEST);
+        return;
+      }
+      const status = error.response?.status;
+      switch (status) {
+        case 404:
+          setToast('error', '대시보드의 멤버가 아닙니다.');
+          return;
+      }
+    }
 
-    await httpClient.post(`/cards`, {
-      assigneeUserId: userId,
-      dashboardId: dashboardId,
+    setModalCardData({
+      id: 0,
+      title: '',
+      description: '',
+      tags: [],
+      dueDate: '',
+      assignee: {
+        profileImageUrl: member.profileImageUrl,
+        nickname: member.nickname,
+        id: member.userId,
+      },
+      imageUrl: '',
+      teamId: '',
       columnId: columnId,
-      title: '김치',
-      description: '대한민국 최고 반찬',
-      dueDate: '2024-04-27 18:00',
-      tags: [
-        '총각 김치',
-        '김치',
-        '총각 김치',
-        '김치',
-        '총각 김치',
-        '김치',
-        '총각 김치',
-        '김치',
-        '총각 김치',
-        '김치',
-      ],
+      createdAt: '',
+      updatedAt: '',
     });
+    setShowCreateModal(true);
+  };
 
-    resetDashboardPage();
+  const handleCreateModalClose = () => {
+    setShowCreateModal(false);
   };
 
   const handleDeleteCardClick = async () => {
@@ -298,10 +345,15 @@ function Column({
     }
   };
 
-  const handleCardClick = (cardData: CardData, columnTitle: string) => {
+  const handleCardClick = (
+    cardData: CardData,
+    columnTitle: string,
+    columnId: number,
+  ) => {
     setShowModal(true);
     setModalCardData(cardData);
     setColumnTitle(columnTitle);
+    setColumnId(columnId);
   };
 
   const handleCloseModal = () => {
@@ -323,6 +375,15 @@ function Column({
   };
 
   const sentinelRef = useObserver(handleInfiniteScroll);
+
+  const handleEditToDoModalclose = () => {
+    setShowEditModal(false);
+    setShowModal(true);
+  };
+  const handleEditButtonClick = () => {
+    setShowEditModal(true);
+    setShowModal(false);
+  };
 
   //데이터 다시 불러오기
   useEffect(() => {
@@ -403,7 +464,12 @@ function Column({
                   />
                 </div>
                 <PageButton
-                  onClick={() => handleAddCardClick(columnData.columnId)}
+                  onClick={() =>
+                    handleCardCreateClick(
+                      columnData.columnId,
+                      selectDashboard.id,
+                    )
+                  }
                 >
                   카드
                 </PageButton>
@@ -429,6 +495,7 @@ function Column({
                                 handleCardClick(
                                   cardData,
                                   columnData.columnTitle,
+                                  columnData.columnId,
                                 )
                               }
                             >
@@ -492,7 +559,9 @@ function Column({
       {showModal && (
         <ToDoModal
           showModal={showModal}
+          setShowModal={setShowModal}
           handleClose={handleCloseModal}
+          handleOpen={handleEditButtonClick}
           cardData={modalCardData}
           columnTitle={columnTitle}
           handleDeleteCardClick={handleDeleteCardClick}
@@ -508,6 +577,32 @@ function Column({
         setData={setData}
         resetDashboardPage={resetDashboardPage}
       />
+      {showEditModal && (
+        <EditToDoModal
+          showEditModal={showEditModal}
+          handleClose={() => setShowEditModal(false)}
+          handleCancel={handleEditToDoModalclose}
+          cardContent={modalCardData}
+          dashBoardId={dashboardId}
+          resetDashboardPage={resetDashboardPage}
+          columnTitle={columnTitle}
+          columnId={columnId}
+          purpose="edit"
+        />
+      )}
+      {showCreateModal && (
+        <EditToDoModal
+          showEditModal={showCreateModal}
+          handleClose={handleCreateModalClose}
+          handleCancel={handleCreateModalClose}
+          cardContent={modalCardData}
+          dashBoardId={dashboardId}
+          resetDashboardPage={resetDashboardPage}
+          columnTitle={columnTitle}
+          columnId={columnId}
+          purpose="create"
+        />
+      )}
     </>
   );
 }
