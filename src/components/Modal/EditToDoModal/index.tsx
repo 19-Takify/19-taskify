@@ -48,6 +48,8 @@ type ModalProps = {
   dashBoardId: number;
   purpose: string;
   resetDashboardPage: () => void;
+  columnTitle: string;
+  columnId: number;
 };
 
 type FormValues = {
@@ -91,6 +93,8 @@ function EditToDoModal({
   dashBoardId,
   purpose,
   resetDashboardPage,
+  columnTitle,
+  columnId,
 }: ModalProps) {
   const schema = z.object({
     columnId: z.any(),
@@ -137,8 +141,6 @@ function EditToDoModal({
   const [columns, setColumns] = useState<Column[]>([]);
   //기존 담당자
   const [assignee, setAssignee] = useState<Member | undefined>();
-  //기존 상태
-  const [currentState, setCurrentState] = useState<Column | undefined>();
   const hasErrorMessage = errors && errors['description']?.message;
   const watchedUploadedFile = useWatch({
     name: 'uploadedFile',
@@ -186,7 +188,6 @@ function EditToDoModal({
       return;
     }
     setTagNameList((prevList) => [...prevList, mergedTag]);
-    console.log(tagNameList);
     (e.target as HTMLInputElement).value = '';
   };
 
@@ -260,8 +261,6 @@ function EditToDoModal({
       (el) => el.userId === cardContent?.assignee?.id,
     );
     setAssignee(assignee);
-    const state = columns.find((el) => el.id === cardContent?.columnId);
-    setCurrentState(state);
     setTagNameList(cardContent?.tags);
   }, [members, cardContent, columns]);
 
@@ -346,7 +345,7 @@ function EditToDoModal({
             <Dropdown
               usage="state"
               data={columns}
-              initialData={{ title: currentState?.title, id: currentState?.id }}
+              initialData={{ title: columnTitle, id: columnId }}
               register={register('columnId')}
               setValue={setValue}
             />

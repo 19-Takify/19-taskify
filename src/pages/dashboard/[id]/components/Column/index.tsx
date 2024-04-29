@@ -96,6 +96,7 @@ function Column({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [columnTitle, setColumnTitle] = useState('');
+  const [columnId, setColumnId] = useState(0);
   const [modalCardData, setModalCardData] = useState<CardData>({
     id: 0,
     title: '',
@@ -344,10 +345,15 @@ function Column({
     }
   };
 
-  const handleCardClick = (cardData: CardData, columnTitle: string) => {
+  const handleCardClick = (
+    cardData: CardData,
+    columnTitle: string,
+    columnId: number,
+  ) => {
     setShowModal(true);
     setModalCardData(cardData);
     setColumnTitle(columnTitle);
+    setColumnId(columnId);
   };
 
   const handleCloseModal = () => {
@@ -489,6 +495,7 @@ function Column({
                                 handleCardClick(
                                   cardData,
                                   columnData.columnTitle,
+                                  columnData.columnId,
                                 )
                               }
                             >
@@ -578,6 +585,8 @@ function Column({
           cardContent={modalCardData}
           dashBoardId={dashboardId}
           resetDashboardPage={resetDashboardPage}
+          columnTitle={columnTitle}
+          columnId={columnId}
           purpose="edit"
         />
       )}
@@ -589,6 +598,8 @@ function Column({
           cardContent={modalCardData}
           dashBoardId={dashboardId}
           resetDashboardPage={resetDashboardPage}
+          columnTitle={columnTitle}
+          columnId={columnId}
           purpose="create"
         />
       )}
