@@ -426,7 +426,11 @@ function EditToDoModal({
             hasLabel
             tag
             register={register('tags')}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(e) => {
+              if (!e.nativeEvent.isComposing) {
+                handleKeyDown(e);
+              }
+            }}
             className={styles.tagInput}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
