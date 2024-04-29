@@ -115,12 +115,24 @@ function ToDoModal({
     }
   };
 
+  const fetchComments = async () => {
+    try {
+      const comment: CommentList = await httpClient.get(
+        `/comments?cardId=${cardData?.id}`,
+      );
+      setCommentData(comment.comments);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      setToast('error', FETCH_ERROR_MESSAGE.UNKNOWN);
+    }
+  };
+
   const handleOnUpdate = async (commentId: number, text: string) => {
     try {
       await httpClient.put(`/comments/${commentId}`, {
         content: text,
       });
-      setIsEditing((prev) => !prev);
+      fetchComments();
     } catch (error) {
       console.error('Error updating comment:', error);
       setToast('error', '댓글 수정에 실패했습니다.');
