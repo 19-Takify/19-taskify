@@ -116,8 +116,6 @@ function EditToDoModal({
     dashBoardId: z.any(),
   });
 
-  console.log('바람구름');
-  console.log(dashBoardId);
   const {
     register,
     formState: { errors, isValid, isSubmitting },
@@ -246,20 +244,12 @@ function EditToDoModal({
       (el) => el.userId === cardContent?.assignee?.id,
     );
     setAssignee(assignee);
-    // console.log(assignee);
-    // console.log(columns);
     const state = columns.find((el) => el.id === cardContent?.columnId);
     setCurrentState(state);
-    // console.log(members);
     setTagNameList(cardContent?.tags);
   }, [members, cardContent, columns]);
 
-  useEffect(() => {
-    console.log(currentState);
-  }, [currentState]);
   const handleValidSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log('송은');
-    console.log(data);
     try {
       // data.assigneeUserId = 3079;
       // data.columnId = 22433;
@@ -270,13 +260,11 @@ function EditToDoModal({
         const imageFile = data.uploadedFile[0];
         const imgdata = new FormData();
         imgdata.append('image', imageFile);
-        console.log(imgdata);
         const responseb = await axios.post(
           `/columns/22433/card-image`,
           imgdata,
         );
         const resultb = responseb.data;
-        console.log(resultb);
         data.imageUrl = resultb.imageUrl;
       } else {
         data.imageUrl = null;

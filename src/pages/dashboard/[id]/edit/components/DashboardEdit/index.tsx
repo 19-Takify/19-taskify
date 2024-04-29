@@ -39,7 +39,6 @@ function DashboardEdit() {
         color: value.color,
       }));
       setToast(TOAST_TEXT.success, '대시보드가 수정되었습니다.');
-      console.log(res);
     } catch (e: any) {
       setToast(TOAST_TEXT.error, e.response.data.message);
     }
