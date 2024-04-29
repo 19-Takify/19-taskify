@@ -15,9 +15,9 @@ function Modal({ showModal, handleClose, children }: ModalProps) {
 
   useEffect(() => {
     if (showModal) {
-      document.body.style.cssText = `overflow: hidden;`;
+      document.body.style.cssText = 'overflow: hidden;';
       return () => {
-        document.body.style.cssText = `position: ""; top: "";`;
+        document.body.style.cssText = '';
       };
     }
   }, [showModal]);

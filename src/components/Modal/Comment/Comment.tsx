@@ -31,6 +31,7 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
   const [editedContent, setEditedContent] = useState(commentData?.content);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [tempContent, setTempContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -47,13 +48,15 @@ function Comment({ commentData, onDelete, onUpdate }: CommentProps) {
   };
 
   const handleSaveEdit = async () => {
-    onUpdate(commentData?.id, editedContent);
+    if (isSaving) return; // 이미 저장 중이면 더 이상 진행하지 않음
+    setIsSaving(true);
+    await onUpdate(commentData?.id, editedContent);
     setIsEditing(!isEditing);
+    setIsSaving(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
       handleSaveEdit();
     }
   };
