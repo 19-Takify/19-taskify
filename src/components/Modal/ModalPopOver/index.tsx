@@ -48,9 +48,9 @@ function ModalPopOver({
   /*
   useEffect(() => {
     if (showDropdown) {
-      document.body.style.cssText = `overflow: hidden;`;
+      document.body.style.cssText = 'overflow: hidden;';
       return () => {
-        document.body.style.cssText = `overflow: scroll;`;
+        document.body.style.cssText = '';
       };
     }
   }, [showDropdown]);

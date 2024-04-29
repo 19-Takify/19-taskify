@@ -42,14 +42,16 @@ function Card({ cardData }: CardProps) {
   return (
     <div className={styles.cardBox} data-status="item">
       {cardData?.imageUrl && (
-        <Image
-          className={styles.cardImage}
-          src={cardData?.imageUrl}
-          alt="카드 배경 이미지"
-          width={274}
-          height={160}
-          priority={true}
-        />
+        <div className={styles.image}>
+          <Image
+            className={styles.cardImage}
+            src={cardData?.imageUrl}
+            alt="카드 배경 이미지"
+            width={276}
+            height={160}
+            priority
+          />
+        </div>
       )}
       <div className={styles.desktopBox} data-status="item">
         <div className={styles.tabletBox} data-status="item">

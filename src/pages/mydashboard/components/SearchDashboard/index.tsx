@@ -4,6 +4,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { debounce } from 'lodash';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
+import setToast from '@/utils/setToast';
 
 type Invitation = {
   id: number;
@@ -33,12 +34,17 @@ function SearchDashboard({
   const httpClient = new HttpClient(instance);
   const debouncing = debounce(async (value: string) => {
     if (value) {
-      const searchInvitations = await httpClient.get<InvitationList>(
-        `/invitations?title=${value}`,
-      );
-      setInvitations(searchInvitations.invitations);
-      setIsSearch(true);
-      return;
+      try {
+        const searchInvitations = await httpClient.get<InvitationList>(
+          `/invitations?title=${value}`,
+        );
+        setInvitations(searchInvitations.invitations);
+        setIsSearch(true);
+        return;
+      } catch {
+        setToast('error', '검색에 실패 했습니다.');
+        return;
+      }
     }
 
     const searchInvitations =
@@ -48,7 +54,14 @@ function SearchDashboard({
   }, 300);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    debouncing(e.target.value);
+    //맨 처음 공백 입력 X
+    const gap = /^\s+/;
+    if (gap.test(e.target.value)) {
+      e.target.value = '';
+      return;
+    }
+
+    debouncing(e.target.value.trim());
   };
 
   return (
@@ -62,7 +75,7 @@ function SearchDashboard({
       />
       <input
         className={styles.searchInput}
-        placeholder="검색"
+        placeholder="대시보드 이름을 입력해 주세요."
         onChange={(e) => handleChange(e)}
       />
     </div>
