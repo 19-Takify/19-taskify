@@ -434,7 +434,7 @@ function Column({
                             >
                               <Card cardData={cardData} />
                               {index === columnData.cards.length - 1 && (
-                                <div ref={sentinelRef}>asdsadsadasda</div>
+                                <div ref={sentinelRef}></div>
                               )}
                             </div>
                           )}
