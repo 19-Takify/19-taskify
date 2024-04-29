@@ -11,6 +11,7 @@ import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 import { SetStateAction } from 'jotai';
 import Tag from '@/components/Tag';
+import { DIVISION } from '@/constants/division';
 
 type Assignee = {
   profileImageUrl: string;
@@ -89,7 +90,6 @@ function ToDoModal({
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CommentData[]>([]);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const division = '!@#$%^&*';
 
   const handleDropdownOpen = () => {
     setIsDropdown(true);
@@ -239,8 +239,8 @@ function ToDoModal({
               </div>
               <ul className={styles.tagsList}>
                 {cardData?.tags?.map((tag, index) => {
-                  const color = tag.split(division)[1];
-                  const tagContent = tag.split(division)[0];
+                  const color = tag.split(DIVISION)[1];
+                  const tagContent = tag.split(DIVISION)[0];
                   return (
                     <li key={index} data-status="item">
                       <Tag color={color}>{tagContent}</Tag>

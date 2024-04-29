@@ -1,3 +1,4 @@
+import { DIVISION } from '@/constants/division';
 import ProfileIcon from '../Profile/ProfileIcon';
 import Tag from '../Tag';
 import styles from './Card.module.scss';
@@ -39,7 +40,6 @@ const TAG_COLORS = [
 ];
 
 function Card({ cardData }: CardProps) {
-  const division = '!@#$%^&*';
   return (
     <div className={styles.cardBox} data-status="item">
       {cardData?.imageUrl && (
@@ -62,8 +62,8 @@ function Card({ cardData }: CardProps) {
           <div className={styles.tabletContent} data-status="item">
             <ul className={styles.tags} data-status="item">
               {cardData?.tags?.slice(0, 2).map((tag, index) => {
-                const color = tag.split(division)[1];
-                const tagContent = tag.split(division)[0];
+                const color = tag.split(DIVISION)[1];
+                const tagContent = tag.split(DIVISION)[0];
                 return (
                   <li
                     className={styles.tagsList}
