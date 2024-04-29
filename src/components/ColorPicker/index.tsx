@@ -1,17 +1,13 @@
-import React, { Dispatch, MouseEvent, useState } from 'react';
+import React, {
+  Dispatch,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styles from './ColorPicker.module.scss';
 import { SetStateAction } from 'jotai';
-
-export const TAG_COLORS = [
-  '#E99695',
-  '#F9D0C4',
-  '#FEF2C0',
-  '#C2E0C6',
-  '#BFDADC',
-  '#C5DEF5',
-  '#BFD4F2',
-  '#D4C5F9',
-];
+import { TAG_COLORS } from '@/constants/colors';
 
 type ColorPicker = {
   selectedColor: string;
@@ -19,15 +15,43 @@ type ColorPicker = {
 };
 
 function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
-  const [showColorPicker, setShowColorPicker] = useState(false);
   const handleColorPickerClick = () => {
-    setShowColorPicker(!showColorPicker);
+    setIsOpen && setIsOpen(!isOpen);
   };
   const handleColorButtonClick = (e: MouseEvent, color: string) => {
     e.preventDefault();
-    setShowColorPicker(false);
     setSelectedColor(color);
+    setIsOpen && setIsOpen(false);
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+  const colorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: any): void {
+      if (
+        colorRef.current &&
+        !colorRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+      return;
+    }
+
+    function handleKeyDown(event: any) {
+      if (event.key === 'Enter') {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [colorRef]);
+
   return (
     <>
       <button
@@ -36,8 +60,8 @@ function ColorPicker({ selectedColor, setSelectedColor }: ColorPicker) {
         style={{ backgroundColor: selectedColor }}
         onClick={handleColorPickerClick}
       ></button>
-      {showColorPicker && (
-        <div className={styles.colors}>
+      {isOpen && (
+        <div className={styles.colors} ref={colorRef}>
           {TAG_COLORS.map((color, i) => {
             return (
               <button

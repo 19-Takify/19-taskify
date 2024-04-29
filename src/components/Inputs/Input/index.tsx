@@ -1,5 +1,11 @@
 import styles from './Input.module.scss';
-import { useState, InputHTMLAttributes, Dispatch } from 'react';
+import {
+  useState,
+  InputHTMLAttributes,
+  Dispatch,
+  MutableRefObject,
+  RefObject,
+} from 'react';
 import Image from 'next/image';
 import {
   FieldErrors,

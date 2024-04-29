@@ -24,11 +24,11 @@ import { SetStateAction } from 'jotai';
 import Image from 'next/image';
 import pen from '@/svgs/pen.svg';
 import add from '@/svgs/add.svg';
-import { TAG_COLORS } from '@/components/ColorPicker';
 import useFilePreview from '@/hooks/useFilePreview';
 import setToast from '@/utils/setToast';
 import { isAxiosError } from 'axios';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
+import { TAG_COLORS } from '@/constants/colors';
 
 type Assignee = {
   profileImageUrl: string;
@@ -106,6 +106,7 @@ function EditToDoModal({
     dueDate: z.date(),
     tags: z
       .string()
+      .trim()
       .max(15, { message: '태그 이름은 15자 이하로 입력해 주세요.' }),
     imageUrl: z.any(),
     uploadedFile: z.any(),
@@ -151,23 +152,30 @@ function EditToDoModal({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const tagName = (e.target as HTMLInputElement).value;
-      if (tagName.length <= 8) {
-        if (tagName !== '') {
-          setTagNameList((prevList) => [
-            ...prevList,
-            `${tagName}!@#$%^&*${selectedColor}`,
-          ]);
-
-          (e.target as HTMLInputElement).value = '';
-        }
+      const tagName = (e.target as HTMLInputElement).value?.trim();
+      if (tagName.length < 1) {
+        setError('tags', { message: '태그 이름을 입력해 주세요.' });
+        return;
       }
+      if (tagName.length > 15) return;
+      const mergedTag = `${tagName}${divison}${selectedColor}`;
+
+      const isDuplicate = tagNameList.some((tag) => tag === mergedTag);
+
+      if (isDuplicate) {
+        setError('tags', { message: '이미 등록된 태그입니다.' });
+        return;
+      }
+      setTagNameList((prevList) => [...prevList, mergedTag]);
+      (e.target as HTMLInputElement).value = '';
     }
   };
   const handleTagNameClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const tagName = (e.target as HTMLButtonElement).textContent || '';
-    setTagNameList((prevList) => prevList.filter((tag) => tag !== tagName));
+    const color = e.currentTarget.dataset.color;
+    const mergedTag = `${tagName}${divison}${color}`;
+    setTagNameList((prevList) => prevList.filter((tag) => tag !== mergedTag));
   };
   //태그네임이 중복됐을 때?
   useEffect(() => {
@@ -390,6 +398,7 @@ function EditToDoModal({
                   onClick={handleTagNameClick}
                   type="button"
                   style={{ backgroundColor: tagName.split(divison)[1] }}
+                  data-color={tagName.split(divison)[1]}
                 >
                   {tagName.split(divison)[0]}
                 </button>
