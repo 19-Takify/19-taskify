@@ -450,21 +450,17 @@ function EditToDoModal({
             })}
           </div>
         </div>
-        <div>
-          <label className={styles.label}>이미지</label>
-          <button type="button" onClick={handleImageFileDelete}>
-            삭제
-          </button>
-        </div>
+
+        <label className={styles.label}>이미지</label>
+
         <label className={styles.fileInput} htmlFor="fileInput">
           {filePreview ? (
             <div className={styles.imagePreview}>
               <Image
                 src={filePreview}
                 alt="카드 이미지 미리보기"
-                width={80}
-                height={80}
                 className={styles.filePreview}
+                fill
               />
               <Image
                 className={styles.imageIcon}
@@ -486,6 +482,13 @@ function EditToDoModal({
             </div>
           )}
         </label>
+        <button
+          className={styles.deleteButton}
+          type="button"
+          onClick={handleImageFileDelete}
+        >
+          삭제
+        </button>
         <input
           id="fileInput"
           type="file"

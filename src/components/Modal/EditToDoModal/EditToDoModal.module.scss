@@ -27,6 +27,7 @@
 
 .label {
   font-size: 1.125rem;
+  display: block;
 }
 
 .requiredLabel {
@@ -112,6 +113,10 @@
   height: 2.25rem;
   top: 1.25rem;
   left: 1.25rem;
+}
+
+.deleteButton {
+  display: block;
 }
 
 .buttons {
