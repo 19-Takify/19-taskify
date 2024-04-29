@@ -287,8 +287,6 @@ function EditToDoModal({
         );
         const result = imageResponse.data;
         data.imageUrl = result.imageUrl;
-      } else {
-        data.imageUrl = data.currentImage;
       }
       data.tags = tagNameList;
       data.dashboardId = dashBoardId;
@@ -334,7 +332,7 @@ function EditToDoModal({
   };
 
   const handleImageFileDelete = () => {
-    setValue('imageUrl', '');
+    setValue('imageUrl', null);
     setFilePreview('');
     resetDashboardPage();
   };
