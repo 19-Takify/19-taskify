@@ -39,6 +39,30 @@ export const getMeForServer = async (
   }
 };
 
+export const isDashboardAccessible = async (
+  accessToken?: string,
+  dashboardId?: string,
+) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/dashboards/${dashboardId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 /**
  * @TODO 로그인 상태 유지 시 24시간 유지
  */

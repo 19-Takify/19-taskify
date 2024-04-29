@@ -1,5 +1,5 @@
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import InvitedDashboard from './components/InvitedDashboard';
 import styles from './myDashboard.module.scss';
 import HttpClient from '@/apis/httpClient';
@@ -9,6 +9,7 @@ import Meta from '@/components/Meta';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import Loading from '@/components/Loading';
 import { useRouterLoading } from '@/hooks/useRouterLoading';
+import BackButton from '@/components/Button/BackButton';
 
 type Invitation = {
   id: number;
@@ -26,9 +27,13 @@ type MyDashboardProps = {
 };
 
 function MyDashboard({ invitations }: MyDashboardProps) {
-  const [invitation, setInvitation] = useState<Invitation[]>(invitations);
+  const [invitation, setInvitation] = useState<Invitation[]>([]);
   const url = useCurrentUrl();
   const isLoading = useRouterLoading();
+
+  useEffect(() => {
+    setInvitation(invitations);
+  }, [invitations]);
 
   if (isLoading) {
     return <Loading />;
@@ -38,9 +43,11 @@ function MyDashboard({ invitations }: MyDashboardProps) {
     <>
       <Meta title="Taskify | 내 대시보드" url={url} />
       <div className={styles.myDashboardPage}>
+        <div className={styles.backButton}>
+          <BackButton />
+        </div>
         <div className={styles.invitedDashboard}>
           <InvitedDashboard
-            initialInvitations={invitations}
             invitations={invitation}
             setInvitations={setInvitation}
           />

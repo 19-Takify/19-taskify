@@ -17,6 +17,14 @@ type InviteDashboardModalProps = {
   syncFunc?: any;
 };
 
+type InvitationInfoType = {
+  invitations: {
+    invitee: {
+      email: string;
+    };
+  }[];
+};
+
 type FormValues = {
   email: string;
 };
@@ -56,6 +64,19 @@ function InviteDashBoardModal({
 
   const handleInviteDashboard = async (data: FormValues) => {
     try {
+      const res = await httpClient.get<InvitationInfoType>(
+        `/dashboards/${dashboardId}/invitations`,
+      );
+
+      const isDuplicate = res.invitations.some(
+        ({ invitee }) => invitee.email === data.email,
+      );
+
+      if (isDuplicate) {
+        setError('email', { message: '이미 초대한 사용자입니다.' });
+        return;
+      }
+
       await httpClient.post(`/dashboards/${dashboardId}/invitations`, data);
       setToast('success', '대시보드 초대에 성공했습니다.');
 

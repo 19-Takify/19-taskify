@@ -10,6 +10,8 @@ import CommentsList from '../Comment/CommentList';
 import setToast from '@/utils/setToast';
 import { FETCH_ERROR_MESSAGE } from '@/constants/errorMessage';
 import { SetStateAction } from 'jotai';
+import Tag from '@/components/Tag';
+import Circle from '@/components/Circle';
 
 type Assignee = {
   profileImageUrl: string;
@@ -57,9 +59,21 @@ type ModalProps = {
   handleClose: () => void;
   handleOpen: () => void;
   cardData?: CardList;
+  columnTitle: string;
   handleDeleteCardClick: () => void;
   dashboardId: number;
 };
+
+const TAG_COLORS = [
+  '#E99695',
+  '#F9D0C4',
+  '#FEF2C0',
+  '#C2E0C6',
+  '#BFDADC',
+  '#C5DEF5',
+  '#BFD4F2',
+  '#D4C5F9',
+];
 
 function ToDoModal({
   showModal,
@@ -67,6 +81,7 @@ function ToDoModal({
   handleClose,
   handleOpen,
   cardData,
+  columnTitle,
   handleDeleteCardClick,
   dashboardId,
 }: ModalProps) {
@@ -157,32 +172,34 @@ function ToDoModal({
 
   return (
     <Modal showModal={showModal} handleClose={handleClose}>
-      <div className={styles.btnBox}>
-        <div className={styles.btns}>
-          <button onClick={handleDropdownOpen} className={styles.btnx}>
-            <Image
-              src="/svgs/kebab.svg"
-              alt="케밥 버튼"
-              width={28}
-              height={28}
-            />
-          </button>
-          {isDropdown && (
-            <ModalPopOver
-              showDropdown={isDropdown}
-              handleDropdownClose={handleDropdownClose}
-              cardData={cardData}
-              dashboardId={dashboardId}
-              setShowModal={setShowModal}
-              handleDeleteCardClick={handleDeleteCardClick}
-              handleOpen={handleOpen}
-            />
-          )}
-          <button onClick={handleClose} className={styles.btnx}>
-            <Image src="/svgs/close.svg" alt="닫기" width={28} height={28} />
-          </button>
+      <div className={styles.todoBox}>
+        <div className={styles.btnBox}>
+          <div className={styles.btns}>
+            <button onClick={handleDropdownOpen} className={styles.btnx}>
+              <Image
+                src="/svgs/kebab.svg"
+                alt="케밥 버튼"
+                width={28}
+                height={28}
+              />
+            </button>
+            {isDropdown && (
+              <ModalPopOver
+                showDropdown={isDropdown}
+                handleDropdownClose={handleDropdownClose}
+                cardData={cardData}
+                dashboardId={dashboardId}
+                setShowModal={setShowModal}
+                handleDeleteCardClick={handleDeleteCardClick}
+                handleOpen={handleOpen}
+              />
+            )}
+            <button onClick={handleClose} className={styles.btnx}>
+              <Image src="/svgs/close.svg" alt="닫기" width={28} height={28} />
+            </button>
+          </div>
+          <div className={styles.name}>새로운 일정 관리 Taskify</div>
         </div>
-        <div className={styles.name}>새로운 일정 관리 Taskify</div>
       </div>
       <div className={styles.contentBox}>
         <div className={styles.managerBox}>
@@ -204,17 +221,28 @@ function ToDoModal({
         </div>
         <div>
           <div className={styles.content}>
+            <div className={styles.columnName}>
+              <div className={styles.columnTitle}>{`• ${columnTitle}`}</div>
+            </div>
+            <ul className={styles.tagsList}>
+              {cardData?.tags?.map((tag, index) => (
+                <li key={index} data-status="item">
+                  <Tag color={TAG_COLORS[index % TAG_COLORS.length]}>{tag}</Tag>
+                </li>
+              ))}
+            </ul>
             <div className={styles.text}>
               {cardData?.description || '설명이 없습니다.'}
             </div>
             <div className={styles.img}>
               {cardData?.imageUrl && (
                 <Image
+                  className={styles.cardImage}
                   src={cardData.imageUrl}
-                  alt="예시 사진"
-                  layout="responsive"
-                  width={300}
-                  height={300}
+                  alt="카드 사진"
+                  layout="fixed"
+                  width={416}
+                  height={295}
                 />
               )}
             </div>

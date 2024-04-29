@@ -10,6 +10,7 @@ function Signup() {
   return (
     <>
       <Meta title="Taskify | 회원가입" url={useCurrentUrl()} />
+      <div className={styles.background} />
       <div className={styles.container}>
         <header className={styles.header}>
           <Link href={PAGE_PATH.MAIN}>
