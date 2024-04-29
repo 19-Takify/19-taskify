@@ -190,7 +190,6 @@ function EditToDoModal({
       return;
     }
     setTagNameList((prevList) => [...prevList, mergedTag]);
-    console.log(tagNameList);
     (e.target as HTMLInputElement).value = '';
   };
 
@@ -279,12 +278,12 @@ function EditToDoModal({
         const imgdata = new FormData();
         imgdata.append('image', imageFile);
         //이미지 url을 받아오기 위한 요청
-        const responseb = await axios.post(
-          `/columns/22433/card-image`,
+        const imageResponse = await axios.post(
+          `/columns/${columnId}/card-image`,
           imgdata,
         );
-        const resultb = responseb.data;
-        data.imageUrl = resultb.imageUrl;
+        const result = imageResponse.data;
+        data.imageUrl = result.imageUrl;
       } else {
         data.imageUrl = data.currentImage;
       }
