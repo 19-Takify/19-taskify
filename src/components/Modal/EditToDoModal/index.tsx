@@ -271,7 +271,6 @@ function EditToDoModal({
       }
       data.tags = tagNameList;
       data.dashboardId = dashBoardId;
-      console.log('purpose', purpose);
       if (purpose === 'edit') {
         await axios.put(`/cards/${cardContent?.id}`, {
           ...data,
