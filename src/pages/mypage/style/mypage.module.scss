@@ -1,0 +1,28 @@
+.wrap {
+  max-width: 120rem;
+  min-width: 18.75rem;
+  height: auto;
+  background-color: $color-gray-fafafa;
+  padding: 1rem 1rem 2rem;
+
+  @include tablet {
+    padding: 0.5rem 1rem 2.5rem;
+  }
+
+  .box {
+    width: 38.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 18.75rem;
+
+    @include tablet {
+      width: auto;
+      gap: 0.5rem;
+    }
+
+    @include mobile {
+      margin-right: 1rem;
+    }
+  }
+}

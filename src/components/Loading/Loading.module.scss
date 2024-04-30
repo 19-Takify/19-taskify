@@ -1,0 +1,98 @@
+@font-face {
+  font-family: 'YEONGJUSeonbiTTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2403@1.0/YEONGJUSeonbiTTF.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title-effect {
+  display: inline-block;
+  animation: loading 1.7s infinite alternate;
+  font-family: 'YEONGJUSeonbiTTF';
+
+  &:nth-of-type(1) {
+    font-size: 4.5rem;
+    @include mobile {
+      font-size: 3.5rem;
+    }
+  }
+  &:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-of-type(3) {
+    animation-delay: 0.3s;
+  }
+  &:nth-of-type(4) {
+    animation-delay: 0.4s;
+  }
+  &:nth-of-type(5) {
+    animation-delay: 0.5s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(6) {
+    animation-delay: 0.6s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(7) {
+    animation-delay: 0.7s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(8) {
+    animation-delay: 0.8s;
+    padding: 0 0.1rem;
+  }
+  &:nth-of-type(9) {
+    animation-delay: 0.9s;
+    padding: 0 0.1rem;
+  }
+
+  @keyframes loading {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+.wrap {
+  width: 100%;
+  height: 100vh;
+  background-color: $color-gray-eeeeee;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.content {
+  width: 100%;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.title {
+  font-size: 4.2rem;
+  margin-top: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.25rem;
+  color: $color-violet-5534da;
+  font-style: italic;
+
+  @include mobile {
+    font-size: 3rem;
+  }
+}
+
+.logo {
+  margin-left: 2.3rem;
+
+  @include mobile {
+    margin-left: 1.5rem;
+    width: 10.3125rem;
+  }
+}

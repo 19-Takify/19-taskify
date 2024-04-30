@@ -1,0 +1,203 @@
+.todoBox {
+  //max-width: 36rem;
+}
+
+.btnBox {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  @include mobile {
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+}
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: $color-black-333236;
+  @include mobile {
+    margin: 1.5rem 0 0.5rem;
+  }
+}
+.btns {
+  display: flex;
+  align-items: center;
+}
+.btnx {
+  background-color: $color-white-ffffff;
+  position: relative;
+  @include mobile {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+  }
+}
+
+.columnName {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1rem;
+  max-width: 24rem;
+  border-radius: 1rem;
+  @include shortText;
+}
+
+.columnTitle {
+  border-radius: 1rem;
+  padding: 0.25rem 1rem;
+  background: rgba(85, 52, 218, 0.08);
+  font-size: 1rem;
+  color: $color-violet-5534da;
+}
+
+.tagsList {
+  max-width: 26rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.contentBox {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1.3rem;
+  width: 100%;
+  @include tablet {
+    flex-direction: column;
+  }
+}
+.content {
+  width: 26rem;
+  @include tablet {
+    max-width: 26rem;
+    width: 100%;
+  }
+}
+.text {
+  font-size: 0.9rem;
+  color: $color-black-333236;
+  margin-bottom: 1rem;
+  line-height: 1.4rem;
+  margin-right: 0.2rem;
+  @include mobile {
+    font-size: 0.8rem;
+  }
+  word-wrap: break-word;
+}
+.img {
+  width: 100%;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.cardImage {
+  width: 26rem;
+  height: 15.25rem;
+}
+
+.textarea {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  position: relative;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+.input {
+  display: flex;
+  align-items: flex-start;
+  border: 0.1rem solid $color-gray-d9d9d9;
+  border-radius: 0.4rem;
+  padding: 1rem 7rem 1rem 1rem;
+  width: 100%;
+  height: 6.8rem;
+  resize: none;
+  outline-color: $color-gray-9fa6b2;
+  @include mobile {
+    height: 4.3rem;
+    font-size: 0.8rem;
+    color: $color-gray-9fa6b2;
+  }
+}
+.submit {
+  background-color: $color-white-ffffff;
+  width: 5rem;
+  height: 2rem;
+  border-radius: 4px;
+  border: 0.1rem solid $color-gray-d9d9d9;
+  color: $color-violet-5534da;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  @include mobile {
+    width: 5.2rem;
+    height: 2rem;
+    top: 1.6rem;
+  }
+}
+
+.managerBox {
+  display: flex;
+  flex-direction: column;
+  border: 0.1rem solid $color-gray-d9d9d9;
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 9.6rem;
+  padding: 1rem;
+
+  @include tablet {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 4.5rem;
+    display: flex;
+  }
+}
+.nameBox {
+  @include mobile {
+    width: 50%;
+  }
+}
+
+.manager {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  color: $color-black-333236;
+  font-weight: 700;
+  @include tablet {
+    font-size: 0.7rem;
+    margin-bottom: 0.3rem;
+  }
+}
+.managerProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  @include tablet {
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+  }
+  @include mobile {
+    gap: 0.4rem;
+    margin-bottom: 0;
+  }
+}
+.managerName {
+  color: $color-black-333236;
+  font-size: 0.8rem;
+  @include tablet {
+    font-size: 0.7rem;
+  }
+}
+.doneDate {
+  @include mobile {
+    margin-bottom: 0.6rem;
+  }
+}

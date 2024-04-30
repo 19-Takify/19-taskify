@@ -1,0 +1,39 @@
+.container {
+  height: 4.3rem;
+  border-bottom: 0.1rem solid $color-gray-d9d9d9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2.3rem;
+  @include mobile {
+    height: 3.75rem;
+    padding: 0 1rem 0 1.5rem;
+  }
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.tastify {
+  @include mobile {
+    display: none;
+  }
+}
+.box {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-right: 2rem;
+  @include mobile {
+    margin: 0;
+  }
+}
+.button {
+  font-size: 1rem;
+  color: $color-black-333236;
+  background-color: $color-white-ffffff;
+  border: none;
+  @include mobile {
+    font-size: 0.8rem;
+  }
+}

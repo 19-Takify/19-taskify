@@ -1,0 +1,55 @@
+.background {
+  position: fixed;
+  background-color: $color-gray-fafafa;
+  height: 100vh;
+  inset: 0;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  background-color: $color-gray-fafafa;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 8rem 0.75rem;
+  gap: 1.5rem;
+
+  @include tablet {
+    height: 100%;
+    padding: 2rem 0.75rem;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .title {
+    display: inline-block;
+    color: $color-black-333236;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  @include tablet {
+    .logoImage {
+      width: 8.75rem;
+      height: 12.25rem;
+    }
+  }
+}
+
+.footerMessage {
+  display: flex;
+  color: $color-black-333236;
+  gap: 0.5rem;
+
+  .link {
+    color: $color-violet-5534da;
+    text-decoration: underline;
+    text-underline-position: under;
+  }
+}

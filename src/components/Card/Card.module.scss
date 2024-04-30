@@ -1,0 +1,118 @@
+.cardBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  width: 19.75rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid $color-gray-d9d9d9;
+  background: $color-white-ffffff;
+
+  @include tablet {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.cardTitle {
+  color: $color-black-333236;
+  font-size: 1rem;
+  font-weight: 500;
+  max-width: 15rem;
+  @include shortText;
+}
+
+.image {
+  width: 100%;
+  display: block;
+
+  @include tablet {
+    max-width: 5.5rem;
+    height: 3.25rem;
+    width: 100%;
+  }
+
+  @include mobile {
+    max-width: 16.25rem;
+    height: 9.5rem;
+    width: 100%;
+  }
+}
+
+.cardImage {
+  width: 17rem;
+  height: 10rem;
+
+  @include tablet {
+    max-width: 5.5rem;
+    height: 3.25rem;
+    width: 100%;
+  }
+
+  @include mobile {
+    max-width: 16.25rem;
+    height: 9.5rem;
+    width: 100%;
+  }
+}
+
+.tags {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+
+  @include mobile {
+    font-size: 0.75rem;
+  }
+}
+
+.profileIcon {
+  margin-top: auto;
+}
+
+.tabletBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.tabletContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @include tablet {
+    flex-direction: row;
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.desktopBox {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

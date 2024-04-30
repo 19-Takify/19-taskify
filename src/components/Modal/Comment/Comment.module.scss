@@ -1,0 +1,72 @@
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.profileName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $color-black-333236;
+  @include mobile {
+    font-size: 0.8rem;
+  }
+}
+.createAt {
+  font-size: 0.8rem;
+  color: $color-gray-9fa6b2;
+  @include mobile {
+    font-size: 0.7rem;
+  }
+}
+.commentBox {
+  position: relative;
+  left: 2rem;
+  margin-top: 0.3rem;
+  @include mobile {
+    left: 1.9rem;
+  }
+}
+.commentText {
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+  color: $color-black-333236;
+  @include tablet {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+  }
+  max-width: 23.75rem;
+  word-wrap: break-word;
+}
+.btn {
+  color: $color-gray-9fa6b2;
+  text-decoration: underline;
+  margin-right: 0.6rem;
+  font-size: 0.8rem;
+  background-color: $color-white-ffffff;
+  @include mobile {
+    font-size: 0.7rem;
+    margin-right: 0.4rem;
+  }
+}
+.editTextArea {
+  width: 24rem;
+  height: 3rem;
+  padding: 0.5rem;
+  border: 0.08rem solid $color-gray-d9d9d9;
+  border-radius: 0.3rem;
+  resize: none;
+  margin-top: 0.2rem;
+  outline-color: $color-gray-9fa6b2;
+  @include mobile {
+    height: 2.5rem;
+    padding: 0.4rem;
+    width: 16rem;
+    margin-top: 0.2rem;
+  }
+}
