@@ -44,14 +44,14 @@ function Card({ cardData }: CardProps) {
     <div className={styles.cardBox} data-status="item">
       {cardData?.imageUrl && (
         <div className={styles.image}>
-          <Image
+          {/* <Image
             className={styles.cardImage}
             src={cardData?.imageUrl}
             alt="카드 배경 이미지"
             width={276}
             height={160}
             loading="lazy"
-          />
+          /> */}
         </div>
       )}
       <div className={styles.desktopBox} data-status="item">

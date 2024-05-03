@@ -1,12 +1,32 @@
+@keyframes slideIn {
+  from {
+    margin-left: 18.75rem;
+  }
+  to {
+    margin-left: 0;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    margin-left: 0;
+  }
+  to {
+    margin-left: 18.75rem;
+  }
+}
+
 .wrap {
   max-width: 120rem;
   min-width: 18.75rem;
+  width: 100%;
   height: auto;
-  background-color: $color-gray-fafafa;
-  padding: 1rem 1rem 2rem;
+  padding: 1rem 2rem 1rem;
+  transform: translateX(-18.75rem);
 
-  @include tablet {
-    padding: 0.5rem 1rem 2.5rem;
+  @media (max-width: 1060px) {
+    transform: translateX(0);
+    padding: 1rem 1rem 2rem;
   }
 
   .box {
@@ -20,9 +40,25 @@
       width: auto;
       gap: 0.5rem;
     }
+  }
+}
 
-    @include mobile {
-      margin-right: 1rem;
-    }
+.open {
+  animation: slideOut 0.4s ease forwards;
+  transform: translateX(-18.75rem);
+
+  @media (max-width: 1060px) {
+    animation: none;
+    transform: translateX(0);
+  }
+}
+
+.close {
+  animation: slideIn 0.4s ease forwards;
+  transform: translateX(-18.75rem);
+
+  @media (max-width: 1060px) {
+    animation: none;
+    transform: translateX(0);
   }
 }

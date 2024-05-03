@@ -1,5 +1,5 @@
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState, RefObject } from 'react';
 import InvitedDashboard from './components/InvitedDashboard';
 import styles from './myDashboard.module.scss';
 import HttpClient from '@/apis/httpClient';
@@ -10,6 +10,7 @@ import useCurrentUrl from '@/hooks/useCurrentUrl';
 import BackButton from '@/components/Button/BackButton';
 import PageButton from '@/components/Button/PageButton';
 import NewDashboardModal from '@/components/Modal/NewDashboardModal';
+import useSlideAnimation from '@/hooks/useSlideAnimation';
 
 type Invitation = {
   id: number;
@@ -29,6 +30,7 @@ type MyDashboardProps = {
 function MyDashboard({ invitations }: MyDashboardProps) {
   const [invitation, setInvitation] = useState<Invitation[]>([]);
   const [isOpenNewDashboardModal, setIsOpenNewDashboardModal] = useState(false);
+  const [refElement, isOpen, renderDelayed] = useSlideAnimation(styles.close);
 
   useEffect(() => {
     setInvitation(invitations);
@@ -41,23 +43,28 @@ function MyDashboard({ invitations }: MyDashboardProps) {
   return (
     <>
       <Meta title="Taskify | 내 대시보드" url={useCurrentUrl()} />
-      <div className={styles.myDashboardPage}>
-        <div className={styles.wrap}>
-          <div className={styles.buttonBox}>
-            <BackButton />
-            <div className={styles.btn}>
-              <PageButton onClick={handleCreateDashboard}>
-                새로운 대시보드
-              </PageButton>
+      <div
+        ref={refElement as RefObject<HTMLDivElement>}
+        className={`${styles.myDashboardPage} ${isOpen && styles.open}`}
+      >
+        {renderDelayed && (
+          <div className={styles.wrap}>
+            <div className={styles.buttonBox}>
+              <BackButton />
+              <div className={styles.btn}>
+                <PageButton onClick={handleCreateDashboard}>
+                  새로운 대시보드
+                </PageButton>
+              </div>
+            </div>
+            <div className={styles.invitedDashboard}>
+              <InvitedDashboard
+                invitations={invitation}
+                setInvitations={setInvitation}
+              />
             </div>
           </div>
-          <div className={styles.invitedDashboard}>
-            <InvitedDashboard
-              invitations={invitation}
-              setInvitations={setInvitation}
-            />
-          </div>
-        </div>
+        )}
       </div>
       <NewDashboardModal
         showModal={isOpenNewDashboardModal}
