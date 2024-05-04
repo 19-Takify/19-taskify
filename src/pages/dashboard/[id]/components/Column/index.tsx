@@ -130,7 +130,6 @@ function Column({
   const isTablet = useIsDesiredSize(744);
 
   const handleScroll = () => {
-    console.log('A');
     const maxScrollLeft =
       cardContainer.current.scrollWidth - cardContainer.current.clientWidth;
     const isStart = cardContainer.current.scrollLeft === 0;
@@ -183,7 +182,7 @@ function Column({
     // 좌측 이동
     handlePrevCard();
   };
-  console.log(cardContainer.current);
+
   const handleMove = () => {
     if (!xDown.current) {
       return;
@@ -227,7 +226,6 @@ function Column({
 
   useEffect(() => {
     if (cardContainer.current) {
-      console.log(cardContainer.current);
       cardContainer.current.addEventListener('scroll', handleScroll);
       if (
         cardContainer.current.scrollWidth > cardContainer.current.clientWidth
