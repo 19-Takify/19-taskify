@@ -1,9 +1,9 @@
 import Circle from '@/components/Circle';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import styles from './SideMenu.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, RefObject } from 'react';
 import { sideMenuAtom } from '../Layout/DashBoardLayout';
 import PageButton from '../Button/PageButton';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ import { TOAST_TEXT } from '@/constants/toastText';
 import HttpClient from '@/apis/httpClient';
 import instance from '@/apis/axios';
 import NewDashboardModal from '../Modal/NewDashboardModal';
+import useSlideAnimation from '@/hooks/useSlideAnimation';
 
 type TDashboardList = {
   id: number;
@@ -25,22 +26,22 @@ type TDashboardList = {
 
 function SideMenu() {
   const httpClient = new HttpClient(instance);
-  const [isOpen, setIsOpen] = useAtom(sideMenuAtom);
-  const [isFirstRender, setIsFirstRender] = useState(false);
-  const [renderDelayed, setRenderDelayed] = useState(false);
+  const setIsOpen = useSetAtom(sideMenuAtom);
   const [dashboardList, setDashboardList] = useState<TDashboardList[]>([]);
-  const sideMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { id } = router.query;
   const [isOpenNewDashboardModal, setIsOpenNewDashboardModal] = useState(false);
-
+  const [refElement, isOpen, renderDelayed] = useSlideAnimation(styles.close);
   const handleCreateDashboard = () => {
     setIsOpenNewDashboardModal(true);
   };
+  const isFixed = id && !router.asPath.includes('edit');
 
   useEffect(() => {
     const handleSideMenu = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      const sideMenuRef = refElement as RefObject<HTMLDivElement>;
+
       if (target.dataset.state === 'sideMenuToggle') {
         setIsOpen((prev) => !prev);
         return;
@@ -52,19 +53,7 @@ function SideMenu() {
       }
     };
 
-    // 첫 렌더링 시에는 slideOut 애니메이션 작동 x
-    setIsFirstRender(true);
-
-    if (isFirstRender && !isOpen) {
-      sideMenuRef.current?.classList.add(styles.close);
-    }
-
     document.addEventListener('click', handleSideMenu);
-
-    //렌더링시 0.4초 뒤에 작동 >> 초기 애니메이션 제거
-    const timeout = setTimeout(() => {
-      setRenderDelayed(true);
-    }, 400);
 
     if (isOpen) {
       const getDashBoardList = async () => {
@@ -83,7 +72,6 @@ function SideMenu() {
 
     return () => {
       document.removeEventListener('click', handleSideMenu);
-      clearTimeout(timeout);
     };
   }, [isOpen]);
 
@@ -93,8 +81,8 @@ function SideMenu() {
 
   return (
     <div
-      ref={sideMenuRef}
-      className={`${styles.sideMenu} ${isOpen && styles.open} `}
+      ref={refElement as RefObject<HTMLDivElement>}
+      className={`${styles.sideMenu} ${isOpen && styles.open} ${isFixed && styles.fixed}`}
     >
       {renderDelayed && (
         <div className={styles.sideMenuBox}>

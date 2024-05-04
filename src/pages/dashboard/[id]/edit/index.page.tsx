@@ -4,7 +4,7 @@ import DashboardManager from '@/pages/dashboard/[id]/edit/components/DashboardMa
 import DashboardEdit from '@/pages/dashboard/[id]/edit/components/DashboardEdit';
 import Meta from '@/components/Meta';
 import DashBoardLayout from '@/components/Layout/DashBoardLayout';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, RefObject } from 'react';
 import BackButton from '@/components/Button/BackButton';
 import useCurrentUrl from '@/hooks/useCurrentUrl';
 import axios, { setContext } from '@/apis/axios';
@@ -16,6 +16,7 @@ import { TInviteData, TMembersData } from './type/editType';
 import DeleteConfirmModal from '@/components/Modal/DeleteModal';
 import { useRouter } from 'next/router';
 import { PAGE_PATH } from '@/constants/pageUrl';
+import useSlideAnimation from '@/hooks/useSlideAnimation';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   setContext(context);
@@ -51,6 +52,7 @@ type TEditProps = {
 
 function Edit({ inviteData, membersData }: TEditProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refElement, isOpen, renderDelayed] = useSlideAnimation(styles.close);
   const selectDashboard = useAtomValue(selectDashboardAtom);
   const router = useRouter();
 
@@ -77,22 +79,27 @@ function Edit({ inviteData, membersData }: TEditProps) {
   return (
     <>
       <Meta title="Taskify | 대시보드 수정" url={useCurrentUrl()} />
-      <div className={styles.wrap}>
-        <div className={styles.box}>
-          <div className={styles.buttonBox}>
-            <BackButton />
+      <div
+        ref={refElement as RefObject<HTMLDivElement>}
+        className={`${styles.wrap} ${isOpen && styles.open}`}
+      >
+        {renderDelayed && (
+          <div className={styles.box}>
+            <div className={styles.buttonBox}>
+              <BackButton />
+              {selectDashboard.createdByMe && (
+                <button className={styles.deleteBtn} onClick={handleModalOpen}>
+                  대시보드 삭제하기
+                </button>
+              )}
+            </div>
+            {selectDashboard.createdByMe && <DashboardEdit />}
+            <DashboardManager usage="member" data={membersData} />
             {selectDashboard.createdByMe && (
-              <button className={styles.deleteBtn} onClick={handleModalOpen}>
-                대시보드 삭제하기
-              </button>
+              <DashboardManager usage="invite" data={inviteData} />
             )}
           </div>
-          {selectDashboard.createdByMe && <DashboardEdit />}
-          <DashboardManager usage="member" data={membersData} />
-          {selectDashboard.createdByMe && (
-            <DashboardManager usage="invite" data={inviteData} />
-          )}
-        </div>
+        )}
       </div>
       {isModalOpen && (
         <DeleteConfirmModal

@@ -1,10 +1,51 @@
+@keyframes slideIn {
+  from {
+    margin-left: 18.75rem;
+  }
+  to {
+    margin-left: 0;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    margin-left: 0;
+  }
+  to {
+    margin-left: 18.75rem;
+  }
+}
+
+.open {
+  animation: slideOut 0.4s ease forwards;
+  transform: translateX(-18.75rem);
+
+  @media (max-width: 1060px) {
+    animation: none;
+    transform: translateX(0);
+  }
+}
+
+.close {
+  animation: slideIn 0.4s ease forwards;
+  transform: translateX(-18.75rem);
+
+  @media (max-width: 1060px) {
+    animation: none;
+    transform: translateX(0);
+  }
+}
+
 .wrap {
   background-color: $color-gray-fafafa;
   min-height: calc(100vh - 4.3rem);
-  padding: 1rem 0 2.5rem 1rem;
+  padding: 1rem 0 2.5rem 2rem;
+  transform: translateX(-18.75rem);
 
-  @include tablet {
+  @media (max-width: 1060px) {
+    transform: translateX(0);
     padding: 0.5rem 0 2.5rem 1rem;
+    width: 100%;
   }
 
   .box {
