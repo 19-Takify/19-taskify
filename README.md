@@ -6,6 +6,16 @@
 - 개발 기간 : 2024.04.15 ~ 2024.04.29
 - 배포 주소 : https://team19-main.vercel.app
 - 노션 주소 : https://devwqc.notion.site/6e51ebc1f13045a09a656d481a06289e?pvs=4
+
+**개발 모드로 실행하기**
+```
+git clone https://github.com/19-Takify/19-taskify.git
+
+npm install
+
+npm run dev
+```
+***
 <br>
 
 
@@ -16,20 +26,24 @@
 - 상대방의 일정을 확인할 수 있고 공유할 수 있어서 직장인, 모임, 동아리 등 단체 활동에 안성 맞춤인 서비스 입니다.
 <br>
 
+*** 
 
-## 💡 기술 스택
+## ⚙️ TechStack 
 
-<div align="middle">
-  
-### Front-end
+<div align="left">
+
 
 <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white">
 <img src="https://img.shields.io/badge/TypeScript-3178c6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white">
 <img src="https://img.shields.io/badge/Axios-5a29e4?style=for-the-badge&logo=axios&logoColor=white">
-<img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
 
-### Environment
+<br/>
+<br/>
+<br/>
+<br/>
+
+## 🍃 Communication
 
 <img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
 <img src="https://img.shields.io/badge/Discord-5865f2?style=for-the-badge&logo=discord&logoColor=black">
@@ -38,12 +52,13 @@
 
 </div>
 <br>
+<br/>
+<br/>
 
-
-## 	🙏 팀 구성
-| 이름   | 기송은 | 박유빈 | 여승구 | 이우혁 | 정봉찬 |
-|--------|--------|--------|--------|--------|--------|
-| GitHub | [q45402sk](https://github.com/q45402sk) | [yb3143](https://github.com/yb3143) | [skoo1100](https://github.com/skoo1100) | [woo29](https://github.com/woo29) | [devwqc](https://github.com/devwqc) |
+## 👏 팀원 구성
+|<img src="https://avatars.githubusercontent.com/u/56138199?v=4,q45402sk,Songeun Kee,https://github.com/q45402sk" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/96522163?v=4,yb3143,박유빈,https://github.com/yb3143" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/55544307?v=4,skoo1100,skoo1100,https://github.com/skoo1100" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/162881886?v=4,woo29,우혁,https://github.com/woo29" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/98067115?v=4,devwqc,정봉찬,https://github.com/devwqc" width="150" height="150"/>
+|:-:|:-:|:-:|:-:|:-:
+|FE : 기송은 <br/> [@q45402sk](https://github.com/q45402sk)|FE : 박유빈 <br/> [@yb3143](https://github.com/yb3143)|FE : 여승구 <br/> [@skoo1100](https://github.com/skoo1100)|FE : 이우혁 <br/> [@woo29](https://github.com/woo29)|FE : 정봉찬 <br/> [@devwqc](https://github.com/devwqc)
 <br>
 
 
@@ -78,31 +93,39 @@
 
 
 ## 📝 컨벤션
-### 코드 컨벤션
-**폴더 구조**
-- 공통 컴포넌트: `src/components/`에 작성
-- 페이지에 종속된 컴포넌트: `src/pages/페이지명/components`에 작성
-
-**코드 네이밍**
-- 변수, 함수: `카멜 케이스`로 작성
-- 상수: `대문자 + 스네이크 네이밍`으로 작성
-- 클래스, 컴포넌트, 타입: `파스칼 케이스`로 작성
-
-**파일 네이밍**
-- components, pages: `파스칼 케이스`로 작성
-- hooks: `use prefix`로 작성
-- 그 외: `카멜 케이스`로 작성
-
-**rem**
-- `1rem = 16px`
-- `0.25rem(4px) 단위`로 작성
-
-**type**
-- 타입은 interface가 아닌 `type`으로 작성
+<details>
+    <summary> <strong>코드 컨벤션</strong> </summary>
+  <br/>
+  
+  **폴더 구조**
+  
+  - 공통 컴포넌트: `src/components/`에 작성
+  - 페이지에 종속된 컴포넌트: `src/pages/페이지명/components`에 작성
+  
+  **코드 네이밍**
+  - 변수, 함수: `카멜 케이스`로 작성
+  - 상수: `대문자 + 스네이크 네이밍`으로 작성
+  - 클래스, 컴포넌트, 타입: `파스칼 케이스`로 작성
+  
+  **파일 네이밍**
+  - components, pages: `파스칼 케이스`로 작성
+  - hooks: `use prefix`로 작성
+  - 그 외: `카멜 케이스`로 작성
+  
+  **rem**
+  - `1rem = 16px`
+  - `0.25rem(4px) 단위`로 작성
+  
+  **type**
+  - 타입은 interface가 아닌 `type`으로 작성
+</details>
 <br>
 
-### Git 컨벤션
-**git 전략**<br>
+<details>
+    <summary> <strong>Git 컨벤션</strong> </summary>
+  <br/>
+
+**git 전략** <br>
 <img src="https://github.com/19-Takify/19-taskify/assets/55544307/fc049688-aa80-44c2-a8d2-03da86a05e9e" width="600px">
 ```
 - main: 배포 브랜치
@@ -124,6 +147,8 @@
 - rename: 파일명 수정 및 파일 이동
 - remove: 파일 삭제
 ```
+
+</details>
 <br>
 
 
